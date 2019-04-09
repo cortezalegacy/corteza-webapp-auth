@@ -25,15 +25,15 @@ export default new Router({
       name: 'signup',
       component: view('Signup') },
 
-    // {
-    //   path: '/request-password-reset',
-    //   name: 'request-password-reset',
-    //   component: view('RequestPasswordReset') },
+    {
+      path: '/request-password-reset',
+      name: 'request-password-reset',
+      component: view('RequestPasswordReset') },
 
-    // {
-    //   path: '/reset-password',
-    //   name: 'reset-password',
-    //   component: view('PasswordReset') },
+    {
+      path: '/reset-password',
+      name: 'reset-password',
+      component: view('ResetPassword') },
 
     { path: '/confirm-email',
       name: 'confirm-email',
