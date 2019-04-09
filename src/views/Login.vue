@@ -8,17 +8,22 @@
               id="email"
               type="email"
               name="email"
+              required
               placeholder="email@domain.tld"
               autocomplete="email"
-              v-model="email">
+              v-model="form.email">
+
+      <br/>
       <label for="password">Password:</label>
       <input
               id="password"
               type="password"
               name="password"
+              required
               placeholder="your password"
               autocomplete="password"
-              v-model="password">
+              v-model="form.password">
+      <br/>
       <button type="submit"
               class="login-btn"
               :disabled="disabledSubmit">Login</button>
@@ -26,15 +31,19 @@
       <div class="error" v-if="error">{{ error }}</div>
     </form>
     <div class="or">or</div>
-    <fieldset class="sso-signons">
-      <div class="sso-provider-wrap google">
-        <input type="radio" hidden id="google" name="target" value="google" />
-        <label for="google" ><i class="icon-google"></i><span class="text">Login with <strong>Google</strong></span></label>
-      </div>
-      <div class="sso-provider-wrap facebook">
-        <input type="radio" hidden id="facebook" name="target" value="facebook" />
-        <label for="facebook"><i class="icon-facebook"></i><span class="text">Login with <strong>Facebook</strong></span></label>
-      </div>
+    <fieldset class="external-providers">
+      <external-provider
+        kind="provider1"
+        url="/auth/external/provider/provider1"
+        >provider 1</external-provider>
+      <external-provider
+        kind="provider2"
+        url="/auth/external/provider/provider2"
+        >provider 2</external-provider>
+      <external-provider
+        kind="provider3"
+        url="/auth/external/provider/provider3"
+        >provider 3</external-provider>
     </fieldset>
     <hr />
     <router-link :to="{ name: 'signup'}">signup</router-link>
@@ -56,8 +65,10 @@ export default {
 
       error: null,
 
-      email: '',
-      password: '',
+      form: {
+        email: '',
+        password: '',
+      },
     }
   },
 
@@ -73,12 +84,10 @@ export default {
 
   methods: {
     internalLogin () {
+      this.error = null
       this.processing = true
-      this.$system.authInternalLogin({
-        email: this.email,
-        password: this.password,
-      }).then(r => {
-        this.$logger.log(r)
+
+      this.$system.authInternalLogin(this.form).then(r => {
         this.processing = false
       }).catch(({ message } = {}) => {
         this.error = message

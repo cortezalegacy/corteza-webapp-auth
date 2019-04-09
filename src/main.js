@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import router from './router'
 import logger from './logger'
+import App from './views/Index'
 import './components'
 import './plugins'
 
@@ -14,5 +15,5 @@ Vue.config.productionTip = false
 
 new Vue({
   router,
-  template: '<router-view/>',
+  render: h => h(App),
 }).$mount('#app')

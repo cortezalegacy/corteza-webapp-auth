@@ -31,13 +31,13 @@ export default new Router({
     //   component: view('RequestPasswordReset') },
 
     // {
-    //   path: '/password-reset',
-    //   name: 'password-reset',
+    //   path: '/reset-password',
+    //   name: 'reset-password',
     //   component: view('PasswordReset') },
 
-    // { path: '/confirm-email',
-    //   name: 'confirm-email',
-    //   component: view('ConfirmEmail') },
+    { path: '/confirm-email',
+      name: 'confirm-email',
+      component: view('ConfirmEmail') },
 
     { path: '*',
       redirect: { name: 'login' },
