@@ -2,7 +2,7 @@
   <auth-dialog title="Request password reset">
     <i class="img"></i>
     <form @submit.prevent="requestPasswordReset">
-      <h2>use your email and password</h2>
+      <h2>Use your email and password</h2>
       <label for="email">Email:</label>
       <input
               id="email"

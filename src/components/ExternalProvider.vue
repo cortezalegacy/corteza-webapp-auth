@@ -38,10 +38,6 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
-/deep/ .external-providers {
-  border: none;
-}
-
 .provider {
   font-size: 15px;
   text-align: left;

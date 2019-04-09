@@ -21,7 +21,7 @@
               placeholder="Your password"
               autocomplete="password"
               v-model="form.password">
-      <router-link :to="{ name: 'signup'}">signup</router-link>
+      <router-link :to="{ name: 'request-password-reset'}" class="forgotten-pw">Forgotten password?</router-link>
       <div class="error" v-if="error">{{ error }}</div>
       <button type="submit"
               class="login-btn"
@@ -52,10 +52,9 @@
       >OpenID</external-provider>
     </fieldset>
     <hr />
-    New
-    <router-link :to="{ name: 'signup'}">signup</router-link>
-    |
-    <router-link :to="{ name: 'logout'}">logout</router-link>
+    <div class="footnote">
+      <router-link :to="{ name: 'signup'}">Create an account</router-link>
+    </div>
   </auth-dialog>
 </template>
 
@@ -100,3 +99,11 @@ export default {
   },
 }
 </script>
+<style scoped lang="scss">
+.forgotten-pw {
+  display: block;
+  text-align: right;
+  font-size: 14px;
+  color: #000;
+}
+</style>

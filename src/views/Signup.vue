@@ -47,7 +47,7 @@
       <br/>
       <button type="submit"
               class="login-btn"
-              :disabled="disabledSubmit">Signup</button>
+              :disabled="disabledSubmit">Submit</button>
 
       <div class="error" v-if="error">{{ error }}</div>
     </form>
