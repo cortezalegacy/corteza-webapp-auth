@@ -2,8 +2,8 @@
 export default {
   name: 'Logout',
   props: {
-    msg: String
-  }
+    msg: String,
+  },
 }
 </script>
 

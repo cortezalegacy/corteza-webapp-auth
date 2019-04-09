@@ -31,8 +31,8 @@
 export default {
   name: 'Signup',
   props: {
-    msg: String
-  }
+    msg: String,
+  },
 }
 </script>
 

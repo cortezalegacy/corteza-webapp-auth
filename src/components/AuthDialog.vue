@@ -9,8 +9,8 @@
 export default {
   name: 'AuthDialog',
   props: {
-    title: String
-  }
+    title: String,
+  },
 }
 </script>
 

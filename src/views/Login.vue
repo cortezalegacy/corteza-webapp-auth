@@ -47,7 +47,7 @@
 export default {
   name: 'Login',
   props: {
-    msg: String
+    msg: String,
   },
 
   data () {
@@ -56,8 +56,8 @@ export default {
 
       error: null,
 
-      email: "",
-      password: "",
+      email: '',
+      password: '',
     }
   },
 
@@ -67,12 +67,12 @@ export default {
     },
   },
 
-  created() {
+  created () {
 
   },
 
   methods: {
-    internalLogin() {
+    internalLogin () {
       this.processing = true
       this.$system.authInternalLogin({
         email: this.email,
@@ -84,8 +84,8 @@ export default {
         this.error = message
         this.processing = false
       })
-    }
-  }
+    },
+  },
 }
 </script>
 <style scoped>
