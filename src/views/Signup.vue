@@ -2,7 +2,7 @@
   <auth-dialog title="Login">
     <i class="img"></i>
     <form @submit.prevent="internalSignup">
-      <h2>use your email and password</h2>
+      <h2>Use your email and password</h2>
       <label for="email">Email:</label>
       <input
               id="email"
@@ -20,7 +20,7 @@
               type="password"
               name="password"
               required
-              placeholder="your password"
+              placeholder="Your password"
               autocomplete="password"
               v-model="form.password">
       <br />
@@ -40,7 +40,7 @@
               id="handle"
               type="text"
               name="handle"
-              placeholder="shortname"
+              placeholder="Shortname"
               autocomplete="handle"
               v-model="form.handle">
 
@@ -51,26 +51,34 @@
 
       <div class="error" v-if="error">{{ error }}</div>
     </form>
-    <div class="or">or</div>
+    <div class="or">or select below:</div>
     <fieldset class="external-providers">
       <external-provider
-              kind="provider1"
+              kind="linkedin"
               url="/auth/external/provider/provider1"
       >provider 1</external-provider>
       <external-provider
-              kind="provider2"
+              kind="facebook"
               url="/auth/external/provider/provider2"
       >provider 2</external-provider>
       <external-provider
-              kind="provider3"
+              kind="gplus"
+              url="/auth/external/provider/provider3"
+      >provider 3</external-provider>
+      <external-provider
+              kind="github"
+              url="/auth/external/provider/provider3"
+      >provider 3</external-provider>
+      <external-provider
+              kind="openid-connect.didmos2"
               url="/auth/external/provider/provider3"
       >provider 3</external-provider>
     </fieldset>
     {{ form }}
     <hr />
-    <router-link :to="{ name: 'signup'}">signup</router-link>
-    |
-    <router-link :to="{ name: 'logout'}">logout</router-link>
+    <div class="footnote">Already have an account?
+      <router-link :to="{ name: 'login'}">Login here</router-link>
+    </div>
   </auth-dialog>
 </template>
 
@@ -117,8 +125,3 @@ export default {
   },
 }
 </script>
-<style scoped>
-.error {
-  color: red;
-}
-</style>

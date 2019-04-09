@@ -2,7 +2,7 @@
   <auth-dialog title="Login">
     <i class="img"></i>
     <form @submit.prevent="internalLogin">
-      <h2>use your email and password</h2>
+      <h2>Use your email and password</h2>
        <label for="email">Email:</label>
       <input
               id="email"
@@ -12,40 +12,47 @@
               placeholder="email@domain.tld"
               autocomplete="email"
               v-model="form.email">
-
-      <br/>
       <label for="password">Password:</label>
       <input
               id="password"
               type="password"
               name="password"
               required
-              placeholder="your password"
+              placeholder="Your password"
               autocomplete="password"
               v-model="form.password">
-      <br/>
+      <router-link :to="{ name: 'signup'}">signup</router-link>
+      <div class="error" v-if="error">{{ error }}</div>
       <button type="submit"
               class="login-btn"
-              :disabled="disabledSubmit">Login</button>
+              :disabled="disabledSubmit">Submit</button>
 
-      <div class="error" v-if="error">{{ error }}</div>
     </form>
-    <div class="or">or</div>
+    <div class="or">or select below:</div>
     <fieldset class="external-providers">
       <external-provider
-        kind="provider1"
+        kind="linkedin"
         url="/auth/external/provider/provider1"
-        >provider 1</external-provider>
+        >Linkedin</external-provider>
       <external-provider
-        kind="provider2"
+        kind="facebook"
         url="/auth/external/provider/provider2"
-        >provider 2</external-provider>
+        >Facebook</external-provider>
       <external-provider
-        kind="provider3"
+        kind="gplus"
         url="/auth/external/provider/provider3"
-        >provider 3</external-provider>
+        >Google</external-provider>
+      <external-provider
+              kind="github"
+              url="/auth/external/provider/provider3"
+      >GitHub</external-provider>
+      <external-provider
+              kind="openid-connect.didmos2"
+              url="/auth/external/provider/provider3"
+      >OpenID</external-provider>
     </fieldset>
     <hr />
+    New
     <router-link :to="{ name: 'signup'}">signup</router-link>
     |
     <router-link :to="{ name: 'logout'}">logout</router-link>
@@ -93,8 +100,3 @@ export default {
   },
 }
 </script>
-<style scoped>
-.error {
-  color: red;
-}
-</style>

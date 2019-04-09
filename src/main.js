@@ -4,6 +4,7 @@ import logger from './logger'
 import App from './views/Index'
 import './components'
 import './plugins'
+import '@/assets/sass/index.scss'
 
 /* eslint-disable no-undef */
 logger.log(
