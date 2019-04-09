@@ -30,9 +30,6 @@ export default {
   },
 
   methods: {
-    reset () {
-    },
-
     internalSignup () {
       this.error = null
       this.processing = true

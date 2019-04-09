@@ -102,10 +102,6 @@ export default {
     },
   },
 
-  created () {
-
-  },
-
   methods: {
     reset () {
     },

@@ -102,14 +102,7 @@ export default {
     },
   },
 
-  created () {
-
-  },
-
   methods: {
-    reset () {
-    },
-
     internalSignup () {
       this.error = null
       this.processing = true

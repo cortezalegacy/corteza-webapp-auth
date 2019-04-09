@@ -78,10 +78,6 @@ export default {
     },
   },
 
-  created () {
-
-  },
-
   methods: {
     internalLogin () {
       this.error = null
