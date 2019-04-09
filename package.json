@@ -10,9 +10,25 @@
   "gitHooks": {
     "pre-commit": "yarn lint"
   },
+  "stylelint": {
+    "plugins": [
+      "stylelint-scss"
+    ],
+    "extends": "stylelint-config-standard",
+    "rules": {
+      "color-hex-case": null,
+      "color-hex-length": null,
+      "no-empty-source": null,
+      "selector-list-comma-newline-after": null
+    }
+  },
   "dependencies": {
     "@vue/eslint-config-standard": "^4.0.0",
     "core-js": "^2.6.5",
+    "stylelint": "^9.10.1",
+    "stylelint-config-standard": "^18.2.0",
+    "stylelint-scss": "^3.5.4",
+    "stylelint-webpack-plugin": "^0.10.5",
     "vue": "^2.6.6",
     "vue-router": "^3.0.3"
   },

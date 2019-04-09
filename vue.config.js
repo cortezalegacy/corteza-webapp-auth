@@ -22,6 +22,8 @@ if (process.env.NODE_ENV !== 'test') {
   }
 }
 
+const StyleLintPlugin = require('stylelint-webpack-plugin')
+
 module.exports = {
   publicPath,
   lintOnSave: true,
@@ -31,6 +33,10 @@ module.exports = {
       new webpack.DefinePlugin({
         CRUST_VERSION: JSON.stringify(('' + exec('git describe --always --tags')).trim()),
         CRUST_BUILD_TIME: JSON.stringify((new Date()).toISOString()),
+      }),
+
+      new StyleLintPlugin({
+        files: ['**/*.{vue,htm,html,css,sss,less,scss,sass}'],
       }),
     ],
 
