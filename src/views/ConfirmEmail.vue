@@ -1,17 +1,17 @@
 <template>
   <auth-dialog title="Email confirmation">
     <div v-if="error">
-      {{ error }}
-      <br />
-      <br />
-      <br />
-      Check your email again or try to login again to receive a new token.
-      <br />
-      <br />
-      <router-link :to="{ name: 'login' }">Login</router-link>
+      <p class="error">Error: {{ error }}</p>
+      <p>Check your email again or try to login again to receive a new token.</p>
     </div>
     <div v-else-if="processing">
       Sending confirmation token ...
+    </div>
+    <div v-else>
+      Email confirmed, redirecting.
+    </div>
+    <div class="footnote" v-if="internalSignUpEnabled">
+      <router-link :to="{ name: 'login'}">Login</router-link>
     </div>
   </auth-dialog>
 </template>
@@ -22,8 +22,11 @@ const tokenRegex = /^[a-zA-Z0-9]{32}\d+$/
 
 export default {
   name: 'ConfirmEmail',
+
   props: {
-    msg: String,
+    internalSignUpEnabled: {
+      type: Boolean,
+    },
   },
 
   data () {
@@ -41,7 +44,6 @@ export default {
 
   created () {
     const token = this.$route.query.token
-
     if (!tokenRegex.test(token)) {
       this.error = 'Invalid token'
     } else {
@@ -54,12 +56,12 @@ export default {
       this.error = null
       this.processing = true
 
-      this.$system.authInternalConfirmEmail({ token }).then(r => {
-        // @todo store JWT, redirect user back to wherever he came from.
-        this.$logger.log(r)
-        this.processing = false
+      this.$system.authInternalConfirmEmail({ token }).then(({ jwt, user }) => {
+        this.$auth.JWT = jwt
+        this.$auth.user = user
       }).catch(({ message } = {}) => {
         this.error = message
+      }).finally(() => {
         this.processing = false
       })
     },

@@ -1,14 +1,13 @@
 <template>
-  <div :class="['provider', kind]">
-    <a :href="url"><i :class="['icon', iconClass]"></i>
-      <span class="text"><slot>Login with <strong>{{ label || kind }}</strong></slot></span>
-    </a>
+  <div :class="['provider', kind]" @click="redirect">
+    <i :class="['icon', iconClass]"></i>
+    <span class="text"><slot>Login with <strong>{{ label || kind }}</strong></slot></span>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'AuthDialog',
+  name: 'ExternalProvider',
   props: {
     kind: {
       type: String,
@@ -24,13 +23,23 @@ export default {
     },
     url: {
       type: String,
-      required: true,
+      required: false,
     },
   },
 
   computed: {
     iconClass () {
       return `icon-${this.icon || this.kind}`
+    },
+
+    authUrl () {
+      return this.url || 'http://system.api.local.crust.tech:3002/auth/external/' + this.kind
+    },
+  },
+
+  methods: {
+    redirect () {
+      window.location = this.authUrl
     },
   },
 }
@@ -39,6 +48,7 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
 .provider {
+  cursor: pointer;
   font-size: 15px;
   text-align: left;
   border: 1px solid #000;
@@ -49,7 +59,7 @@ export default {
   color: white;
   vertical-align: middle;
 
-  a {
+  span {
     color: #000;
     text-decoration: none;
   }
@@ -76,7 +86,7 @@ export default {
   &.gplus {
     border: none;
 
-    a {
+    span {
       color: #fff;
     }
   }

@@ -39,6 +39,14 @@ export default new Router({
       name: 'confirm-email',
       component: view('ConfirmEmail') },
 
+    { path: '/profile',
+      name: 'profile',
+      component: view('ViewProfile') },
+
+    { path: '/change-password',
+      name: 'change-password',
+      component: view('ChangePassword') },
+
     { path: '*',
       redirect: { name: 'login' },
     },

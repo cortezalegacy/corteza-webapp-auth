@@ -1,8 +1,10 @@
 <template>
-  <auth-dialog title="Request password reset">
-    <i class="img"></i>
-    <form @submit.prevent="requestPasswordReset">
-      <h2>Use your email and password</h2>
+  <auth-dialog title="Request password reset link">
+    <p v-if="done">Password reset request sent. Check your inbox.</p>
+    <form @submit.prevent="requestPasswordReset" v-else>
+
+      <div class="error" v-if="error">Error: {{ error }}</div>
+
       <label for="email">Email:</label>
       <input
               id="email"
@@ -18,9 +20,10 @@
               class="login-btn"
               :disabled="disabledSubmit">Submit</button>
 
-      <div class="error" v-if="error">{{ error }}</div>
     </form>
-    {{ form }}
+    <div class="footnote">
+      <router-link :to="{ name: 'login' }">Login</router-link>
+    </div>
   </auth-dialog>
 </template>
 
@@ -28,13 +31,18 @@
 
 export default {
   name: 'RequestPasswordReset',
+
   props: {
-    msg: String,
+    internalPasswordResetEnabled: {
+      type: Boolean,
+      required: true,
+    },
   },
 
   data () {
     return {
       processing: false,
+      done: false,
 
       error: null,
 
@@ -50,15 +58,26 @@ export default {
     },
   },
 
+  created () {
+    if (this.$auth.is()) {
+      this.$router.push({ name: 'profile' })
+    }
+    if (!this.internalPasswordResetEnabled) {
+      this.$router.push({ name: 'login' })
+    }
+  },
+
   methods: {
     requestPasswordReset () {
       this.error = null
       this.processing = true
+      this.done = false
 
       this.$system.authInternalRequestPasswordReset(this.form).then(r => {
-        this.processing = false
+        this.done = true
       }).catch(({ message } = {}) => {
         this.error = message
+      }).finally(() => {
         this.processing = false
       })
     },

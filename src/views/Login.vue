@@ -1,9 +1,9 @@
 <template>
   <auth-dialog title="Login">
-    <i class="img"></i>
-    <form @submit.prevent="internalLogin">
-      <h2>Use your email and password</h2>
-       <label for="email">Email:</label>
+    <form @submit.prevent="internalLogin" v-if="internalEnabled">
+      <div class="error" v-if="error">Error: {{ error }}</div>
+
+      <label for="email">Email:</label>
       <input
               id="email"
               type="email"
@@ -21,48 +21,51 @@
               placeholder="Your password"
               autocomplete="password"
               v-model="form.password">
-      <router-link :to="{ name: 'request-password-reset'}" class="forgotten-pw">Forgotten password?</router-link>
-      <div class="error" v-if="error">{{ error }}</div>
+      <router-link v-if="internalPasswordResetEnabled"
+                   :to="{ name: 'request-password-reset'}"
+                   class="forgotten-pw">Forgotten password?</router-link>
       <button type="submit"
               class="login-btn"
               :disabled="disabledSubmit">Submit</button>
-
     </form>
-    <div class="or">or select below:</div>
-    <fieldset class="external-providers">
-      <external-provider
-        kind="linkedin"
-        url="/auth/external/provider/provider1"
-        >Linkedin</external-provider>
-      <external-provider
-        kind="facebook"
-        url="/auth/external/provider/provider2"
-        >Facebook</external-provider>
-      <external-provider
-        kind="gplus"
-        url="/auth/external/provider/provider3"
-        >Google</external-provider>
-      <external-provider
-              kind="github"
-              url="/auth/external/provider/provider3"
-      >GitHub</external-provider>
-      <external-provider
-              kind="openid-connect.didmos2"
-              url="/auth/external/provider/provider3"
-      >OpenID</external-provider>
+
+    <div class="or" v-if="externalEnabled && externalProviders && internalEnabled">or select below:</div>
+
+    <fieldset class="external-providers" v-if="externalEnabled && externalProviders">
+      <external-provider v-for="p in externalProviders" :key="p.handle" :kind="p.handle" :label="p.label"></external-provider>
     </fieldset>
-    <hr />
     <div class="footnote">
-      <router-link :to="{ name: 'signup'}">Create an account</router-link>
+      <router-link v-if="internalEnabled && internalSignUpEnabled"
+                   :to="{ name: 'signup'}">Create new account</router-link>
     </div>
   </auth-dialog>
 </template>
 
 <script>
+const tokenRegex = /^[a-zA-Z0-9]{32}\d+$/
+
 export default {
   name: 'Login',
   props: {
-    msg: String,
+    externalEnabled: {
+      type: Boolean,
+    },
+
+    externalProviders: {
+      type: Array,
+    },
+
+    internalEnabled: {
+      type: Boolean,
+    },
+
+    internalPasswordResetEnabled: {
+      type: Boolean,
+    },
+
+    internalSignUpEnabled: {
+      type: Boolean,
+    },
   },
 
   data () {
@@ -84,17 +87,55 @@ export default {
     },
   },
 
+  created () {
+    const token = this.$route.query.token
+    if (token) {
+      if (!tokenRegex.test(token)) {
+        this.$router.push({ name: 'login' })
+      } else {
+        this.exchangeToken(token)
+      }
+    } else if (this.$auth.is()) {
+      this.$router.push({ name: 'profile' })
+    }
+  },
+
   methods: {
-    internalLogin () {
+
+    exchangeToken (token) {
       this.error = null
       this.processing = true
 
-      this.$system.authInternalLogin(this.form).then(r => {
-        this.processing = false
+      this.$system.authExchangeAuthToken({ token }).then(({ jwt, user }) => {
+        return this.finalize({ jwt, user })
       }).catch(({ message } = {}) => {
         this.error = message
+      }).finally(() => {
         this.processing = false
       })
+    },
+
+    internalLogin () {
+      if (!this.internalEnabled) {
+        return
+      }
+
+      this.error = null
+      this.processing = true
+
+      this.$system.authInternalLogin(this.form).then(({ jwt, user }) => {
+        return this.finalize({ jwt, user })
+      }).catch(({ message } = {}) => {
+        this.error = message
+      }).finally(() => {
+        this.processing = false
+      })
+    },
+
+    finalize ({ jwt, user, redirectTo = '/' }) {
+      this.$auth.JWT = jwt
+      this.$auth.user = user
+      window.location = redirectTo
     },
   },
 }
@@ -105,5 +146,6 @@ export default {
   text-align: right;
   font-size: 14px;
   color: #000;
+  margin: 10px 0 20px 0;
 }
 </style>

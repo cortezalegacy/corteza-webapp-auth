@@ -2,12 +2,13 @@
   <auth-dialog title="Reset your password">
 
     <div v-if="!user">
-      <div class="error" v-if="error">{{ error }}</div>
+      <div class="error" v-if="error">Error: {{ error }}</div>
       <div v-else>Validating password reset token...</div>
     </div>
     <form v-else @submit.prevent="changePassword">
-
       Set new password for {{ user.email }}
+
+      <div class="error" v-if="error">Error: {{ error }}</div>
 
       <label for="password">New password:</label>
       <input
@@ -24,11 +25,10 @@
               class="login-btn"
               :disabled="disabledSubmit">Reset</button>
 
-      <div class="error" v-if="error">{{ error }}</div>
-
-      {{ user }}
-      {{ token }}
     </form>
+    <div class="footnote">
+      <router-link :to="{ name: 'login' }">Login</router-link>
+    </div>
   </auth-dialog>
 </template>
 
@@ -37,10 +37,7 @@
 const tokenRegex = /^[a-zA-Z0-9]{32}\d+$/
 
 export default {
-  name: 'Signup',
-  props: {
-    msg: String,
-  },
+  name: 'ResetPassword',
 
   data () {
     return {
@@ -64,7 +61,6 @@ export default {
   },
 
   created () {
-    this.$logger.log(this.$route.query)
     if (this.$route.query.token) {
       const token = this.$route.query.token
 
@@ -84,9 +80,9 @@ export default {
       this.$system.authInternalExchangePasswordResetToken({ token }).then(({ token, user }) => {
         this.token = token
         this.user = user
-        this.processing = false
       }).catch(({ message } = {}) => {
         this.error = message
+      }).finally(() => {
         this.processing = false
       })
     },
@@ -95,11 +91,12 @@ export default {
       this.error = null
       this.processing = true
 
-      this.$system.authInternalConfirmEmail({ token: this.token, ...this.form }).then(r => {
-        // @todo store JWT, redirect user back to wherever he came from.
-        this.$logger.log(r)
+      this.$system.authInternalResetPassword({ token: this.token, ...this.form }).then(({ jwt, user }) => {
+        this.$auth.JWT = jwt
+        this.$auth.user = user
       }).catch(({ message } = {}) => {
         this.error = message
+      }).finally(() => {
         this.processing = false
       })
     },
