@@ -94,6 +94,7 @@ export default {
       this.$system.authInternalResetPassword({ token: this.token, ...this.form }).then(({ jwt, user }) => {
         this.$auth.JWT = jwt
         this.$auth.user = user
+        this.$router.push({ name: 'profile' })
       }).catch(({ message } = {}) => {
         this.error = message
       }).finally(() => {

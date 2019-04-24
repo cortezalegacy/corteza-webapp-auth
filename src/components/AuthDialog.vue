@@ -1,6 +1,6 @@
 <template>
   <main>
-    <img alt="Crust logo" class="logo" src="../assets/crust-logo-with-tagline.png">
+    <a href="/"><img alt="Crust logo" class="logo" src="../assets/crust-logo-with-tagline.png"></a>
     <section>
       <h1>{{ title }}</h1>
       <slot></slot>
