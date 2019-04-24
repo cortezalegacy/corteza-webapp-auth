@@ -1,3 +1,3 @@
 import { System } from 'crust-api-client'
 
-export default new System({ baseURL: `http://system.api.local.crust.tech:3002` })
+export default new System({ baseURL: window.CrustSystemAPI })

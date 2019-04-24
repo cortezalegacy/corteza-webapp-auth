@@ -33,7 +33,7 @@ export default {
     },
 
     authUrl () {
-      return this.url || 'http://system.api.local.crust.tech:3002/auth/external/' + this.kind
+      return this.url
     },
   },
 
