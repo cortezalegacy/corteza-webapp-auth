@@ -18,11 +18,10 @@ export default {
     }
   },
 
-  beforeCreate () {
+  created () {
+    this.$auth.JWT = null
+    this.$auth.user = null
     this.$system.authLogout().then(() => {
-      this.$auth.JWT = null
-      this.$auth.user = null
-
       this.$router.push({ name: 'login' })
     }).catch(({ message } = {}) => {
       this.error = message

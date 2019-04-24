@@ -2466,7 +2466,7 @@ crust-api-client@crusttech/crust-api-client.js.git#master:
 
 crust-common.vue@crusttech/crust-common.vue.git#master:
   version "2019.3.1"
-  resolved "https://codeload.github.com/crusttech/crust-common.vue/tar.gz/5aa2d1c258228fab915f67752fa901474a94df70"
+  resolved "https://codeload.github.com/crusttech/crust-common.vue/tar.gz/a90019098b571617cc83aa873f058fe47dcc0474"
 
 crypto-browserify@^3.11.0:
   version "3.12.0"

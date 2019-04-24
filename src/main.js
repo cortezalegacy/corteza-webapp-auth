@@ -8,13 +8,17 @@ import '@/assets/sass/index.scss'
 
 /* eslint-disable no-undef */
 logger.log(
-  `%cCrust CRM, version: ${CRUST_VERSION}, build time: ${CRUST_BUILD_TIME}`,
+  `%cCrust Auth, version: ${CRUST_VERSION}, build time: ${CRUST_BUILD_TIME}`,
   'background-color: #1397CB; color: white; padding: 3px 10px; border: 1px solid black; font: Courier',
 )
 
 Vue.config.productionTip = false
 
-new Vue({
-  router,
-  render: h => h(App),
-}).$mount('#app')
+if (window.CrustSystemAPI === undefined) {
+  alert('Unexisting or invalid configuration. Make sure there is a public/config.js file.')
+} else {
+  new Vue({
+    router,
+    render: h => h(App),
+  }).$mount('#app')
+}
