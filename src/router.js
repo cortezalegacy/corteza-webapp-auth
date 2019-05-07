@@ -10,7 +10,7 @@ function view (name) {
 }
 
 export default new Router({
-  base: '/auth',
+  base: '/auth/',
   mode: 'history',
   routes: [
     { path: '/',

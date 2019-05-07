@@ -1,6 +1,11 @@
 <template>
   <div>
-    <router-view v-bind="settings" />
+    <div class="error" v-if="error">{{ error }}</div>
+    <router-view v-bind="settings"
+                 v-else-if="!this.processing"/>
+    <div class="loader" v-else>
+      <img :src="logo" />
+    </div>
   </div>
 </template>
 
@@ -10,6 +15,8 @@ export default {
 
   data () {
     return {
+      logo: require('@/assets/crust-logo-with-tagline.png'),
+
       processing: false,
 
       error: null,
@@ -50,6 +57,11 @@ export default {
           })
         }
       }).catch(({ message } = {}) => {
+        if (message !== 'Network Error') {
+          this.$auth.JWT = null
+          this.$auth.user = null
+        }
+
         this.error = message
       }).finally(() => {
         this.processing = false
@@ -58,3 +70,35 @@ export default {
   },
 }
 </script>
+<style lang="scss" scoped>
+@keyframes flickerAnimation {
+  0% { opacity: 0.6; }
+  50% { opacity: 0.1; }
+  100% { opacity: 0.6; }
+}
+
+.loader {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+
+  img {
+    align-self: center;
+    opacity: 0.7;
+    animation: flickerAnimation 3s infinite;
+  }
+}
+
+.error {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #E85568;
+  font-size: 24px;
+  background-color: #FFFFFF;
+  height: 20vh;
+  top: 40vh;
+  text-align: center;
+}
+</style>
