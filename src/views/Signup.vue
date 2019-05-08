@@ -131,25 +131,23 @@ export default {
       this.processing = true
       this.pendingEmailConfirmation = false
 
-      const pendingEmailConfirmationError = 'user email pending confirmation'
-
       this.$system.authInternalSignup(this.form).then(({ jwt, user }) => {
         this.finalize({ jwt, user })
       }).catch(({ message } = {}) => {
-        if (message === pendingEmailConfirmationError) {
-          this.pendingEmailConfirmation = true
-        } else {
-          this.error = message
-        }
+        this.error = message
       }).finally(() => {
         this.processing = false
       })
     },
 
     finalize ({ jwt, user, redirectTo = '/' }) {
-      this.$auth.JWT = jwt
-      this.$auth.user = user
-      window.location = redirectTo
+      if (jwt) {
+        this.$auth.JWT = jwt
+        this.$auth.user = user
+        window.location = redirectTo
+      } else {
+        this.pendingEmailConfirmation = true
+      }
     },
   },
 }

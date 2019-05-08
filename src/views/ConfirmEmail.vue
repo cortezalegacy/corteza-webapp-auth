@@ -59,6 +59,9 @@ export default {
       this.$system.authInternalConfirmEmail({ token }).then(({ jwt, user }) => {
         this.$auth.JWT = jwt
         this.$auth.user = user
+        window.setTimeout(() => {
+          window.location = '/'
+        }, 3000)
       }).catch(({ message } = {}) => {
         this.error = message
       }).finally(() => {
