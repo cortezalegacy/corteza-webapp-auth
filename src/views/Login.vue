@@ -29,11 +29,14 @@
               :disabled="disabledSubmit">Submit</button>
     </form>
 
-    <div class="or" v-if="externalEnabled && externalProviders && internalEnabled">or select below:</div>
+    <div class="or" v-if="externalEnabled && externalProviders.length && internalEnabled">or select below:</div>
 
     <fieldset class="external-providers" v-if="externalEnabled && externalProviders">
       <external-provider v-for="p in externalProviders" :key="p.handle" :kind="p.handle" :label="p.label"></external-provider>
     </fieldset>
+    <div v-if="!(externalEnabled && externalProviders.length > 0) && !internalEnabled">
+      Login disabled. <br />Contact your administrator.
+    </div>
     <div class="footnote">
       <router-link v-if="internalEnabled && internalSignUpEnabled"
                    :to="{ name: 'signup'}">Create new account</router-link>
