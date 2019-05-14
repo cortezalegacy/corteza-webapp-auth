@@ -1,12 +1,12 @@
 <template>
-    <auth-dialog title="Logout">
-        <div v-if="error">
-            <p class="error">Error: {{ error }}</p>
-        </div>
-        <div class="footnote">
-            <router-link :to="{ name: 'login' }">Login</router-link>
-        </div>
-    </auth-dialog>
+  <div>
+    <div v-if="error">
+      <p class="error">Error: {{ error }}</p>
+    </div>
+    <div class="footnote">
+      <router-link :to="{ name: 'login' }">Login</router-link>
+    </div>
+  </div>
 </template>
 <script>
 export default {

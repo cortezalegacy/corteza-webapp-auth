@@ -1,5 +1,5 @@
 <template>
-  <auth-dialog title="Change your password">
+  <div>
     <p v-if="passwordChanged">Password changed.</p>
     <div v-else>
       <form @submit.prevent="changePassword">
@@ -54,7 +54,7 @@
       |
       <router-link :to="{ name: 'profile'}">Back to profile</router-link>
     </div>
-  </auth-dialog>
+  </div>
 </template>
 
 <script>

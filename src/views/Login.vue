@@ -1,5 +1,5 @@
 <template>
-  <auth-dialog title="Login">
+  <div>
     <form @submit.prevent="internalLogin" v-if="internalEnabled">
       <div class="error" v-if="error">Error: {{ error }}</div>
 
@@ -41,15 +41,23 @@
       <router-link v-if="internalEnabled && internalSignUpEnabled"
                    :to="{ name: 'signup'}">Create new account</router-link>
     </div>
-  </auth-dialog>
+  </div>
 </template>
 
 <script>
+import ExternalProvider from '../components/ExternalProvider'
+
 const tokenRegex = /^[a-zA-Z0-9]{32}\d+$/
 
 export default {
   name: 'Login',
+
+  components: {
+    ExternalProvider,
+  },
   props: {
+    afterLogin: { default: null },
+
     externalEnabled: {
       type: Boolean,
     },
@@ -138,7 +146,11 @@ export default {
     finalize ({ jwt, user, redirectTo = '/' }) {
       this.$auth.JWT = jwt
       this.$auth.user = user
-      window.location = redirectTo
+      if (this.afterLogin) {
+        this.afterLogin()
+      } else {
+        window.location = redirectTo
+      }
     },
   },
 }

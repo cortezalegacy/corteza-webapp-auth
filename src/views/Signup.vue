@@ -1,5 +1,5 @@
 <template>
-  <auth-dialog title="Sign up">
+  <div>
     <p v-if="pendingEmailConfirmation">Email confirmation link sent. Check your inbox.</p>
     <div v-else>
       <form @submit.prevent="internalSignup" v-if="internalSignUpEnabled">
@@ -66,14 +66,22 @@
         <router-link :to="{ name: 'login'}">Login here</router-link>
       </div>
     </div>
-  </auth-dialog>
+  </div>
 </template>
 
 <script>
+import ExternalProvider from '../components/ExternalProvider'
+
 export default {
   name: 'Signup',
 
+  components: {
+    ExternalProvider,
+  },
+
   props: {
+    afterSignup: { default: null },
+
     externalEnabled: {
       type: Boolean,
     },
@@ -144,7 +152,11 @@ export default {
       if (jwt) {
         this.$auth.JWT = jwt
         this.$auth.user = user
-        window.location = redirectTo
+        if (this.afterSignup) {
+          this.afterSignup()
+        } else {
+          window.location = redirectTo
+        }
       } else {
         this.pendingEmailConfirmation = true
       }

@@ -100,30 +100,30 @@ export default {
     vertical-align: top;
     margin-right: 10px;
     border-right: 1px solid #fff;
-    mask: url("~@/assets/logos/openid.svg") no-repeat;
+    mask: url("~../assets/logos/openid.svg") no-repeat;
     mask-size: 20px;
   }
 
   .icon-linkedin {
-    mask: url("~@/assets/logos/linkedin.svg") no-repeat;
+    mask: url("~../assets/logos/linkedin.svg") no-repeat;
     mask-size: 20px;
     background-color: #fff;
   }
 
   .icon-facebook {
-    mask: url("~@/assets/logos/facebook.svg") no-repeat;
+    mask: url("~../assets/logos/facebook.svg") no-repeat;
     mask-size: 20px;
     background-color: #fff;
   }
 
   .icon-github {
-    mask: url("~@/assets/logos/github.svg") no-repeat;
+    mask: url("~../assets/logos/github.svg") no-repeat;
     mask-size: 20px;
     background-color: #fff;
   }
 
   .icon-gplus {
-    mask: url("~@/assets/logos/google.svg") no-repeat;
+    mask: url("~../assets/logos/google.svg") no-repeat;
     mask-size: 20px;
     background-color: #fff;
   }

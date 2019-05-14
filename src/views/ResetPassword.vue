@@ -1,6 +1,5 @@
 <template>
-  <auth-dialog title="Reset your password">
-
+  <div>
     <div v-if="!user">
       <div class="error" v-if="error">Error: {{ error }}</div>
       <div v-else>Validating password reset token...</div>
@@ -29,7 +28,7 @@
     <div class="footnote">
       <router-link :to="{ name: 'login' }">Login</router-link>
     </div>
-  </auth-dialog>
+  </div>
 </template>
 
 <script>
