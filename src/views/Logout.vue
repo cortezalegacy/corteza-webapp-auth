@@ -12,6 +12,10 @@
 export default {
   name: 'Logout',
 
+  props: {
+    afterLogout: { default: null },
+  },
+
   data () {
     return {
       error: null,
@@ -22,7 +26,11 @@ export default {
     this.$auth.JWT = null
     this.$auth.user = null
     this.$system.authLogout().then(() => {
-      this.$router.push({ name: 'login' })
+      if (this.afterLogout) {
+        this.afterLogout()
+      } else {
+        this.$router.push({ name: 'login' })
+      }
     }).catch(({ message } = {}) => {
       this.error = message
     })
