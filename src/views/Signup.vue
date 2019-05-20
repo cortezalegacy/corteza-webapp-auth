@@ -53,7 +53,7 @@
       </form>
       <div class="or" v-if="externalEnabled && externalProviders && internalSignUpEnabled">or select below:</div>
       <fieldset class="external-providers" v-if="externalEnabled && externalProviders">
-        <external-provider v-for="p in externalProviders" :key="p.handle" :pKind="p.handle" :pLabel="p.label"></external-provider>
+        <external-provider v-for="p in externalProviders" :key="p.handle" :onExternalAuth="onExternalAuth" :pKind="p.handle" :pLabel="p.label"></external-provider>
       </fieldset>
       <div class="footnote" v-if="internalSignUpEnabled">
         <router-link v-if="internalPasswordResetEnabled"
@@ -81,6 +81,7 @@ export default {
 
   props: {
     afterSignup: { default: null },
+    onExternalAuth: { default: null },
 
     externalEnabled: {
       type: Boolean,

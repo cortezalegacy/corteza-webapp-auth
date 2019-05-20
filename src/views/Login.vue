@@ -32,7 +32,7 @@
     <div class="or" v-if="externalEnabled && externalProviders.length && internalEnabled">or select below:</div>
 
     <fieldset class="external-providers" v-if="externalEnabled && externalProviders">
-      <external-provider v-for="p in externalProviders" :key="p.handle" :pKind="p.handle" :pLabel="p.label"></external-provider>
+      <external-provider v-for="p in externalProviders" :key="p.handle" :onExternalAuth="onExternalAuth" :pKind="p.handle" :pLabel="p.label"></external-provider>
     </fieldset>
     <div v-if="!(externalEnabled && externalProviders.length > 0) && !internalEnabled">
       Login disabled. <br />Contact your administrator.
@@ -57,6 +57,7 @@ export default {
   },
   props: {
     afterLogin: { default: null },
+    onExternalAuth: { default: null },
 
     externalEnabled: {
       type: Boolean,

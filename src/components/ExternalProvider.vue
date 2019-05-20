@@ -25,6 +25,7 @@ export default {
       type: String,
       required: false,
     },
+    onExternalAuth: { default: null },
   },
 
   computed: {
@@ -39,7 +40,11 @@ export default {
 
   methods: {
     redirect () {
-      window.location = this.authUrl
+      if (this.onExternalAuth) {
+        this.onExternalAuth(this.authUrl)
+      } else {
+        window.location = this.authUrl
+      }
     },
   },
 }
