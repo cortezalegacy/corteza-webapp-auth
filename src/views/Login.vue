@@ -97,22 +97,36 @@ export default {
     disabledSubmit () {
       return this.processing
     },
+    fPath () {
+      return this.$route.fullPath
+    },
+  },
+
+  watch: {
+    fPath: {
+      handler: function (newVal) {
+        this.finishExternal()
+      },
+    },
   },
 
   created () {
-    const token = this.$route.query.token
-    if (token) {
-      if (!tokenRegex.test(token)) {
-        this.$router.push({ name: 'login' })
-      } else {
-        this.exchangeToken(token)
-      }
-    } else if (this.$auth.is()) {
-      this.$router.push({ name: 'profile' })
-    }
+    this.finishExternal()
   },
 
   methods: {
+    finishExternal () {
+      const token = this.$route.query.token
+      if (token) {
+        if (!tokenRegex.test(token)) {
+          this.$router.push({ name: 'login' })
+        } else {
+          this.exchangeToken(token)
+        }
+      } else if (this.$auth.is()) {
+        this.$router.push({ name: 'profile' })
+      }
+    },
 
     exchangeToken (token) {
       this.error = null
