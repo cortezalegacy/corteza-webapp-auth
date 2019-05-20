@@ -33,7 +33,7 @@ export default {
     },
 
     authUrl () {
-      return this.url
+      return this.url || `${this.$system.baseURL}${this.$system.authSettingsEndpoint()}external/${this.kind}`
     },
   },
 
