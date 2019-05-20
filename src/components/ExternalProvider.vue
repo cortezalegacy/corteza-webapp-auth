@@ -1,7 +1,7 @@
 <template>
-  <div :class="['provider', kind]" @click="redirect">
+  <div :class="['provider', pKind]" @click="redirect">
     <i :class="['icon', iconClass]"></i>
-    <span class="text"><slot>Login with <strong>{{ label || kind }}</strong></slot></span>
+    <span class="text"><slot>Login with <strong>{{ pLabel || pKind }}</strong></slot></span>
   </div>
 </template>
 
@@ -9,19 +9,19 @@
 export default {
   name: 'ExternalProvider',
   props: {
-    kind: {
+    pKind: {
       type: String,
       required: true,
     },
-    icon: {
+    pIcon: {
       type: String,
       required: false,
     },
-    label: {
+    pLabel: {
       type: String,
       required: false,
     },
-    url: {
+    pUrl: {
       type: String,
       required: false,
     },
@@ -29,11 +29,11 @@ export default {
 
   computed: {
     iconClass () {
-      return `icon-${this.icon || this.kind}`
+      return `icon-${this.pIcon || this.pKind}`
     },
 
     authUrl () {
-      return this.url || `${this.$system.baseURL}${this.$system.authSettingsEndpoint()}external/${this.kind}`
+      return this.pUrl || `${this.$system.baseURL}${this.$system.authSettingsEndpoint()}external/${this.pKind}`
     },
   },
 
