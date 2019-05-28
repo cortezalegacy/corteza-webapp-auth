@@ -1,5 +1,5 @@
 <template>
-  <auth-dialog title="Your Crust profile">
+  <div>
     <dt>Email</dt>
     <dd>{{ $auth.user.email }}</dd>
     <dt>Name</dt>
@@ -12,7 +12,7 @@
         | <router-link :to="{ name: 'change-password'}">Change your password</router-link>
       </span>
     </div>
-  </auth-dialog>
+  </div>
 </template>
 
 <script>

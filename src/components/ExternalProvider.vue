@@ -1,7 +1,7 @@
 <template>
-  <div :class="['provider', kind]" @click="redirect">
+  <div :class="['provider', pKind]" @click="redirect">
     <i :class="['icon', iconClass]"></i>
-    <span class="text"><slot>Login with <strong>{{ label || kind }}</strong></slot></span>
+    <span class="text"><slot>Login with <strong>{{ pLabel || pKind }}</strong></slot></span>
   </div>
 </template>
 
@@ -9,37 +9,42 @@
 export default {
   name: 'ExternalProvider',
   props: {
-    kind: {
+    pKind: {
       type: String,
       required: true,
     },
-    icon: {
+    pIcon: {
       type: String,
       required: false,
     },
-    label: {
+    pLabel: {
       type: String,
       required: false,
     },
-    url: {
+    pUrl: {
       type: String,
       required: false,
     },
+    onExternalAuth: { default: null },
   },
 
   computed: {
     iconClass () {
-      return `icon-${this.icon || this.kind}`
+      return `icon-${this.pIcon || this.pKind}`
     },
 
     authUrl () {
-      return this.url || `${this.$system.baseURL}${this.$system.authSettingsEndpoint()}external/${this.kind}`
+      return this.pUrl || `${this.$system.baseURL}${this.$system.authSettingsEndpoint()}external/${this.pKind}`
     },
   },
 
   methods: {
     redirect () {
-      window.location = this.authUrl
+      if (this.onExternalAuth) {
+        this.onExternalAuth(this.authUrl)
+      } else {
+        window.location = this.authUrl
+      }
     },
   },
 }
@@ -100,30 +105,30 @@ export default {
     vertical-align: top;
     margin-right: 10px;
     border-right: 1px solid #fff;
-    mask: url("~@/assets/logos/openid.svg") no-repeat;
+    mask: url("~../assets/logos/openid.svg") no-repeat;
     mask-size: 20px;
   }
 
   .icon-linkedin {
-    mask: url("~@/assets/logos/linkedin.svg") no-repeat;
+    mask: url("~../assets/logos/linkedin.svg") no-repeat;
     mask-size: 20px;
     background-color: #fff;
   }
 
   .icon-facebook {
-    mask: url("~@/assets/logos/facebook.svg") no-repeat;
+    mask: url("~../assets/logos/facebook.svg") no-repeat;
     mask-size: 20px;
     background-color: #fff;
   }
 
   .icon-github {
-    mask: url("~@/assets/logos/github.svg") no-repeat;
+    mask: url("~../assets/logos/github.svg") no-repeat;
     mask-size: 20px;
     background-color: #fff;
   }
 
   .icon-gplus {
-    mask: url("~@/assets/logos/google.svg") no-repeat;
+    mask: url("~../assets/logos/google.svg") no-repeat;
     mask-size: 20px;
     background-color: #fff;
   }

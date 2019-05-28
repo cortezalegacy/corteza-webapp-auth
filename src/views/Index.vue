@@ -1,8 +1,15 @@
 <template>
   <div>
     <div class="error" v-if="error">{{ error }}</div>
-    <router-view v-bind="settings"
-                 v-else-if="!this.processing"/>
+
+    <main v-else-if="!this.processing">
+      <a href="/"><img alt="Crust logo" class="logo" src="../assets/crust-logo-with-tagline.png"></a>
+      <section>
+        <h1>{{ t(`dialog.${$route.name}.title`) }}</h1>
+        <router-view v-bind="settings"/>
+      </section>
+    </main>
+
     <div class="loader" v-else>
       <img :src="logo" />
     </div>
@@ -15,7 +22,7 @@ export default {
 
   data () {
     return {
-      logo: require('@/assets/crust-logo-with-tagline.png'),
+      logo: require('../assets/crust-logo-with-tagline.png'),
 
       processing: false,
 
@@ -31,6 +38,21 @@ export default {
         externalProviders: [],
       },
     }
+  },
+
+  computed: {
+    t () {
+      return (k) => ({
+        'dialog.change-password.title': 'Change your password',
+        'dialog.confirm-email.title': 'Email confirmation',
+        'dialog.login.title': 'Login',
+        'dialog.logout.title': 'Logout',
+        'dialog.request-password-reset.title': 'Request password reset link',
+        'dialog.reset-password.title': 'Reset your password',
+        'dialog.sign-up.title': 'Sign up',
+        'dialog.profile.title': 'Your Crust profile',
+      }[k] || k)
+    },
   },
 
   created () {
@@ -100,5 +122,30 @@ export default {
   height: 20vh;
   top: 40vh;
   text-align: center;
+}
+
+main {
+  h1 {
+    margin: 0;
+    padding: 0 0 20px 0;
+    font-size: 18px;
+  }
+
+  position: relative;
+  max-width: 320px;
+
+  section {
+    margin-top: 20px;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 2px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.33);
+  }
+
+  img.logo {
+    max-width: 80%;
+    display: block;
+    margin: 0 auto;
+  }
 }
 </style>

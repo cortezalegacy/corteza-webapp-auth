@@ -1,5 +1,5 @@
 <template>
-  <auth-dialog title="Sign up">
+  <div>
     <p v-if="pendingEmailConfirmation">Email confirmation link sent. Check your inbox.</p>
     <div v-else>
       <form @submit.prevent="internalSignup" v-if="internalSignUpEnabled">
@@ -53,7 +53,7 @@
       </form>
       <div class="or" v-if="externalEnabled && externalProviders && internalSignUpEnabled">or select below:</div>
       <fieldset class="external-providers" v-if="externalEnabled && externalProviders">
-        <external-provider v-for="p in externalProviders" :key="p.handle" :kind="p.handle" :label="p.label"></external-provider>
+        <external-provider v-for="p in externalProviders" :key="p.handle" :onExternalAuth="onExternalAuth" :pKind="p.handle" :pLabel="p.label"></external-provider>
       </fieldset>
       <div class="footnote" v-if="internalSignUpEnabled">
         <router-link v-if="internalPasswordResetEnabled"
@@ -66,14 +66,23 @@
         <router-link :to="{ name: 'login'}">Login here</router-link>
       </div>
     </div>
-  </auth-dialog>
+  </div>
 </template>
 
 <script>
+import ExternalProvider from '../components/ExternalProvider'
+
 export default {
   name: 'Signup',
 
+  components: {
+    ExternalProvider,
+  },
+
   props: {
+    afterSignup: { default: null },
+    onExternalAuth: { default: null },
+
     externalEnabled: {
       type: Boolean,
     },
@@ -144,7 +153,11 @@ export default {
       if (jwt) {
         this.$auth.JWT = jwt
         this.$auth.user = user
-        window.location = redirectTo
+        if (this.afterSignup) {
+          this.afterSignup()
+        } else {
+          window.location = redirectTo
+        }
       } else {
         this.pendingEmailConfirmation = true
       }

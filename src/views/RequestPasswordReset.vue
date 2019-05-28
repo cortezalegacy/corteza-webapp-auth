@@ -1,5 +1,5 @@
 <template>
-  <auth-dialog title="Request password reset link">
+  <div>
     <p v-if="done">Password reset request sent. Check your inbox.</p>
     <form @submit.prevent="requestPasswordReset" v-else>
 
@@ -24,7 +24,7 @@
     <div class="footnote">
       <router-link :to="{ name: 'login' }">Login</router-link>
     </div>
-  </auth-dialog>
+  </div>
 </template>
 
 <script>

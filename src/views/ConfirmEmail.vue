@@ -1,5 +1,5 @@
 <template>
-  <auth-dialog title="Email confirmation">
+  <div>
     <div v-if="error">
       <p class="error">Error: {{ error }}</p>
       <p>Check your email again or try to login again to receive a new token.</p>
@@ -13,7 +13,7 @@
     <div class="footnote" v-if="internalSignUpEnabled">
       <router-link :to="{ name: 'login'}">Login</router-link>
     </div>
-  </auth-dialog>
+  </div>
 </template>
 
 <script>
@@ -27,6 +27,7 @@ export default {
     internalSignUpEnabled: {
       type: Boolean,
     },
+    afterConfirmEmail: { default: null },
   },
 
   data () {
@@ -59,9 +60,13 @@ export default {
       this.$system.authInternalConfirmEmail({ token }).then(({ jwt, user }) => {
         this.$auth.JWT = jwt
         this.$auth.user = user
-        window.setTimeout(() => {
-          window.location = '/'
-        }, 3000)
+        if (this.afterConfirmEmail) {
+          this.afterConfirmEmail()
+        } else {
+          window.setTimeout(() => {
+            window.location = '/'
+          }, 3000)
+        }
       }).catch(({ message } = {}) => {
         this.error = message
       }).finally(() => {

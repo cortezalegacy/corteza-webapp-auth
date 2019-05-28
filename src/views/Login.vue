@@ -1,5 +1,5 @@
 <template>
-  <auth-dialog title="Login">
+  <div>
     <form @submit.prevent="internalLogin" v-if="internalEnabled">
       <div class="error" v-if="error">Error: {{ error }}</div>
 
@@ -32,7 +32,7 @@
     <div class="or" v-if="externalEnabled && externalProviders.length && internalEnabled">or select below:</div>
 
     <fieldset class="external-providers" v-if="externalEnabled && externalProviders">
-      <external-provider v-for="p in externalProviders" :key="p.handle" :kind="p.handle" :label="p.label"></external-provider>
+      <external-provider v-for="p in externalProviders" :key="p.handle" :onExternalAuth="onExternalAuth" :pKind="p.handle" :pLabel="p.label"></external-provider>
     </fieldset>
     <div v-if="!(externalEnabled && externalProviders.length > 0) && !internalEnabled">
       Login disabled. <br />Contact your administrator.
@@ -41,15 +41,24 @@
       <router-link v-if="internalEnabled && internalSignUpEnabled"
                    :to="{ name: 'signup'}">Create new account</router-link>
     </div>
-  </auth-dialog>
+  </div>
 </template>
 
 <script>
+import ExternalProvider from '../components/ExternalProvider'
+
 const tokenRegex = /^[a-zA-Z0-9]{32}\d+$/
 
 export default {
   name: 'Login',
+
+  components: {
+    ExternalProvider,
+  },
   props: {
+    afterLogin: { default: null },
+    onExternalAuth: { default: null },
+
     externalEnabled: {
       type: Boolean,
     },
@@ -88,22 +97,36 @@ export default {
     disabledSubmit () {
       return this.processing
     },
+    fPath () {
+      return this.$route.fullPath
+    },
+  },
+
+  watch: {
+    fPath: {
+      handler: function (newVal) {
+        this.finishExternal()
+      },
+    },
   },
 
   created () {
-    const token = this.$route.query.token
-    if (token) {
-      if (!tokenRegex.test(token)) {
-        this.$router.push({ name: 'login' })
-      } else {
-        this.exchangeToken(token)
-      }
-    } else if (this.$auth.is()) {
-      this.$router.push({ name: 'profile' })
-    }
+    this.finishExternal()
   },
 
   methods: {
+    finishExternal () {
+      const token = this.$route.query.token
+      if (token) {
+        if (!tokenRegex.test(token)) {
+          this.$router.push({ name: 'login' })
+        } else {
+          this.exchangeToken(token)
+        }
+      } else if (this.$auth.is()) {
+        this.$router.push({ name: 'profile' })
+      }
+    },
 
     exchangeToken (token) {
       this.error = null
@@ -138,7 +161,11 @@ export default {
     finalize ({ jwt, user, redirectTo = '/' }) {
       this.$auth.JWT = jwt
       this.$auth.user = user
-      window.location = redirectTo
+      if (this.afterLogin) {
+        this.afterLogin()
+      } else {
+        window.location = redirectTo
+      }
     },
   },
 }

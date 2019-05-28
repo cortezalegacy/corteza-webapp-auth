@@ -7,6 +7,7 @@
   "contributors": [
     "Denis Arh <denis.arh@gmail.com>"
   ],
+  "main": "index.js",
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build --mode production",
@@ -30,12 +31,12 @@
   "dependencies": {
     "@vue/eslint-config-standard": "^4.0.0",
     "core-js": "^2.6.5",
+    "crust-api-client.js": "crusttech/crust-api-client.js.git#master",
+    "crust-common.vue": "crusttech/crust-common.vue.git#master",
     "stylelint": "^9.10.1",
     "stylelint-config-standard": "^18.2.0",
     "stylelint-scss": "^3.5.4",
     "stylelint-webpack-plugin": "^0.10.5",
-    "crust-api-client.js": "crusttech/crust-api-client.js.git#master",
-    "crust-common.vue": "crusttech/crust-common.vue.git#master",
     "vue": "^2.6.6",
     "vue-router": "^3.0.3"
   },
