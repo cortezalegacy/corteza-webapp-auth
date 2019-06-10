@@ -1,38 +1,21 @@
 {
   "name": "webapp-auth",
-  "description": "Crust Authentication WebApp",
-  "private": true,
   "version": "2019.3.1",
-  "license": "Apache-2.0",
-  "contributors": [
-    "Denis Arh <denis.arh@gmail.com>"
-  ],
-  "main": "index.js",
+  "private": true,
+  "description": "Crust Authentication WebApp",
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build --mode production",
-    "lint": "vue-cli-service lint"
+    "lint": "vue-cli-service lint",
+    "test:unit": "vue-cli-service test:unit"
   },
-  "gitHooks": {
-    "pre-commit": "yarn lint"
-  },
-  "stylelint": {
-    "plugins": [
-      "stylelint-scss"
-    ],
-    "extends": "stylelint-config-standard",
-    "rules": {
-      "color-hex-case": null,
-      "color-hex-length": null,
-      "no-empty-source": null,
-      "selector-list-comma-newline-after": null
-    }
-  },
+  "main": "index.js",
   "dependencies": {
     "@vue/eslint-config-standard": "^4.0.0",
     "core-js": "^2.6.5",
     "crust-api-client.js": "crusttech/crust-api-client.js.git#master",
     "crust-common.vue": "crusttech/crust-common.vue.git#master",
+    "sinon": "^7.3.2",
     "stylelint": "^9.10.1",
     "stylelint-config-standard": "^18.2.0",
     "stylelint-scss": "^3.5.4",
@@ -43,8 +26,11 @@
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.5.0",
     "@vue/cli-plugin-eslint": "^3.5.0",
+    "@vue/cli-plugin-unit-mocha": "^3.8.0",
     "@vue/cli-service": "^3.5.0",
+    "@vue/test-utils": "1.0.0-beta.29",
     "babel-eslint": "^10.0.1",
+    "chai": "^4.1.2",
     "eslint": "^5.8.0",
     "eslint-plugin-vue": "^5.0.0",
     "node-sass": "^4.9.4",
@@ -74,5 +60,24 @@
     "> 1%",
     "last 2 versions",
     "not ie <= 8"
-  ]
+  ],
+  "contributors": [
+    "Denis Arh <denis.arh@gmail.com>"
+  ],
+  "gitHooks": {
+    "pre-commit": "yarn lint"
+  },
+  "license": "Apache-2.0",
+  "stylelint": {
+    "plugins": [
+      "stylelint-scss"
+    ],
+    "extends": "stylelint-config-standard",
+    "rules": {
+      "color-hex-case": null,
+      "color-hex-length": null,
+      "no-empty-source": null,
+      "selector-list-comma-newline-after": null
+    }
+  }
 }
