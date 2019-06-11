@@ -61,6 +61,7 @@ export default {
   created () {
     if (this.$auth.is()) {
       this.$router.push({ name: 'profile' })
+      return
     }
     if (!this.internalPasswordResetEnabled) {
       this.$router.push({ name: 'login' })

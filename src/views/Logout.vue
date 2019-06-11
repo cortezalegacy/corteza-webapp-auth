@@ -23,9 +23,10 @@ export default {
   },
 
   created () {
-    this.$auth.JWT = null
-    this.$auth.user = null
     this.$system.authLogout().then(() => {
+      this.$auth.JWT = null
+      this.$auth.user = null
+
       if (this.afterLogout) {
         this.afterLogout()
       } else {

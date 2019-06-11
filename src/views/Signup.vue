@@ -150,16 +150,17 @@ export default {
     },
 
     finalize ({ jwt, user, redirectTo = '/' }) {
-      if (jwt) {
-        this.$auth.JWT = jwt
-        this.$auth.user = user
-        if (this.afterSignup) {
-          this.afterSignup()
-        } else {
-          window.location = redirectTo
-        }
-      } else {
+      // @note can invalid jwt happen?
+      if (!jwt) {
         this.pendingEmailConfirmation = true
+        return
+      }
+      this.$auth.JWT = jwt
+      this.$auth.user = user
+      if (this.afterSignup) {
+        this.afterSignup()
+      } else {
+        window.location = redirectTo
       }
     },
   },

@@ -1,11 +1,11 @@
 <template>
   <div>
     <dt>Email</dt>
-    <dd>{{ $auth.user.email }}</dd>
+    <dd>{{ user.email }}</dd>
     <dt>Name</dt>
-    <dd>{{ $auth.user.name }}</dd>
+    <dd>{{ user.name }}</dd>
     <dt>Handle</dt>
-    <dd>{{ $auth.user.handle }}</dd>
+    <dd>{{ user.handle }}</dd>
     <div class="footnote">
       <router-link :to="{ name: 'logout'}">Logout</router-link>
       <span v-if="internalEnabled">
@@ -22,6 +22,12 @@ export default {
   props: {
     internalEnabled: {
       type: Boolean,
+    },
+  },
+
+  computed: {
+    user () {
+      return this.$auth.user || {}
     },
   },
 

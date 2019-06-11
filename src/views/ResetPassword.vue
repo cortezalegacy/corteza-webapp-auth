@@ -60,14 +60,15 @@ export default {
   },
 
   created () {
-    if (this.$route.query.token) {
-      const token = this.$route.query.token
-
+    const token = this.$route.query.token
+    if (token) {
       if (!tokenRegex.test(token)) {
         this.error = 'Invalid token'
       } else {
         this.exchangeToken(token)
       }
+    } else {
+      this.error = 'Missing token'
     }
   },
 

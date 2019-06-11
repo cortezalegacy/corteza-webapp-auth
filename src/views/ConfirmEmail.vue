@@ -37,15 +37,9 @@ export default {
     }
   },
 
-  computed: {
-    disabledSubmit () {
-      return this.processing
-    },
-  },
-
   created () {
     const token = this.$route.query.token
-    if (!tokenRegex.test(token)) {
+    if (!token || !tokenRegex.test(token)) {
       this.error = 'Invalid token'
     } else {
       this.confirmToken(token)
@@ -53,6 +47,12 @@ export default {
   },
 
   methods: {
+    afterConfirm () {
+      window.setTimeout(() => {
+        window.location = '/'
+      }, 3000)
+    },
+
     confirmToken (token) {
       this.error = null
       this.processing = true
@@ -63,9 +63,7 @@ export default {
         if (this.afterConfirmEmail) {
           this.afterConfirmEmail()
         } else {
-          window.setTimeout(() => {
-            window.location = '/'
-          }, 3000)
+          this.afterConfirm()
         }
       }).catch(({ message } = {}) => {
         this.error = message
