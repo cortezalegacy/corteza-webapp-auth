@@ -140,7 +140,7 @@ export default {
       this.processing = true
       this.pendingEmailConfirmation = false
 
-      this.$system.authInternalSignup(this.form).then(({ jwt, user }) => {
+      this.$SystemAPI.authInternalSignup(this.form).then(({ jwt, user }) => {
         this.finalize({ jwt, user })
       }).catch(({ message } = {}) => {
         this.error = message

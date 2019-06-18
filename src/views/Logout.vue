@@ -23,7 +23,7 @@ export default {
   },
 
   created () {
-    this.$system.authLogout().then(() => {
+    this.$SystemAPI.authLogout().then(() => {
       this.$auth.JWT = null
       this.$auth.user = null
 

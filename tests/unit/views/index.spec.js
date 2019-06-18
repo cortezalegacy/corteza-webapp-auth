@@ -43,7 +43,7 @@ describe('views/Index.vue', () => {
         const settings = { internalEnabled: true, externalEnabled: false }
         const unknown = { unknown: true }
         const systemResolve = sinon.mock().resolves({ ...settings, ...unknown })
-        wrapper = mount({ mocks: { $route: {}, $system: { authSettings: systemResolve } } })
+        wrapper = mount({ mocks: { $route: {}, $SystemAPI: { authSettings: systemResolve } } })
 
         expect(wrapper.vm.error).to.eq(null)
         expect(wrapper.vm.processing).to.eq(true)
@@ -62,7 +62,7 @@ describe('views/Index.vue', () => {
       it('resolve.externalProviders', (done) => {
         const settings = { externalProviders: [{ label: 'b' }, { label: 'a' }] }
         const systemResolve = sinon.mock().resolves({ ...settings })
-        wrapper = mount({ mocks: { $route: {}, $system: { authSettings: systemResolve } } })
+        wrapper = mount({ mocks: { $route: {}, $SystemAPI: { authSettings: systemResolve } } })
 
         expect(wrapper.vm.settings.externalProviders).to.have.length(0)
         setTimeout(() => {
@@ -75,7 +75,7 @@ describe('views/Index.vue', () => {
       })
       it('reject.error.general', (done) => {
         const systemReject = sinon.mock().rejects(new Error('reject'))
-        wrapper = mount({ mocks: { $route: {}, $system: { authSettings: systemReject }, $auth: { JWT: 'jwt', user: 'user' } } })
+        wrapper = mount({ mocks: { $route: {}, $SystemAPI: { authSettings: systemReject }, $auth: { JWT: 'jwt', user: 'user' } } })
         expect(wrapper.vm.error).to.eq(null)
         expect(wrapper.vm.processing).to.eq(true)
         expect(wrapper.vm.$auth.JWT).to.not.eq(null)
@@ -91,7 +91,7 @@ describe('views/Index.vue', () => {
       })
       it('reject.error.network', (done) => {
         const systemReject = sinon.mock().rejects(new Error('Network Error'))
-        wrapper = mount({ mocks: { $route: {}, $system: { authSettings: systemReject }, $auth: { JWT: 'jwt', user: 'user' } } })
+        wrapper = mount({ mocks: { $route: {}, $SystemAPI: { authSettings: systemReject }, $auth: { JWT: 'jwt', user: 'user' } } })
         expect(wrapper.vm.error).to.eq(null)
         expect(wrapper.vm.processing).to.eq(true)
         expect(wrapper.vm.$auth.JWT).to.not.eq(null)

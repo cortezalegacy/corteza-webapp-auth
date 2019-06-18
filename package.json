@@ -1,8 +1,8 @@
 {
-  "name": "webapp-auth",
-  "version": "2019.3.1",
+  "name": "corteza-webapp-auth",
+  "version": "2019.3.2",
   "private": true,
-  "description": "Crust Authentication WebApp",
+  "description": "Corteza Authentication WebApp",
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build --mode production",
@@ -13,8 +13,7 @@
   "dependencies": {
     "@vue/eslint-config-standard": "^4.0.0",
     "core-js": "^2.6.5",
-    "crust-api-client.js": "crusttech/crust-api-client.js.git#master",
-    "crust-common.vue": "crusttech/crust-common.vue.git#master",
+    "corteza-webapp-common": "cortezaproject/corteza-webapp-common.git#master",
     "sinon": "^7.3.2",
     "stylelint": "^9.10.1",
     "stylelint-config-standard": "^18.2.0",

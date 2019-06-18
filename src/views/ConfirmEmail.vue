@@ -57,7 +57,7 @@ export default {
       this.error = null
       this.processing = true
 
-      this.$system.authInternalConfirmEmail({ token }).then(({ jwt, user }) => {
+      this.$SystemAPI.authInternalConfirmEmail({ token }).then(({ jwt, user }) => {
         this.$auth.JWT = jwt
         this.$auth.user = user
         if (this.afterConfirmEmail) {

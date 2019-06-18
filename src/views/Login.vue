@@ -132,7 +132,7 @@ export default {
       this.error = null
       this.processing = true
 
-      this.$system.authExchangeAuthToken({ token }).then(({ jwt, user }) => {
+      this.$SystemAPI.authExchangeAuthToken({ token }).then(({ jwt, user }) => {
         return this.finalize({ jwt, user })
       }).catch(({ message } = {}) => {
         this.error = message
@@ -149,7 +149,7 @@ export default {
       this.error = null
       this.processing = true
 
-      this.$system.authInternalLogin(this.form).then(({ jwt, user }) => {
+      this.$SystemAPI.authInternalLogin(this.form).then(({ jwt, user }) => {
         return this.finalize({ jwt, user })
       }).catch(({ message } = {}) => {
         this.error = message

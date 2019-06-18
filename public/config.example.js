@@ -1,1 +1,1 @@
-window.CrustSystemAPI = `//system.api.your.crust`
+window.SystemAPI = `//system.api.your.crust`

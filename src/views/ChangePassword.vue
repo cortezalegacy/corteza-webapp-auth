@@ -112,7 +112,7 @@ export default {
       this.processing = true
       this.passwordChanged = false
 
-      this.$system.authInternalChangePassword(this.form).then(() => {
+      this.$SystemAPI.authInternalChangePassword(this.form).then(() => {
         this.passwordChanged = true
       }).catch(({ message } = {}) => {
         this.error = message

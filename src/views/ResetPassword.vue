@@ -77,7 +77,7 @@ export default {
       this.error = null
       this.processing = true
 
-      this.$system.authInternalExchangePasswordResetToken({ token }).then(({ token, user }) => {
+      this.$SystemAPI.authInternalExchangePasswordResetToken({ token }).then(({ token, user }) => {
         this.token = token
         this.user = user
       }).catch(({ message } = {}) => {
@@ -91,7 +91,7 @@ export default {
       this.error = null
       this.processing = true
 
-      this.$system.authInternalResetPassword({ token: this.token, ...this.form }).then(({ jwt, user }) => {
+      this.$SystemAPI.authInternalResetPassword({ token: this.token, ...this.form }).then(({ jwt, user }) => {
         this.$auth.JWT = jwt
         this.$auth.user = user
         this.$router.push({ name: 'profile' })

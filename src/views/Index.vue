@@ -3,7 +3,7 @@
     <div class="error" v-if="error">{{ error }}</div>
 
     <main v-else-if="!this.processing">
-      <a href="/"><img alt="Crust logo" class="logo" src="../assets/crust-logo-with-tagline.png"></a>
+      <a href="/"><img alt="Corteza logo" class="logo" src="../assets/corteza-logo-with-tagline.png"></a>
       <section>
         <h1>{{ t(`dialog.${$route.name}.title`) }}</h1>
         <router-view v-bind="settings"/>
@@ -22,7 +22,7 @@ export default {
 
   data () {
     return {
-      logo: require('../assets/crust-logo-with-tagline.png'),
+      logo: require('../assets/corteza-logo-with-tagline.png'),
 
       processing: false,
 
@@ -50,7 +50,7 @@ export default {
         'dialog.request-password-reset.title': 'Request password reset link',
         'dialog.reset-password.title': 'Reset your password',
         'dialog.sign-up.title': 'Sign up',
-        'dialog.profile.title': 'Your Crust profile',
+        'dialog.profile.title': 'Your profile',
       }[k] || k)
     },
   },
@@ -64,7 +64,7 @@ export default {
       this.error = null
       this.processing = true
 
-      this.$system.authSettings().then(ss => {
+      this.$SystemAPI.authSettings().then(ss => {
         for (var k in this.settings) {
           if (ss[k] !== undefined) {
             this.settings[k] = ss[k]

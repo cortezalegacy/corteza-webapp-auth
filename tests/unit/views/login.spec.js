@@ -87,7 +87,7 @@ describe('views/Login.vue', () => {
       })
 
       it('resolve', (done) => {
-        wrapper = mount(Login, { ...common, methods: { finalize }, mocks: { ...mocks, $system: { authExchangeAuthToken: systemResolve } } })
+        wrapper = mount(Login, { ...common, methods: { finalize }, mocks: { ...mocks, $SystemAPI: { authExchangeAuthToken: systemResolve } } })
         wrapper.vm.exchangeToken(token)
         expect(wrapper.vm.error).to.eq(null)
         expect(wrapper.vm.processing).to.eq(true)
@@ -100,7 +100,7 @@ describe('views/Login.vue', () => {
       })
 
       it('reject', (done) => {
-        wrapper = mount(Login, { ...common, methods: { finalize }, mocks: { ...mocks, $system: { authExchangeAuthToken: systemReject } } })
+        wrapper = mount(Login, { ...common, methods: { finalize }, mocks: { ...mocks, $SystemAPI: { authExchangeAuthToken: systemReject } } })
         wrapper.vm.exchangeToken(token)
         expect(wrapper.vm.error).to.eq(null)
         expect(wrapper.vm.processing).to.eq(true)
@@ -127,13 +127,13 @@ describe('views/Login.vue', () => {
       })
 
       it('disabled', () => {
-        wrapper = mount(Login, { ...common, propsData: { internalEnabled: false }, methods: { finalize }, mocks: { ...mocks, $system: { authInternalLogin: systemResolve } } })
+        wrapper = mount(Login, { ...common, propsData: { internalEnabled: false }, methods: { finalize }, mocks: { ...mocks, $SystemAPI: { authInternalLogin: systemResolve } } })
         wrapper.vm.internalLogin()
         assert(systemResolve.notCalled)
       })
 
       it('resolve', (done) => {
-        wrapper = mount(Login, { ...common, methods: { finalize }, mocks: { ...mocks, $system: { authInternalLogin: systemResolve } } })
+        wrapper = mount(Login, { ...common, methods: { finalize }, mocks: { ...mocks, $SystemAPI: { authInternalLogin: systemResolve } } })
         wrapper.vm.internalLogin()
         expect(wrapper.vm.error).to.eq(null)
         expect(wrapper.vm.processing).to.eq(true)
@@ -146,7 +146,7 @@ describe('views/Login.vue', () => {
       })
 
       it('reject', (done) => {
-        wrapper = mount(Login, { ...common, methods: { finalize }, mocks: { ...mocks, $system: { authInternalLogin: systemReject } } })
+        wrapper = mount(Login, { ...common, methods: { finalize }, mocks: { ...mocks, $SystemAPI: { authInternalLogin: systemReject } } })
         wrapper.vm.internalLogin()
         expect(wrapper.vm.error).to.eq(null)
         expect(wrapper.vm.processing).to.eq(true)

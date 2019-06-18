@@ -34,7 +34,7 @@ export default {
     },
 
     authUrl () {
-      return this.pUrl || `${this.$system.baseURL}${this.$system.authSettingsEndpoint()}external/${this.pKind}`
+      return this.pUrl || `${this.$SystemAPI.baseURL}${this.$SystemAPI.authSettingsEndpoint()}external/${this.pKind}`
     },
   },
 

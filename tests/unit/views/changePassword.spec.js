@@ -85,7 +85,7 @@ describe('views/ChangePassword.vue', () => {
       const form = { oldPassword: 'old', newPassword: 'new', newPasswordCheck: 'new' }
 
       it('resolve', (done) => {
-        wrapper = mount({ mocks: { $auth: { user: {}, is: () => true }, $system: { authInternalChangePassword: systemResolve } }, data: () => ({ form }) })
+        wrapper = mount({ mocks: { $auth: { user: {}, is: () => true }, $SystemAPI: { authInternalChangePassword: systemResolve } }, data: () => ({ form }) })
 
         wrapper.vm.changePassword(wrapper.vm.form)
         expect(wrapper.vm.error).to.eq(null)
@@ -101,7 +101,7 @@ describe('views/ChangePassword.vue', () => {
       })
 
       it('reject', (done) => {
-        wrapper = mount({ mocks: { $auth: { user: {}, is: () => true }, $system: { authInternalChangePassword: systemReject } }, data: () => ({ form }) })
+        wrapper = mount({ mocks: { $auth: { user: {}, is: () => true }, $SystemAPI: { authInternalChangePassword: systemReject } }, data: () => ({ form }) })
 
         wrapper.vm.changePassword(wrapper.vm.form)
         expect(wrapper.vm.error).to.eq(null)

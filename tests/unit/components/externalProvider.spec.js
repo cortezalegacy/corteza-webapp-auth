@@ -18,7 +18,7 @@ describe('components/ExternalProvider.vue', () => {
       wrapper = shallowMount(ExternalProvider, {
         ...common,
         mocks: {
-          $system: {
+          $SystemAPI: {
             baseURL: 'baseURL/',
             authSettingsEndpoint: () => 'authSettingsEndpoint/',
           },

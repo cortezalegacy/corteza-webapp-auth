@@ -68,7 +68,7 @@ describe('views/ConfirmEmail.vue', () => {
 
       it('resolve.afterConfirmEmail', (done) => {
         const $auth = { user: {}, is: () => true }
-        wrapper = mount({ props: { afterConfirmEmail }, mocks: { $route: { query: {} }, $auth, $system: { authInternalConfirmEmail: systemResolve } } })
+        wrapper = mount({ props: { afterConfirmEmail }, mocks: { $route: { query: {} }, $auth, $SystemAPI: { authInternalConfirmEmail: systemResolve } } })
 
         wrapper.vm.confirmToken(token)
         expect(wrapper.vm.error).to.eq(null)
@@ -86,7 +86,7 @@ describe('views/ConfirmEmail.vue', () => {
       it('resolve.redirect', (done) => {
         const $auth = { user: {}, is: () => true }
         const afterConfirm = sinon.fake()
-        wrapper = mount({ mocks: { $route: { query: {} }, $auth, $system: { authInternalConfirmEmail: systemResolve } }, methods: { afterConfirm } })
+        wrapper = mount({ mocks: { $route: { query: {} }, $auth, $SystemAPI: { authInternalConfirmEmail: systemResolve } }, methods: { afterConfirm } })
 
         wrapper.vm.confirmToken(token)
         expect(wrapper.vm.error).to.eq(null)
@@ -104,7 +104,7 @@ describe('views/ConfirmEmail.vue', () => {
 
       it('reject', (done) => {
         const $auth = { user: undefined, is: () => true }
-        wrapper = mount({ mocks: { $route: { query: {} }, $auth, $system: { authInternalConfirmEmail: systemReject } } })
+        wrapper = mount({ mocks: { $route: { query: {} }, $auth, $SystemAPI: { authInternalConfirmEmail: systemReject } } })
 
         wrapper.vm.confirmToken(token)
         expect(wrapper.vm.error).to.eq(null)

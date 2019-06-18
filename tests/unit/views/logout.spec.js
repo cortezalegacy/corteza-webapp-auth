@@ -25,7 +25,7 @@ describe('views/Logout.vue', () => {
 
       it('resolve.afterLogout', (done) => {
         const afterLogout = sinon.fake()
-        wrapper = mount(Logout, { ...common, propsData: { afterLogout }, mocks: { $auth, $system: { authLogout: systemResolve } } })
+        wrapper = mount(Logout, { ...common, propsData: { afterLogout }, mocks: { $auth, $SystemAPI: { authLogout: systemResolve } } })
 
         expect($auth.JWT).to.eq('JWT')
         expect($auth.user).to.eq('user')
@@ -40,7 +40,7 @@ describe('views/Logout.vue', () => {
 
       it('resolve.redirect', (done) => {
         const push = sinon.fake()
-        wrapper = mount(Logout, { ...common, mocks: { $auth, $system: { authLogout: systemResolve }, $router: { push } } })
+        wrapper = mount(Logout, { ...common, mocks: { $auth, $SystemAPI: { authLogout: systemResolve }, $router: { push } } })
 
         expect($auth.JWT).to.eq('JWT')
         expect($auth.user).to.eq('user')
@@ -54,7 +54,7 @@ describe('views/Logout.vue', () => {
       })
 
       it('reject', (done) => {
-        wrapper = mount(Logout, { ...common, mocks: { $auth, $system: { authLogout: systemReject } } })
+        wrapper = mount(Logout, { ...common, mocks: { $auth, $SystemAPI: { authLogout: systemReject } } })
 
         expect($auth.JWT).to.eq('JWT')
         expect($auth.user).to.eq('user')

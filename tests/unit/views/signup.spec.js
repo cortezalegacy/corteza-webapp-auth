@@ -60,7 +60,7 @@ describe('views/Signup.vue', () => {
       })
 
       it('resolve', (done) => {
-        wrapper = mount(Signup, { ...common, mocks: { ...mocks, $system: { authInternalSignup: systemResolve } }, methods: { finalize }, data: () => ({ form }) })
+        wrapper = mount(Signup, { ...common, mocks: { ...mocks, $SystemAPI: { authInternalSignup: systemResolve } }, methods: { finalize }, data: () => ({ form }) })
 
         wrapper.vm.internalSignup()
         expect(wrapper.vm.error).to.eq(null)
@@ -78,7 +78,7 @@ describe('views/Signup.vue', () => {
       })
 
       it('reject', (done) => {
-        wrapper = mount(Signup, { ...common, mocks: { ...mocks, $system: { authInternalSignup: systemReject } }, methods: { finalize }, data: () => ({ form }) })
+        wrapper = mount(Signup, { ...common, mocks: { ...mocks, $SystemAPI: { authInternalSignup: systemReject } }, methods: { finalize }, data: () => ({ form }) })
 
         wrapper.vm.internalSignup()
         expect(wrapper.vm.error).to.eq(null)

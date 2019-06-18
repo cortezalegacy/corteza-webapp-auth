@@ -62,7 +62,7 @@ describe('views/RequestPasswordReset.vue', () => {
 
     describe('requestPasswordReset', () => {
       it('resolve', (done) => {
-        wrapper = mount(RequestPasswordReset, { ...common, mocks: { ...mocks, $system: { authInternalRequestPasswordReset: systemResolve } } })
+        wrapper = mount(RequestPasswordReset, { ...common, mocks: { ...mocks, $SystemAPI: { authInternalRequestPasswordReset: systemResolve } } })
         wrapper.vm.requestPasswordReset()
 
         expect(wrapper.vm.error).to.eq(null)
@@ -78,7 +78,7 @@ describe('views/RequestPasswordReset.vue', () => {
       })
 
       it('reject', (done) => {
-        wrapper = mount(RequestPasswordReset, { ...common, mocks: { ...mocks, $system: { authInternalRequestPasswordReset: systemReject } } })
+        wrapper = mount(RequestPasswordReset, { ...common, mocks: { ...mocks, $SystemAPI: { authInternalRequestPasswordReset: systemReject } } })
         wrapper.vm.requestPasswordReset()
 
         expect(wrapper.vm.error).to.eq(null)

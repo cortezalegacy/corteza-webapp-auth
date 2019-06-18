@@ -74,7 +74,7 @@ export default {
       this.processing = true
       this.done = false
 
-      this.$system.authInternalRequestPasswordReset(this.form).then(r => {
+      this.$SystemAPI.authInternalRequestPasswordReset(this.form).then(r => {
         this.done = true
       }).catch(({ message } = {}) => {
         this.error = message

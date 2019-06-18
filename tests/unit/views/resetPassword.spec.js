@@ -66,7 +66,7 @@ describe('views/ResetPassword.vue', () => {
       })
 
       it('resolve', (done) => {
-        wrapper = mount(ResetPassword, { ...common, mocks: { ...mocks, $system: { authInternalExchangePasswordResetToken: systemResolve } } })
+        wrapper = mount(ResetPassword, { ...common, mocks: { ...mocks, $SystemAPI: { authInternalExchangePasswordResetToken: systemResolve } } })
 
         wrapper.vm.exchangeToken(token)
         expect(wrapper.vm.error).to.eq(null)
@@ -82,7 +82,7 @@ describe('views/ResetPassword.vue', () => {
       })
 
       it('reject', (done) => {
-        wrapper = mount(ResetPassword, { ...common, mocks: { ...mocks, $system: { authInternalExchangePasswordResetToken: systemReject } } })
+        wrapper = mount(ResetPassword, { ...common, mocks: { ...mocks, $SystemAPI: { authInternalExchangePasswordResetToken: systemReject } } })
 
         wrapper.vm.exchangeToken(token)
         expect(wrapper.vm.error).to.eq(null)
@@ -111,7 +111,7 @@ describe('views/ResetPassword.vue', () => {
       })
 
       it('resolve', (done) => {
-        wrapper = mount(ResetPassword, { ...common, mocks: { ...mocks, $system: { authInternalResetPassword: systemResolve }, $auth, $router: { push } }, data: () => ({ token, form }) })
+        wrapper = mount(ResetPassword, { ...common, mocks: { ...mocks, $SystemAPI: { authInternalResetPassword: systemResolve }, $auth, $router: { push } }, data: () => ({ token, form }) })
 
         wrapper.vm.changePassword()
         expect(wrapper.vm.error).to.eq(null)
@@ -129,7 +129,7 @@ describe('views/ResetPassword.vue', () => {
       })
 
       it('reject', (done) => {
-        wrapper = mount(ResetPassword, { ...common, mocks: { ...mocks, $system: { authInternalResetPassword: systemReject }, $auth, $router: { push } }, data: () => ({ token, form }) })
+        wrapper = mount(ResetPassword, { ...common, mocks: { ...mocks, $SystemAPI: { authInternalResetPassword: systemReject }, $auth, $router: { push } }, data: () => ({ token, form }) })
 
         wrapper.vm.changePassword()
         expect(wrapper.vm.error).to.eq(null)
