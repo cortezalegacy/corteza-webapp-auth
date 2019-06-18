@@ -2,11 +2,6 @@ kind: pipeline
 name: Build & Pack
 
 steps:
-  - name: env
-    image: cortezaproject/corteza-webapp-builder
-    commands:
-      - env
-
   - name: deps
     image: cortezaproject/corteza-webapp-builder
     commands:
