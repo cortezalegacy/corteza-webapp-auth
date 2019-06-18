@@ -65,6 +65,6 @@ module.exports = {
   },
   runtimeCompiler: true,
   css: {
-    sourceMap: process.env['NODE_ENV'] === 'development',
+    sourceMap: process.env.NODE_ENV === 'development',
   },
 }
