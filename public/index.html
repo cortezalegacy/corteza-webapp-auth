@@ -6,7 +6,8 @@
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <link rel="icon" id="app-favicon" href="<%= BASE_URL %>favicon32x32.png">
     <title>Corteza Auth</title>
-    <script src="<%= BASE_URL %>config.js"></script>
+    <link rel="preload" href="<%= BASE_URL %>config.js" as="script" />
+    <script src="<%= BASE_URL %>config.js" type="text/javascript"></script>
   </head>
   <body>
     <noscript>
