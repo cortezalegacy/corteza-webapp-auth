@@ -49,7 +49,7 @@ export default {
         'dialog.logout.title': 'Logout',
         'dialog.request-password-reset.title': 'Request password reset link',
         'dialog.reset-password.title': 'Reset your password',
-        'dialog.sign-up.title': 'Sign up',
+        'dialog.signup.title': 'Sign up',
         'dialog.profile.title': 'Your profile',
       }[k] || k)
     },
