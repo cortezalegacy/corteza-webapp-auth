@@ -1,7 +1,6 @@
 import Vue from 'vue'
 import router from './router'
 import App from './views/Index'
-import './components'
 import './plugins'
 import '@/assets/sass/index.scss'
 
@@ -14,7 +13,7 @@ console.log(
 Vue.config.productionTip = false
 
 if (window.SystemAPI === undefined) {
-  alert('Unexisting or invalid configuration. Make sure there is a public/config.js file.')
+  alert('Missing or invalid configuration. Make sure there is a public/config.js file.')
 } else {
   new Vue({
     router,

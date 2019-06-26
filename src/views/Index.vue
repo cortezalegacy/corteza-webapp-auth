@@ -42,6 +42,7 @@ export default {
 
   computed: {
     t () {
+      // @todo temporary, move to file
       return (k) => ({
         'dialog.change-password.title': 'Change your password',
         'dialog.confirm-email.title': 'Email confirmation',
