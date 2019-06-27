@@ -1,9 +1,12 @@
 import Vue from 'vue'
-import App from './views/Index'
+import Router from 'vue-router'
+
 import './plugins'
-import router from './router'
-import i18n from './i18n'
 import '@/assets/sass/index.scss'
+
+import i18n from './i18n'
+import routes from './views/routes'
+import App from './views/Index'
 
 /* eslint-disable no-undef */
 console.log(
@@ -11,11 +14,17 @@ console.log(
   'background-color: #1397CB; color: white; padding: 3px 10px; border: 1px solid black; font: Courier',
 )
 
-Vue.config.productionTip = false
-
 if (window.SystemAPI === undefined) {
   alert('Missing or invalid configuration. Make sure there is a public/config.js file.')
 } else {
+  // Register router plugin & setup router w/ routes
+  Vue.use(Router)
+  const router = new Router({
+    base: '/auth',
+    mode: 'history',
+    routes,
+  })
+
   new Vue({
     router,
     i18n,
