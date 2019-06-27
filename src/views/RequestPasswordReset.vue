@@ -1,28 +1,29 @@
 <template>
   <div>
-    <p v-if="done">Password reset request sent. Check your inbox.</p>
+    <h1>{{ $t(`view.request-password-reset.title`) }}</h1>
+    <p v-if="done">{{ $t('view.request-password-reset.password-request-sent') }}</p>
     <form @submit.prevent="requestPasswordReset" v-else>
 
-      <div class="error" v-if="error">Error: {{ error }}</div>
+      <div class="error" v-if="error">{{ $t('general.error-tpl', { error }) }}</div>
 
-      <label for="email">Email:</label>
+      <label for="email">{{ $t('view.request-password-reset.form.email.label') }}</label>
       <input
               id="email"
               type="email"
               name="email"
               required
-              placeholder="email@domain.tld"
               autocomplete="email"
+              :placeholder="$t('view.request-password-reset.form.email.placeholder')"
               v-model="form.email">
 
       <br/>
       <button type="submit"
               class="login-btn"
-              :disabled="disabledSubmit">Submit</button>
+              :disabled="disabledSubmit">{{ $t('view.request-password-reset.form.send') }}</button>
 
     </form>
     <div class="footnote">
-      <router-link :to="{ name: 'login' }">Login</router-link>
+      <router-link :to="{ name: 'auth:login' }">{{ $t('link.login-cta' )}}</router-link>
     </div>
   </div>
 </template>
@@ -37,6 +38,10 @@ export default {
       type: Boolean,
       required: true,
     },
+  },
+
+  i18nOptions: {
+    namespaces: [ 'auth' ],
   },
 
   data () {
@@ -60,11 +65,11 @@ export default {
 
   created () {
     if (this.$auth.is()) {
-      this.$router.push({ name: 'profile' })
+      this.$router.push({ name: 'auth:profile' })
       return
     }
     if (!this.internalPasswordResetEnabled) {
-      this.$router.push({ name: 'login' })
+      this.$router.push({ name: 'auth:login' })
     }
   },
 

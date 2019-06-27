@@ -8,14 +8,19 @@ const localVue = createLocalVue()
 
 describe('views/ConfirmEmail.vue', () => {
   let wrapper
+
+  const t = { $t: (e) => e }
+  const mocks = {
+    ...t,
+    $route: { query: {} },
+    $auth: { user: {}, is: () => true },
+  }
+
   const common = {
     localVue,
     stubs: ['router-view', 'router-link'],
     propsData: { internalEnabled: true },
-    mocks: {
-      $route: { query: {} },
-      $auth: { user: {}, is: () => true },
-    },
+    mocks,
   }
   const mount = (props = {}) => shallowMount(ConfirmEmail, { ...common, ...props })
 
@@ -28,7 +33,7 @@ describe('views/ConfirmEmail.vue', () => {
     it('token.valid', () => {
       token = `${new Array(33).join('a')}123`
       const confirmToken = sinon.fake()
-      wrapper = mount({ mocks: { $route: { query: { token } } }, methods: { confirmToken } })
+      wrapper = mount({ mocks: { ...mocks, $route: { query: { token } } }, methods: { confirmToken } })
 
       assert(confirmToken.calledOnceWith(token))
       expect(wrapper.vm.error).to.eq(null)
@@ -38,7 +43,7 @@ describe('views/ConfirmEmail.vue', () => {
       // missing
       token = undefined
       const confirmToken = sinon.fake()
-      wrapper = mount({ mocks: { $route: { query: { token } } }, methods: { confirmToken } })
+      wrapper = mount({ mocks: { ...t, $route: { query: { token } } }, methods: { confirmToken } })
 
       expect(confirmToken.calledOnce).to.eq(false)
       expect(wrapper.vm.error).to.not.eq(null)
@@ -46,7 +51,7 @@ describe('views/ConfirmEmail.vue', () => {
       // invalid
       token = 'token'
       confirmToken.resetHistory()
-      wrapper = mount({ mocks: { $route: { query: { token } } }, methods: { confirmToken } })
+      wrapper = mount({ mocks: { ...t, $route: { query: { token } } }, methods: { confirmToken } })
 
       expect(confirmToken.calledOnce).to.eq(false)
       expect(wrapper.vm.error).to.not.eq(null)
@@ -68,7 +73,7 @@ describe('views/ConfirmEmail.vue', () => {
 
       it('resolve.afterConfirmEmail', (done) => {
         const $auth = { user: {}, is: () => true }
-        wrapper = mount({ props: { afterConfirmEmail }, mocks: { $route: { query: {} }, $auth, $SystemAPI: { authInternalConfirmEmail: systemResolve } } })
+        wrapper = mount({ props: { afterConfirmEmail }, mocks: { ...mocks, $route: { query: {} }, $auth, $SystemAPI: { authInternalConfirmEmail: systemResolve } } })
 
         wrapper.vm.confirmToken(token)
         expect(wrapper.vm.error).to.eq(null)
@@ -86,7 +91,7 @@ describe('views/ConfirmEmail.vue', () => {
       it('resolve.redirect', (done) => {
         const $auth = { user: {}, is: () => true }
         const afterConfirm = sinon.fake()
-        wrapper = mount({ mocks: { $route: { query: {} }, $auth, $SystemAPI: { authInternalConfirmEmail: systemResolve } }, methods: { afterConfirm } })
+        wrapper = mount({ mocks: { ...mocks, $route: { query: {} }, $auth, $SystemAPI: { authInternalConfirmEmail: systemResolve } }, methods: { afterConfirm } })
 
         wrapper.vm.confirmToken(token)
         expect(wrapper.vm.error).to.eq(null)
@@ -104,7 +109,7 @@ describe('views/ConfirmEmail.vue', () => {
 
       it('reject', (done) => {
         const $auth = { user: undefined, is: () => true }
-        wrapper = mount({ mocks: { $route: { query: {} }, $auth, $SystemAPI: { authInternalConfirmEmail: systemReject } } })
+        wrapper = mount({ mocks: { ...mocks, $route: { query: {} }, $auth, $SystemAPI: { authInternalConfirmEmail: systemReject } } })
 
         wrapper.vm.confirmToken(token)
         expect(wrapper.vm.error).to.eq(null)

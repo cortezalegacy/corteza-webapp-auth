@@ -1,9 +1,10 @@
 <template>
   <div>
-    <p v-if="passwordChanged">Password changed.</p>
+    <h1>{{ $t(`view.change-password.title`) }}</h1>
+    <p v-if="passwordChanged">{{ $t(`view.change-password.changed`) }}</p>
     <div v-else>
       <form @submit.prevent="changePassword">
-        <label for="email">Email:</label>
+        <label for="email">{{ $t('view.change-password.form.email.label') }}</label>
         <input
                 id="email"
                 type="email"
@@ -11,48 +12,48 @@
                 v-model="user.email">
         <br />
 
-        <div class="error" v-if="error">Error: {{ error }}</div>
+        <div class="error" v-if="error">{{ $t('general.error-tpl', { error }) }}</div>
 
-        <label for="oldPassword">Current password:</label>
+        <label for="oldPassword">{{ $t('view.change-password.form.old-password.label') }}</label>
         <input
                 id="oldPassword"
                 type="password"
                 required
-                placeholder="Your password"
                 autocomplete="password"
+                :placeholder="$t('view.change-password.form.old-password.placeholder')"
                 v-model="form.oldPassword">
         <br />
 
-        <label for="newPassword">Password:</label>
+        <label for="newPassword">{{ $t('view.change-password.form.new-password.label') }}</label>
         <input
                 id="newPassword"
                 type="password"
                 required
-                placeholder="Your password"
                 autocomplete="password"
+                :placeholder="$t('view.change-password.form.new-password.placeholder')"
                 v-model="form.newPassword">
         <br />
 
-        <label for="passwordCheck">Repeat your password:</label>
+        <label for="passwordCheck">{{ $t('view.change-password.form.check-password.label') }}</label>
         <input
                 id="passwordCheck"
                 type="password"
                 required
-                placeholder="Repeat your password"
                 autocomplete="password"
+                :placeholder="$t('view.change-password.form.check-password.placeholder')"
                 :class="{ error: !this.passwordCheckMatch }"
                 v-model="form.newPasswordCheck">
         <br />
 
         <button type="submit"
                 class="login-btn"
-                :disabled="disabledSubmit">Submit</button>
+                :disabled="disabledSubmit">{{ $t('view.change-password.form.submit') }}</button>
       </form>
     </div>
     <div class="footnote">
-      <router-link :to="{ name: 'logout'}">Logout</router-link>
+      <router-link :to="{ name: 'auth:logout'}">{{ $t('link.logout') }}</router-link>
       |
-      <router-link :to="{ name: 'profile'}">Back to profile</router-link>
+      <router-link :to="{ name: 'auth:profile'}">{{ $t('link.profile-cta') }}</router-link>
     </div>
   </div>
 </template>
@@ -96,13 +97,17 @@ export default {
     },
   },
 
+  i18nOptions: {
+    namespaces: [ 'auth' ],
+  },
+
   created () {
     if (!this.internalEnabled) {
-      this.$router.push({ name: 'login' })
+      this.$router.push({ name: 'auth:login' })
     }
 
     if (!this.$auth.is()) {
-      this.$router.push({ name: 'login' })
+      this.$router.push({ name: 'auth:login' })
     }
   },
 

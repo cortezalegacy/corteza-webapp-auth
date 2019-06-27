@@ -5,7 +5,6 @@
     <main v-else-if="!this.processing">
       <a href="/"><img alt="Corteza logo" class="logo" src="../assets/corteza-logo-with-tagline.png"></a>
       <section>
-        <h1>{{ t(`dialog.${$route.name}.title`) }}</h1>
         <router-view v-bind="settings"/>
       </section>
     </main>
@@ -40,20 +39,8 @@ export default {
     }
   },
 
-  computed: {
-    t () {
-      // @todo temporary, move to file
-      return (k) => ({
-        'dialog.change-password.title': 'Change your password',
-        'dialog.confirm-email.title': 'Email confirmation',
-        'dialog.login.title': 'Login',
-        'dialog.logout.title': 'Logout',
-        'dialog.request-password-reset.title': 'Request password reset link',
-        'dialog.reset-password.title': 'Reset your password',
-        'dialog.signup.title': 'Sign up',
-        'dialog.profile.title': 'Your profile',
-      }[k] || k)
-    },
+  i18nOptions: {
+    namespaces: [ 'auth' ],
   },
 
   created () {

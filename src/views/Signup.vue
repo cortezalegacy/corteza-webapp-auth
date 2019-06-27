@@ -1,69 +1,65 @@
 <template>
   <div>
-    <p v-if="pendingEmailConfirmation">Email confirmation link sent. Check your inbox.</p>
+    <h1>{{ $t('view.signup.title') }}</h1>
+    <p v-if="pendingEmailConfirmation">{{ $t('pending-email-confirmation') }}</p>
     <div v-else>
       <form @submit.prevent="internalSignup" v-if="internalSignUpEnabled">
-        <label for="email">Email:</label>
-        <input
-                id="email"
-                type="email"
-                name="email"
-                required
-                placeholder="email@domain.tld"
-                autocomplete="email"
-                v-model="form.email">
+        <label for="email">{{ $t('view.signup.form.email.label') }}</label>
+        <input id="email"
+               type="email"
+               name="email"
+               required
+               autocomplete="email"
+               :placeholder="$t('view.signup.form.email.placeholder')"
+               v-model="form.email">
         <br />
 
-        <label for="password">Password:</label>
-        <input
-                id="password"
-                type="password"
-                name="password"
-                required
-                placeholder="Your password"
-                autocomplete="password"
-                v-model="form.password">
+        <label for="password">{{ $t('view.signup.form.password.label') }}</label>
+        <input id="password"
+               type="password"
+               name="password"
+               required
+               autocomplete="password"
+               :placeholder="$t('view.signup.form.password.placeholder')"
+               v-model="form.password">
         <br />
 
-        <label for="name">Full name:</label>
-        <input
-                id="name"
-                type="text"
-                name="name"
-                placeholder="Your full name"
-                autocomplete="name"
-                v-model="form.name">
+        <label for="name">{{ $t('view.signup.form.name.label') }}</label>
+        <input id="name"
+               type="text"
+               name="name"
+               autocomplete="name"
+               :placeholder="$t('view.signup.form.name.placeholder')"
+               v-model="form.name">
         <br />
 
-        <label for="handle">Name, nickname, handle:</label>
-        <input
-                id="handle"
-                type="text"
-                name="handle"
-                placeholder="Name"
-                autocomplete="handle"
-                v-model="form.handle">
-
+        <label for="handle">{{ $t('view.signup.form.handle.label') }}</label>
+        <input id="handle"
+               type="text"
+               name="handle"
+               autocomplete="handle"
+               :placeholder="$t('view.signup.form.handle.placeholder')"
+               v-model="form.handle">
         <br/>
         <button type="submit"
                 class="login-btn"
-                :disabled="disabledSubmit">Submit</button>
+                :disabled="disabledSubmit">{{ $t('view.signup.form.submit') }}</button>
 
-        <div class="error" v-if="error">Error: {{ error }}</div>
+        <div class="error" v-if="error">{{ $t('general.error-tpl', { error }) }}</div>
       </form>
-      <div class="or" v-if="externalEnabled && externalProviders && internalSignUpEnabled">or select below:</div>
+      <div class="or" v-if="externalEnabled && externalProviders && internalSignUpEnabled">{{ $t('general.internal-external-separator') }}</div>
       <fieldset class="external-providers" v-if="externalEnabled && externalProviders">
         <external-provider v-for="p in externalProviders" :key="p.handle" :onExternalAuth="onExternalAuth" :pKind="p.handle" :pLabel="p.label"></external-provider>
       </fieldset>
       <div class="footnote" v-if="internalSignUpEnabled">
         <router-link v-if="internalPasswordResetEnabled"
-                     :to="{ name: 'request-password-reset'}"
-                     class="forgotten-pw">Forgotten password?</router-link>
+                     :to="{ name: 'auth:request-password-reset'}"
+                     class="forgotten-pw">{{ $t('link.forgotten-password-cta') }}</router-link>
         <br />
         <br />
 
-        Already have an account?
-        <router-link :to="{ name: 'login'}">Login here</router-link>
+        {{ $t('view.signup.existing-account') }}
+        <router-link :to="{ name: 'auth:login'}">{{ $t('link.login') }}</router-link>
       </div>
     </div>
   </div>
@@ -122,6 +118,10 @@ export default {
     }
   },
 
+  i18nOptions: {
+    namespaces: [ 'auth' ],
+  },
+
   computed: {
     disabledSubmit () {
       return this.processing
@@ -130,7 +130,7 @@ export default {
 
   created () {
     if (this.$auth.is()) {
-      this.$router.push({ name: 'profile' })
+      this.$router.push({ name: 'auth:profile' })
     }
   },
 

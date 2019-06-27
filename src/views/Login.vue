@@ -1,45 +1,47 @@
 <template>
   <div>
+    <h1>{{ $t(`view.login.title`) }}</h1>
     <form @submit.prevent="internalLogin" v-if="internalEnabled">
-      <div class="error" v-if="error">Error: {{ error }}</div>
+      <div class="error" v-if="error">{{ $t('general.error-tpl', { error }) }}</div>
 
-      <label for="email">Email:</label>
-      <input
-              id="email"
-              type="email"
-              name="email"
-              required
-              placeholder="email@domain.tld"
-              autocomplete="email"
-              v-model="form.email">
-      <label for="password">Password:</label>
-      <input
-              id="password"
-              type="password"
-              name="password"
-              required
-              placeholder="Your password"
-              autocomplete="password"
-              v-model="form.password">
+      <label for="email">{{ $t('view.login.form.email.label') }}</label>
+      <input id="email"
+             type="email"
+             name="email"
+             required
+             autocomplete="email"
+             :placeholder="$t('view.login.form.email.placeholder')"
+             v-model="form.email">
+      <br />
+
+      <label for="password">{{ $t('view.login.form.password.label') }}</label>
+      <input id="password"
+             type="password"
+             name="password"
+             required
+             autocomplete="password"
+             :placeholder="$t('view.login.form.password.placeholder')"
+             v-model="form.password">
+
       <router-link v-if="internalPasswordResetEnabled"
-                   :to="{ name: 'request-password-reset'}"
-                   class="forgotten-pw">Forgotten password?</router-link>
+                   :to="{ name: 'auth:request-password-reset'}"
+                   class="forgotten-pw">{{ $t('link.forgotten-password-cta') }}</router-link>
       <button type="submit"
               class="login-btn"
-              :disabled="disabledSubmit">Submit</button>
+              :disabled="disabledSubmit">{{ $t('view.login.form.submit') }}</button>
     </form>
 
-    <div class="or" v-if="externalEnabled && externalProviders.length && internalEnabled">or select below:</div>
+    <div class="or" v-if="externalEnabled && externalProviders.length && internalEnabled">{{ $t('general.internal-external-separator') }}</div>
 
     <fieldset class="external-providers" v-if="externalEnabled && externalProviders">
       <external-provider v-for="p in externalProviders" :key="p.handle" :onExternalAuth="onExternalAuth" :pKind="p.handle" :pLabel="p.label"></external-provider>
     </fieldset>
     <div v-if="!(externalEnabled && externalProviders.length > 0) && !internalEnabled">
-      Login disabled. <br />Contact your administrator.
+      {{ $t('auth:general.login-disabled') }}
     </div>
     <div class="footnote">
       <router-link v-if="internalEnabled && internalSignUpEnabled"
-                   :to="{ name: 'signup'}">Create new account</router-link>
+                   :to="{ name: 'auth:signup'}">{{ $t('link.signup-cta') }}</router-link>
     </div>
   </div>
 </template>
@@ -78,6 +80,10 @@ export default {
     internalSignUpEnabled: {
       type: Boolean,
     },
+  },
+
+  i18nOptions: {
+    namespaces: [ 'auth' ],
   },
 
   data () {
@@ -119,12 +125,12 @@ export default {
       const token = this.$route.query.token
       if (token) {
         if (!tokenRegex.test(token)) {
-          this.$router.push({ name: 'login' })
+          this.$router.push({ name: 'auth:login' })
         } else {
           this.exchangeToken(token)
         }
       } else if (this.$auth.is()) {
-        this.$router.push({ name: 'profile' })
+        this.$router.push({ name: 'auth:profile' })
       }
     },
 

@@ -10,7 +10,11 @@ describe('views/Signup.vue', () => {
   const isFalse = sinon.stub().returns(false)
   const isTrue = sinon.stub().returns(true)
 
-  const mocks = { $auth: { is: isFalse } }
+  const mocks = {
+    $auth: { is: isFalse },
+    $t: (e) => e,
+  }
+
   let common = { localVue, stubs: ['router-view', 'router-link'], mocks }
   let wrapper
 
@@ -37,12 +41,12 @@ describe('views/Signup.vue', () => {
     })
 
     it('push.profile', () => {
-      wrapper = mount(Signup, { ...common, mocks: { $auth: { is: isTrue }, $router: { push } } })
-      assert(push.calledOnceWith({ name: 'profile' }))
+      wrapper = mount(Signup, { ...common, mocks: { ...mocks, $auth: { is: isTrue }, $router: { push } } })
+      assert(push.calledOnceWith({ name: 'auth:profile' }))
     })
 
     it('allowSignup', () => {
-      wrapper = mount(Signup, { ...common, mocks: { $auth: { is: isFalse } } })
+      wrapper = mount(Signup, { ...common, mocks: { ...mocks, $auth: { is: isFalse } } })
       assert(push.notCalled)
     })
   })
@@ -107,7 +111,7 @@ describe('views/Signup.vue', () => {
 
       it('jwt.valid.afterSignup', () => {
         let params = { jwt: 'jwt', user: 'user', redirectTo: 'redirectTo' }
-        wrapper = mount(Signup, { ...common, propsData: { afterSignup }, mocks: { $auth } })
+        wrapper = mount(Signup, { ...common, propsData: { afterSignup }, mocks: { ...mocks, $auth } })
 
         wrapper.vm.finalize(params)
         expect($auth.JWT).to.eq(params.jwt)
@@ -119,7 +123,7 @@ describe('views/Signup.vue', () => {
 
       it('jwt.valid.redirect', () => {
         let params = { jwt: 'jwt', user: 'user', redirectTo: 'redirectTo' }
-        wrapper = mount(Signup, { ...common, mocks: { $auth } })
+        wrapper = mount(Signup, { ...common, mocks: { ...mocks, $auth } })
 
         wrapper.vm.finalize(params)
         expect($auth.JWT).to.eq(params.jwt)
@@ -133,7 +137,7 @@ describe('views/Signup.vue', () => {
 
       it('jwt.missing', () => {
         let params = { user: 'user', redirectTo: 'redirectTo' }
-        wrapper = mount(Signup, { ...common, mocks: { $auth } })
+        wrapper = mount(Signup, { ...common, mocks: { ...mocks, $auth } })
 
         wrapper.vm.finalize(params)
         expect($auth.JWT).to.eq(undefined)

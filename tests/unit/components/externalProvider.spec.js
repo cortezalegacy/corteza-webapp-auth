@@ -7,7 +7,16 @@ import { writeableWindowLocation } from '../../lib/helpers'
 const localVue = createLocalVue()
 describe('components/ExternalProvider.vue', () => {
   let wrapper
-  const common = { localVue, propsData: { pKind: 'externalProvider', pUrl: 'pUrl' } }
+
+  const mocks = {
+    $t: (e) => e,
+  }
+
+  const common = {
+    localVue,
+    propsData: { pKind: 'externalProvider', pUrl: 'pUrl' },
+    mocks,
+  }
 
   beforeEach(() => {
     writeableWindowLocation({ path: '/' })
@@ -18,6 +27,7 @@ describe('components/ExternalProvider.vue', () => {
       wrapper = shallowMount(ExternalProvider, {
         ...common,
         mocks: {
+          ...mocks,
           $SystemAPI: {
             baseURL: 'baseURL/',
             authSettingsEndpoint: () => 'authSettingsEndpoint/',

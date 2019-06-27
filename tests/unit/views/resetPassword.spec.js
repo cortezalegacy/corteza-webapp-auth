@@ -7,8 +7,16 @@ import { mount } from '../../lib/helpers'
 const localVue = createLocalVue()
 
 describe('views/ResetPassword.vue', () => {
-  const mocks = { $route: { query: {} } }
-  let common = { localVue, stubs: ['router-view', 'router-link'], propsData: { internalPasswordResetEnabled: true }, mocks }
+  const mocks = {
+    $route: { query: {} },
+    $t: (e) => e,
+  }
+  let common = {
+    localVue,
+    stubs: ['router-view', 'router-link'],
+    propsData: { internalPasswordResetEnabled: true },
+    mocks,
+  }
   let wrapper
 
   afterEach(() => {
@@ -43,13 +51,13 @@ describe('views/ResetPassword.vue', () => {
     it('validate.token.invalid', () => {
       let token = `invalid`
       wrapper = mount(ResetPassword, { ...common, mocks: { ...mocks, $route: { query: { token } } } })
-      expect(wrapper.vm.error).to.eq('Invalid token')
+      expect(wrapper.vm.error).to.eq('view.reset-password.error.invalid-token')
       assert(exchangeToken.notCalled)
     })
 
     it('validate.token.missing', () => {
       wrapper = mount(ResetPassword, common)
-      expect(wrapper.vm.error).to.eq('Missing token')
+      expect(wrapper.vm.error).to.eq('view.reset-password.error.missing-token')
       assert(exchangeToken.notCalled)
     })
   })
@@ -123,7 +131,7 @@ describe('views/ResetPassword.vue', () => {
           expect(wrapper.vm.error).to.eq(null)
           expect(wrapper.vm.processing).to.eq(false)
           assert(systemResolve.calledOnceWith({ token, ...form }))
-          assert(push.calledOnceWith({ name: 'profile' }))
+          assert(push.calledOnceWith({ name: 'auth:profile' }))
           done()
         })
       })

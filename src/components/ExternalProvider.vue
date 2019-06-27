@@ -1,7 +1,7 @@
 <template>
   <div :class="['provider', pKind]" @click="redirect">
     <i :class="['icon', iconClass]"></i>
-    <span class="text"><slot>Login with <strong>{{ pLabel || pKind }}</strong></slot></span>
+    <span class="text"><slot>{{ $t('login-with')  }} <strong>{{ pLabel || pKind }}</strong></slot></span>
   </div>
 </template>
 
@@ -26,6 +26,11 @@ export default {
       required: false,
     },
     onExternalAuth: { default: null },
+  },
+
+  i18nOptions: {
+    namespaces: [ 'auth' ],
+    keyPrefix: 'components.external-provider',
   },
 
   computed: {

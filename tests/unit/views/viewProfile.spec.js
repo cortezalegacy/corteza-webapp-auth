@@ -10,7 +10,11 @@ describe('views/ViewProfile.vue', () => {
   const isFalse = sinon.stub().returns(false)
   const isTrue = sinon.stub().returns(true)
 
-  const mocks = { $auth: { is: isFalse } }
+  const mocks = {
+    $auth: { is: isFalse },
+    $t: (e) => e,
+  }
+
   let common = { localVue, stubs: ['router-view', 'router-link'], mocks }
   let wrapper
 
@@ -22,13 +26,13 @@ describe('views/ViewProfile.vue', () => {
     describe('user', () => {
       it('$auth.user', () => {
         const user = { user: true }
-        wrapper = mount(ViewProfile, { ...common, mocks: { $auth: { is: isTrue, user } } })
+        wrapper = mount(ViewProfile, { ...common, mocks: { ...mocks, $auth: { is: isTrue, user } } })
         expect(wrapper.vm.user).to.deep.eq(user)
       })
 
       it('default', () => {
         const user = {}
-        wrapper = mount(ViewProfile, { ...common, mocks: { $auth: { is: isTrue } } })
+        wrapper = mount(ViewProfile, { ...common, mocks: { ...mocks, $auth: { is: isTrue } } })
         expect(wrapper.vm.user).to.deep.eq(user)
       })
     })
@@ -42,11 +46,11 @@ describe('views/ViewProfile.vue', () => {
 
     it('push.login', () => {
       wrapper = mount(ViewProfile, { ...common, mocks: { ...mocks, $router: { push } } })
-      assert(push.calledOnceWith({ name: 'login' }))
+      assert(push.calledOnceWith({ name: 'auth:login' }))
     })
 
     it('showProfile', () => {
-      wrapper = mount(ViewProfile, { ...common, mocks: { $auth: { is: isTrue }, $router: { push } } })
+      wrapper = mount(ViewProfile, { ...common, mocks: { ...mocks, $auth: { is: isTrue }, $router: { push } } })
       assert(push.notCalled)
     })
   })

@@ -9,8 +9,16 @@ const localVue = createLocalVue()
 describe('views/RequestPasswordReset.vue', () => {
   let isFalse = sinon.stub().returns(false)
   let isTrue = sinon.stub().returns(true)
-  const mocks = { $auth: { is: isFalse } }
-  let common = { localVue, stubs: ['router-view', 'router-link'], propsData: { internalPasswordResetEnabled: true }, mocks }
+  const mocks = {
+    $auth: { is: isFalse },
+    $t: (e) => e,
+  }
+  let common = {
+    localVue,
+    stubs: ['router-view', 'router-link'],
+    propsData: { internalPasswordResetEnabled: true },
+    mocks,
+  }
   let wrapper
 
   afterEach(() => {
@@ -36,22 +44,22 @@ describe('views/RequestPasswordReset.vue', () => {
     })
 
     it('push.profile', () => {
-      wrapper = mount(RequestPasswordReset, { ...common, mocks: { $auth: { is: isTrue }, $router: { push } } })
-      assert(push.calledOnceWith({ name: 'profile' }))
+      wrapper = mount(RequestPasswordReset, { ...common, mocks: { ...mocks, $auth: { is: isTrue }, $router: { push } } })
+      assert(push.calledOnceWith({ name: 'auth:profile' }))
     })
 
     it('push.profile.internalDisabled', () => {
-      wrapper = mount(RequestPasswordReset, { ...common, propsData: { internalPasswordResetEnabled: false }, mocks: { $auth: { is: isTrue }, $router: { push } } })
-      assert(push.calledOnceWith({ name: 'profile' }))
+      wrapper = mount(RequestPasswordReset, { ...common, propsData: { internalPasswordResetEnabled: false }, mocks: { ...mocks, $auth: { is: isTrue }, $router: { push } } })
+      assert(push.calledOnceWith({ name: 'auth:profile' }))
     })
 
     it('push.login', () => {
-      wrapper = mount(RequestPasswordReset, { ...common, propsData: { internalPasswordResetEnabled: false }, mocks: { $auth: { is: isFalse }, $router: { push } } })
-      assert(push.calledOnceWith({ name: 'login' }))
+      wrapper = mount(RequestPasswordReset, { ...common, propsData: { internalPasswordResetEnabled: false }, mocks: { ...mocks, $auth: { is: isFalse }, $router: { push } } })
+      assert(push.calledOnceWith({ name: 'auth:login' }))
     })
 
     it('allowReset', () => {
-      wrapper = mount(RequestPasswordReset, { ...common, mocks: { $auth: { is: isFalse }, $router: { push } } })
+      wrapper = mount(RequestPasswordReset, { ...common, mocks: { ...mocks, $auth: { is: isFalse }, $router: { push } } })
       assert(push.notCalled)
     })
   })

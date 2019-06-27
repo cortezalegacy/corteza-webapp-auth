@@ -10,7 +10,11 @@ describe('views/Login.vue', () => {
   const isFalse = sinon.stub().returns(false)
   const isTrue = sinon.stub().returns(true)
 
-  const mocks = { $route: { query: {} }, $auth: { is: isFalse } }
+  const mocks = {
+    $route: { query: {} },
+    $auth: { is: isFalse },
+    $t: (e) => e,
+  }
   const common = { localVue, propsData: { internalEnabled: true }, stubs: ['router-view', 'router-link'], mocks }
   let wrapper
 
@@ -31,7 +35,7 @@ describe('views/Login.vue', () => {
   describe('created', () => {
     it('finishesExternal', () => {
       const finishExternal = sinon.fake()
-      wrapper = mount(Login, { ...common, methods: { finishExternal } })
+      wrapper = mount(Login, { ...common, mocks, methods: { finishExternal } })
 
       assert(finishExternal.calledOnce)
     })
@@ -59,13 +63,13 @@ describe('views/Login.vue', () => {
 
         wrapper = mount(Login, { ...common, methods: { exchangeToken }, mocks: { ...mocks, $route: { query: { token } }, $router: { push } } })
         assert(exchangeToken.notCalled)
-        assert(push.calledOnceWith({ name: 'login' }))
+        assert(push.calledOnceWith({ name: 'auth:login' }))
       })
 
       it('token.missing.authenticated', () => {
         wrapper = mount(Login, { ...common, methods: { exchangeToken }, mocks: { ...mocks, $auth: { is: isTrue }, $router: { push } } })
         assert(exchangeToken.notCalled)
-        assert(push.calledOnceWith({ name: 'profile' }))
+        assert(push.calledOnceWith({ name: 'auth:profile' }))
       })
 
       it('token.missing.anonymous', () => {

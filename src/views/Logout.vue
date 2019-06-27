@@ -1,10 +1,11 @@
 <template>
   <div>
+    <h1>{{ $t(`view.logout.title`) }}</h1>
     <div v-if="error">
-      <p class="error">Error: {{ error }}</p>
+      <p class="error">{{ $t('general.error-tpl', { error }) }}</p>
     </div>
     <div class="footnote">
-      <router-link :to="{ name: 'login' }">Login</router-link>
+      <router-link :to="{ name: 'auth:login' }">{{ $t('link.login') }}</router-link>
     </div>
   </div>
 </template>
@@ -14,6 +15,10 @@ export default {
 
   props: {
     afterLogout: { default: null },
+  },
+
+  i18nOptions: {
+    namespaces: [ 'auth' ],
   },
 
   data () {
@@ -30,7 +35,7 @@ export default {
       if (this.afterLogout) {
         this.afterLogout()
       } else {
-        this.$router.push({ name: 'login' })
+        this.$router.push({ name: 'auth:login' })
       }
     }).catch(({ message } = {}) => {
       this.error = message

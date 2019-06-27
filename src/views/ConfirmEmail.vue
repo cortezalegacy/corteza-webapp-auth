@@ -1,17 +1,18 @@
 <template>
   <div>
+    <h1>{{ $t(`view.confirm-email.title`) }}</h1>
     <div v-if="error">
-      <p class="error">Error: {{ error }}</p>
-      <p>Check your email again or try to login again to receive a new token.</p>
+      <p class="error">{{ $t('general.error-tpl', { error }) }}</p>
+      <p>{{ $t(`view.confirm-email.check-or-repeat`) }}</p>
     </div>
     <div v-else-if="processing">
-      Sending confirmation token ...
+      {{ $t(`view.confirm-email.sending`) }}
     </div>
     <div v-else>
-      Email confirmed, redirecting.
+      {{ $t(`view.confirm-email.confirmed`) }}
     </div>
     <div class="footnote" v-if="internalSignUpEnabled">
-      <router-link :to="{ name: 'login'}">Login</router-link>
+      <router-link :to="{ name: 'auth:login'}">{{ $t('link.login') }}</router-link>
     </div>
   </div>
 </template>
@@ -28,6 +29,10 @@ export default {
       type: Boolean,
     },
     afterConfirmEmail: { default: null },
+  },
+
+  i18nOptions: {
+    namespaces: [ 'auth' ],
   },
 
   data () {

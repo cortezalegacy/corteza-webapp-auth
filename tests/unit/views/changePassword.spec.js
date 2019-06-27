@@ -7,11 +7,17 @@ const localVue = createLocalVue()
 
 describe('views/ChangePassword.vue', () => {
   let wrapper
+
+  const mocks = {
+    $auth: { user: {}, is: () => true },
+    $t: (e) => e,
+  }
+
   const common = {
     localVue,
     stubs: ['router-view', 'router-link'],
     propsData: { internalEnabled: true },
-    mocks: { $auth: { user: {}, is: () => true } },
+    mocks,
   }
   const mount = (props = {}) => shallowMount(ChangePassword, { ...common, ...props })
 
@@ -51,7 +57,7 @@ describe('views/ChangePassword.vue', () => {
 
     it('user', () => {
       const user = { user: true }
-      wrapper = mount({ mocks: { $auth: { user, is: () => true } } })
+      wrapper = mount({ mocks: { ...mocks, $auth: { user, is: () => true } } })
       expect(wrapper.vm.user).to.deep.eq(user)
     })
   })
@@ -61,20 +67,20 @@ describe('views/ChangePassword.vue', () => {
       // internal disabled
       let push = sinon.fake()
       wrapper = mount({
-        mocks: { $auth: { user: {}, is: () => true }, $router: { push } },
+        mocks: { ...mocks, $auth: { user: {}, is: () => true }, $router: { push } },
         propsData: { internalEnabled: false },
       })
 
-      expect(push.calledOnceWith({ name: 'login' }))
+      expect(push.calledOnceWith({ name: 'auth:login' }))
 
       // user not authenticated
       push = sinon.fake()
       wrapper = mount({
-        mocks: { $auth: { user: {}, is: () => false }, $router: { push } },
+        mocks: { ...mocks, $auth: { user: {}, is: () => false }, $router: { push } },
         propsData: { internalEnabled: true },
       })
 
-      expect(push.calledOnceWith({ name: 'login' }))
+      expect(push.calledOnceWith({ name: 'auth:login' }))
     })
   })
 
@@ -85,7 +91,7 @@ describe('views/ChangePassword.vue', () => {
       const form = { oldPassword: 'old', newPassword: 'new', newPasswordCheck: 'new' }
 
       it('resolve', (done) => {
-        wrapper = mount({ mocks: { $auth: { user: {}, is: () => true }, $SystemAPI: { authInternalChangePassword: systemResolve } }, data: () => ({ form }) })
+        wrapper = mount({ mocks: { ...mocks, $auth: { user: {}, is: () => true }, $SystemAPI: { authInternalChangePassword: systemResolve } }, data: () => ({ form }) })
 
         wrapper.vm.changePassword(wrapper.vm.form)
         expect(wrapper.vm.error).to.eq(null)
@@ -101,7 +107,7 @@ describe('views/ChangePassword.vue', () => {
       })
 
       it('reject', (done) => {
-        wrapper = mount({ mocks: { $auth: { user: {}, is: () => true }, $SystemAPI: { authInternalChangePassword: systemReject } }, data: () => ({ form }) })
+        wrapper = mount({ mocks: { ...mocks, $auth: { user: {}, is: () => true }, $SystemAPI: { authInternalChangePassword: systemReject } }, data: () => ({ form }) })
 
         wrapper.vm.changePassword(wrapper.vm.form)
         expect(wrapper.vm.error).to.eq(null)

@@ -8,7 +8,16 @@ const localVue = createLocalVue()
 
 describe('views/Logout.vue', () => {
   let wrapper
-  let common = { localVue, stubs: ['router-view', 'router-link'] }
+
+  const mocks = {
+    $t: (e) => e,
+  }
+
+  let common = {
+    localVue,
+    stubs: ['router-view', 'router-link'],
+    mocks,
+  }
 
   afterEach(() => {
     sinon.restore()
@@ -25,7 +34,7 @@ describe('views/Logout.vue', () => {
 
       it('resolve.afterLogout', (done) => {
         const afterLogout = sinon.fake()
-        wrapper = mount(Logout, { ...common, propsData: { afterLogout }, mocks: { $auth, $SystemAPI: { authLogout: systemResolve } } })
+        wrapper = mount(Logout, { ...common, propsData: { afterLogout }, mocks: { ...mocks, $auth, $SystemAPI: { authLogout: systemResolve } } })
 
         expect($auth.JWT).to.eq('JWT')
         expect($auth.user).to.eq('user')
@@ -40,7 +49,7 @@ describe('views/Logout.vue', () => {
 
       it('resolve.redirect', (done) => {
         const push = sinon.fake()
-        wrapper = mount(Logout, { ...common, mocks: { $auth, $SystemAPI: { authLogout: systemResolve }, $router: { push } } })
+        wrapper = mount(Logout, { ...common, mocks: { ...mocks, $auth, $SystemAPI: { authLogout: systemResolve }, $router: { push } } })
 
         expect($auth.JWT).to.eq('JWT')
         expect($auth.user).to.eq('user')
@@ -48,13 +57,13 @@ describe('views/Logout.vue', () => {
         setTimeout(() => {
           expect($auth.JWT).to.eq(null)
           expect($auth.user).to.eq(null)
-          assert(push.calledOnceWith({ name: 'login' }))
+          assert(push.calledOnceWith({ name: 'auth:login' }))
           done()
         })
       })
 
       it('reject', (done) => {
-        wrapper = mount(Logout, { ...common, mocks: { $auth, $SystemAPI: { authLogout: systemReject } } })
+        wrapper = mount(Logout, { ...common, mocks: { ...mocks, $auth, $SystemAPI: { authLogout: systemReject } } })
 
         expect($auth.JWT).to.eq('JWT')
         expect($auth.user).to.eq('user')
