@@ -23,6 +23,13 @@ if (process.env.NODE_ENV !== 'test') {
           name: 'vendors',
           chunks: 'all',
         },
+
+        themes: {
+          test: /[\\/]src[\\/]themes[\\/]/,
+          name: 'themes',
+          chunks: 'all',
+          enforce: true,
+        },
       },
     },
   }
@@ -49,12 +56,29 @@ module.exports = {
     optimization,
   },
 
-  // Do not copy config files (deployment procedure will do that)
   chainWebpack: config => {
+    // Do not copy config files (deployment procedure will do that)
     config.plugin('copy').tap(options => {
       options[0][0].ignore.push('config*js')
       return options
     })
+
+    const scssNormal = config.module.rule('scss').oneOf('normal')
+
+    scssNormal.use('sass-loader')
+      .loader('sass-loader')
+      .tap(options => ({
+        ...options,
+        sourceMap: true,
+        sourceMapContents: false,
+      }))
+
+    // Load CSS assets according to their location
+    scssNormal.use('resolve-url-loader')
+      .loader('resolve-url-loader').options({
+        keepQuery: true,
+      })
+      .before('sass-loader')
   },
 
   // devServer Options don't belong into `configureWebpack`
@@ -65,6 +89,6 @@ module.exports = {
   },
   runtimeCompiler: true,
   css: {
-    sourceMap: process.env.NODE_ENV === 'development',
+    sourceMap: process.env['NODE_ENV'] === 'development',
   },
 }

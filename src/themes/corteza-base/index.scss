@@ -1,0 +1,14 @@
+@import 'node_modules/bootstrap/scss/bootstrap';
+@import 'node_modules/bootstrap-vue/src/index.scss';
+//@import "variables";
+//@import "style";
+//@import "external-provider";
+
+div.logo {
+  background: url("img/logo.png") no-repeat center;
+  height: 60px;
+
+  * {
+    display: none;
+  }
+}

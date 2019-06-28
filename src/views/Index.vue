@@ -1,16 +1,17 @@
 <template>
-  <div>
-    <div class="error" v-if="error">{{ error }}</div>
+  <div class="container">
+    <div class="d-flex justify-content-center h-100">
+      <div class="error" v-if="error">{{ error }}</div>
 
-    <main v-else-if="!this.processing">
-      <a href="/"><img alt="Corteza logo" class="logo" src="../assets/corteza-logo-with-tagline.png"></a>
-      <section>
-        <router-view v-bind="settings"/>
-      </section>
-    </main>
-
-    <div class="loader" v-else>
-      <img :src="logo" />
+      <main v-else-if="!this.processing">
+        <a href="/"><div class="logo"><h1>Auth</h1></div></a>
+        <section>
+          <router-view v-bind="settings"/>
+        </section>
+      </main>
+      <div class="loader" v-else>
+        <div class="logo"><h1>Auth</h1></div>
+      </div>
     </div>
   </div>
 </template>
@@ -21,8 +22,6 @@ export default {
 
   data () {
     return {
-      logo: require('../assets/corteza-logo-with-tagline.png'),
-
       processing: false,
 
       error: null,
@@ -48,6 +47,10 @@ export default {
   },
 
   methods: {
+    theme (theme) {
+      document.body.className = theme
+    },
+
     loadSettings () {
       this.error = null
       this.processing = true

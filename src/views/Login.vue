@@ -1,49 +1,49 @@
 <template>
-  <div>
-    <h1>{{ $t(`view.login.title`) }}</h1>
-    <form @submit.prevent="internalLogin" v-if="internalEnabled">
+  <b-card :title="$t(`view.login.title`)">
+    <b-form @submit.prevent="internalLogin" v-if="internalEnabled">
       <div class="error" v-if="error">{{ $t('general.error-tpl', { error }) }}</div>
 
-      <label for="email">{{ $t('view.login.form.email.label') }}</label>
-      <input id="email"
-             type="email"
-             name="email"
-             required
-             autocomplete="email"
-             :placeholder="$t('view.login.form.email.placeholder')"
-             v-model="form.email">
-      <br />
+      <b-form-group :label="$t('view.login.form.email.label')">
+        <b-form-input v-model="form.email"
+                      :label="$t('view.login.form.email.label')"
+                      :placeholder="$t('view.login.form.email.placeholder')"
+                      required
+                      autocomplete="email"></b-form-input>
+      </b-form-group>
 
-      <label for="password">{{ $t('view.login.form.password.label') }}</label>
-      <input id="password"
-             type="password"
-             name="password"
-             required
-             autocomplete="password"
-             :placeholder="$t('view.login.form.password.placeholder')"
-             v-model="form.password">
+      <b-form-group :label="$t('view.login.form.password.label')">
+        <b-form-input v-model="form.password"
+                      type="password"
+                      :label="$t('view.login.form.password.label')"
+                      :placeholder="$t('view.login.form.password.placeholder')"
+                      required
+                      autocomplete="password"></b-form-input>
+        <slot name="description">
+          <small><router-link :to="{ name: 'auth:request-password-reset'}">{{ $t('link.forgotten-password-cta') }}</router-link></small>
+        </slot>
+      </b-form-group>
 
-      <router-link v-if="internalPasswordResetEnabled"
-                   :to="{ name: 'auth:request-password-reset'}"
-                   class="forgotten-pw">{{ $t('link.forgotten-password-cta') }}</router-link>
-      <button type="submit"
-              class="login-btn"
-              :disabled="disabledSubmit">{{ $t('view.login.form.submit') }}</button>
-    </form>
+      <b-form-group class="text-right">
+        <b-button type="submit" variant="primary" :disabled="disabledSubmit">{{ $t('view.login.form.submit') }}</b-button>
+      </b-form-group>
 
-    <div class="or" v-if="externalEnabled && externalProviders.length && internalEnabled">{{ $t('general.internal-external-separator') }}</div>
+      <b-form-group v-if="internalEnabled && internalSignUpEnabled"
+                    class="text-right">
+        <router-link :to="{ name: 'auth:signup'}">{{ $t('link.signup-cta') }}</router-link>
+      </b-form-group>
+    </b-form>
 
-    <fieldset class="external-providers" v-if="externalEnabled && externalProviders">
+    <div class="text-center" v-if="externalEnabled && externalProviders.length && internalEnabled">
+      {{ $t('general.internal-external-separator') }}
+    </div>
+
+    <div class="external-providers" v-if="externalEnabled && externalProviders">
       <external-provider v-for="p in externalProviders" :key="p.handle" :onExternalAuth="onExternalAuth" :pKind="p.handle" :pLabel="p.label"></external-provider>
-    </fieldset>
+    </div>
     <div v-if="!(externalEnabled && externalProviders.length > 0) && !internalEnabled">
       {{ $t('auth:general.login-disabled') }}
     </div>
-    <div class="footnote">
-      <router-link v-if="internalEnabled && internalSignUpEnabled"
-                   :to="{ name: 'auth:signup'}">{{ $t('link.signup-cta') }}</router-link>
-    </div>
-  </div>
+  </b-card>
 </template>
 
 <script>
@@ -176,12 +176,3 @@ export default {
   },
 }
 </script>
-<style scoped lang="scss">
-.forgotten-pw {
-  display: block;
-  text-align: right;
-  font-size: 14px;
-  color: #000;
-  margin: 10px 0 20px 0;
-}
-</style>

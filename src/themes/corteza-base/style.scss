@@ -4,11 +4,12 @@ body {
   display: flex;
   justify-content: center;
   padding: 40px 0;
+  background: $white;
 }
 
 .error {
   margin-top: 5px;
-  color: #E85568;
+  color: $danger;
 }
 
 h2 {
@@ -20,23 +21,23 @@ input {
   width: calc(100% - 10px);
   height: 40px;
   padding-left: 10px;
-  border: 1px solid #90A3B1;
-  color: black;
+  border: 1px solid $secondary;
+  color: $black;
   font-size: 14px;
 
   &:focus,
   &:active {
     outline: none;
-    border-color: #1397CB;
+    border-color: $primary;
   }
 
   &:disabled {
-    background: #90A3B1;
+    background: $secondary;
   }
 
   &.error {
-    color: black;
-    border-color: #E85568;
+    color: $black;
+    border-color: $danger;
   }
 }
 
@@ -54,10 +55,10 @@ button {
     border: none;
     border-radius: 40px;
     padding: 10px 40px;
-    color: #ffffff;
+    color: $white;
     font-size: 16px;
     cursor: pointer;
-    background: #F5D380;
+    background: $warning;
 
     &:hover {
       opacity: 0.9;
@@ -74,7 +75,7 @@ button {
   &::before,
   &::after {
     content: "\00a0";
-    border-bottom: solid 1px grey;
+    border-bottom: solid 1px $secondary;
     min-width: 30px;
     display: inline-block;
     vertical-align: middle;
@@ -89,12 +90,12 @@ button {
 }
 
 .footnote {
-  border-top: 1px solid #90A3B1;
+  border-top: 1px solid $secondary;
   margin-top: 20px;
   padding-top: 10px;
   font-size: 14px;
 
   a {
-    color: #000;
+    color: $black;
   }
 }

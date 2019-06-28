@@ -1,8 +1,9 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+import BootstrapVue from 'bootstrap-vue'
 
 import './plugins'
-import '@/assets/sass/index.scss'
+import './themes/index.scss'
 
 import i18n from './i18n'
 import routes from './views/routes'
@@ -17,6 +18,8 @@ console.log(
 if (window.SystemAPI === undefined) {
   alert('Missing or invalid configuration. Make sure there is a public/config.js file.')
 } else {
+  Vue.use(BootstrapVue)
+
   // Register router plugin & setup router w/ routes
   Vue.use(Router)
   const router = new Router({
