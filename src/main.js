@@ -5,11 +5,11 @@ import BootstrapVue from 'bootstrap-vue'
 import system from 'corteza-webapp-common/src/plugins/system'
 import auth from 'corteza-webapp-common/src/plugins/auth'
 
-import './themes/index.scss'
-
 import i18nInit from './i18n'
 import routes from './views/routes'
 import App from './views/Index'
+
+import './themes'
 
 /* eslint-disable no-undef */
 console.log(

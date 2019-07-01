@@ -23,13 +23,6 @@ if (process.env.NODE_ENV !== 'test') {
           name: 'vendors',
           chunks: 'all',
         },
-
-        themes: {
-          test: /[\\/]src[\\/]themes[\\/]/,
-          name: 'themes',
-          chunks: 'all',
-          enforce: true,
-        },
       },
     },
   }
