@@ -1,11 +1,13 @@
 import Vue from 'vue'
+
 import Router from 'vue-router'
 import BootstrapVue from 'bootstrap-vue'
+import system from 'corteza-webapp-common/src/plugins/system'
+import auth from 'corteza-webapp-common/src/plugins/auth'
 
-import './plugins'
 import './themes/index.scss'
 
-import i18n from './i18n'
+import i18nInit from './i18n'
 import routes from './views/routes'
 import App from './views/Index'
 
@@ -19,6 +21,8 @@ if (window.SystemAPI === undefined) {
   alert('Missing or invalid configuration. Make sure there is a public/config.js file.')
 } else {
   Vue.use(BootstrapVue)
+  Vue.use(system)
+  Vue.use(auth)
 
   // Register router plugin & setup router w/ routes
   Vue.use(Router)
@@ -30,7 +34,7 @@ if (window.SystemAPI === undefined) {
 
   new Vue({
     router,
-    i18n,
+    i18n: i18nInit(Vue),
     render: h => h(App),
   }).$mount('#app')
 }
