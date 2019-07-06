@@ -73,10 +73,6 @@ export default {
       type: Boolean,
     },
 
-    internalPasswordResetEnabled: {
-      type: Boolean,
-    },
-
     internalSignUpEnabled: {
       type: Boolean,
     },

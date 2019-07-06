@@ -1,7 +1,7 @@
 <template>
   <div>
     <h1>{{ $t('view.signup.title') }}</h1>
-    <p v-if="pendingEmailConfirmation">{{ $t('pending-email-confirmation') }}</p>
+    <p v-if="pendingEmailConfirmation">{{ $t('view.signup.pending-email-confirmation') }}</p>
     <div v-else>
       <form @submit.prevent="internalSignup" v-if="internalSignUpEnabled">
         <label for="email">{{ $t('view.signup.form.email.label') }}</label>

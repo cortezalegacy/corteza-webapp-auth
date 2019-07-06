@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="internalEnabled">
     <h1>{{ $t(`view.change-password.title`) }}</h1>
     <p v-if="passwordChanged">{{ $t(`view.change-password.changed`) }}</p>
     <div v-else>

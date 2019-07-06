@@ -24,16 +24,17 @@ export default {
     internalEnabled: {
       type: Boolean,
     },
+
+    user: {
+      type: Object,
+      default () {
+        return this.$auth.user
+      },
+    },
   },
 
   i18nOptions: {
     namespaces: [ 'auth' ],
-  },
-
-  computed: {
-    user () {
-      return this.$auth.user || {}
-    },
   },
 
   beforeCreate () {

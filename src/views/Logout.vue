@@ -28,6 +28,10 @@ export default {
   },
 
   created () {
+    if (!this.$SystemAPI) {
+      return
+    }
+
     this.$SystemAPI.authLogout().then(() => {
       this.$auth.JWT = null
       this.$auth.user = null

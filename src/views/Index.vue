@@ -3,7 +3,7 @@
     <div class="d-flex justify-content-center h-100">
       <div class="error" v-if="error">{{ error }}</div>
 
-      <main v-else-if="!this.processing">
+      <main v-else-if="!processing">
         <a href="/"><div class="logo"><h1>Auth</h1></div></a>
         <section>
           <router-view v-bind="settings"/>
@@ -43,43 +43,37 @@ export default {
   },
 
   created () {
-    this.loadSettings()
-  },
+    if (!this.$SystemAPI) {
+      return
+    }
 
-  methods: {
-    theme (theme) {
-      document.body.className = theme
-    },
+    this.error = null
+    this.processing = true
 
-    loadSettings () {
-      this.error = null
-      this.processing = true
-
-      this.$SystemAPI.authSettings().then(ss => {
-        for (var k in this.settings) {
-          if (ss[k] !== undefined) {
-            this.settings[k] = ss[k]
-          }
+    this.$SystemAPI.authSettings().then(ss => {
+      for (var k in this.settings) {
+        if (ss[k] !== undefined) {
+          this.settings[k] = ss[k]
         }
+      }
 
-        // For now, sort by label just to have a stable order
-        // we'll support custom sort order of external providers later.
-        if (Array.isArray(this.settings.externalProviders)) {
-          this.settings.externalProviders = this.settings.externalProviders.sort((a, b) => {
-            return a.label.localeCompare(b.label)
-          })
-        }
-      }).catch(({ message } = {}) => {
-        if (message !== 'Network Error') {
-          this.$auth.JWT = null
-          this.$auth.user = null
-        }
+      // For now, sort by label just to have a stable order
+      // we'll support custom sort order of external providers later.
+      if (Array.isArray(this.settings.externalProviders)) {
+        this.settings.externalProviders = this.settings.externalProviders.sort((a, b) => {
+          return a.label.localeCompare(b.label)
+        })
+      }
+    }).catch(({ message } = {}) => {
+      if (message !== 'Network Error') {
+        this.$auth.JWT = null
+        this.$auth.user = null
+      }
 
-        this.error = message
-      }).finally(() => {
-        this.processing = false
-      })
-    },
+      this.error = message
+    }).finally(() => {
+      this.processing = false
+    })
   },
 }
 </script>
