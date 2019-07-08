@@ -1,13 +1,15 @@
 <template>
-  <b-button :class="['provider', pKind]" @click="redirect">
-    <i :class="['icon', iconClass]"></i>
-    <span class="text"><slot>{{ $t('login-with')  }} <strong>{{ pLabel || pKind }}</strong></slot></span>
+  <b-button variant="outline-primary"
+            class="mr-1"
+            size="lg"
+            @click="redirect">
+    <font-awesome-icon :icon="['fab', iconClass]"></font-awesome-icon><br>
+    <small>{{ pLabel || pKind }}</small>
   </b-button>
 </template>
 
 <script>
 export default {
-  name: 'ExternalProvider',
   props: {
     pKind: {
       type: String,
@@ -35,7 +37,7 @@ export default {
 
   computed: {
     iconClass () {
-      return `icon-${this.pIcon || this.pKind}`
+      return `${this.pIcon || this.pKind}`
     },
 
     authUrl () {

@@ -1,19 +1,18 @@
 <template>
-  <div>
-    <h1>{{ $t(`view.profile.title`) }}</h1>
+  <b-card :title="$t(`view.profile.title`)">
     <dt>{{ $t('view.profile.fields.email.label') }}</dt>
     <dd>{{ user.email }}</dd>
     <dt>{{ $t('view.profile.fields.name.label') }}</dt>
     <dd>{{ user.name }}</dd>
     <dt>{{ $t('view.profile.fields.handle.label') }}</dt>
     <dd>{{ user.handle }}</dd>
-    <div class="footnote">
+    <div>
       <router-link :to="{ name: 'auth:logout'}">{{ $t('link.logout') }}</router-link>
       <span v-if="internalEnabled">
         | <router-link :to="{ name: 'auth:change-password'}">{{ $t('link.change-password') }}</router-link>
       </span>
     </div>
-  </div>
+  </b-card>
 </template>
 
 <script>

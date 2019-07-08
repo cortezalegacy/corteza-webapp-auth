@@ -1,5 +1,13 @@
 <template>
   <b-card :title="$t('view.signup.title')">
+    <div class="text-center mb-5" v-if="externalEnabled && externalProviders">
+      <external-provider v-for="p in externalProviders"
+                         :key="p.handle"
+                         :onExternalAuth="onExternalAuth"
+                         :pKind="p.handle"
+                         :pIcon="p.icon || p.handle"
+                         :pLabel="p.label"></external-provider>
+    </div>
     <p v-if="pendingEmailConfirmation">{{ $t('view.signup.pending-email-confirmation') }}</p>
     <div v-else>
       <b-form @submit.prevent="internalSignup" v-if="internalSignUpEnabled">
@@ -70,25 +78,16 @@
           </b-form-input>
         </b-input-group>
 
-        <b-form-group class="text-center mt-2">
+        <b-form-group class="text-right mt-2">
           <b-button type="submit"
                     variant="primary"
                     :disabled="disabledSubmit">{{ $t('view.signup.form.submit') }}</b-button>
         </b-form-group>
         <div class="text-danger mb-1" v-if="error">{{ $t('general.error-tpl', { error }) }}</div>
       </b-form>
-
-      <div class="or" v-if="externalEnabled && externalProviders && internalSignUpEnabled">{{ $t('general.internal-external-separator') }}</div>
-      <fieldset class="external-providers" v-if="externalEnabled && externalProviders">
-        <external-provider v-for="p in externalProviders" :key="p.handle" :onExternalAuth="onExternalAuth" :pKind="p.handle" :pLabel="p.label"></external-provider>
-      </fieldset>
       <div class="text-center" v-if="internalSignUpEnabled">
         <router-link v-if="internalPasswordResetEnabled"
-                     :to="{ name: 'auth:request-password-reset'}"
-                     class="forgotten-pw">{{ $t('link.forgotten-password-cta') }}</router-link>
-        <br />
-        <br />
-
+                     :to="{ name: 'auth:request-password-reset'}">{{ $t('link.forgotten-password-cta') }}</router-link>
         {{ $t('view.signup.existing-account') }}
         <router-link :to="{ name: 'auth:login'}">{{ $t('link.login') }}</router-link>
       </div>

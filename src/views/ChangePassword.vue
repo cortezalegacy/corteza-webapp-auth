@@ -65,7 +65,7 @@
                         autocomplete="password"></b-form-input>
         </b-input-group>
 
-        <b-form-group class="text-center mt-2">
+        <b-form-group class="text-right mt-2">
           <b-button type="submit"
                     variant="primary"
                     :disabled="disabledSubmit">{{ $t('view.change-password.form.submit') }}</b-button>

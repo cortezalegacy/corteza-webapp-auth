@@ -1,18 +1,20 @@
 <template>
-  <div class="container d-flex justify-content-center align-items-center vh-100">
-    <div class="col-md-8 col-lg-6">
-      <div class="text-danger mb-1" v-if="error">{{ error }}</div>
-      <main v-else-if="!this.processing">
-        <a href="/"><div class="logo bg-white pt-5"><h1>Auth</h1></div></a>
-        <section>
-          <router-view v-bind="settings"/>
-        </section>
-      </main>
-      <div class="loader" v-else>
-        <div class="logo"><h1>Auth</h1></div>
+  <div class="container h-100">
+    <div class="row justify-content-center align-items-center h-100">
+      <div class="col-md-8 col-lg-6">
+        <div class="text-danger mb-1" v-if="error">{{ error }}</div>
+        <main v-else-if="!this.processing">
+          <a href="/"><div class="logo bg-white pt-5"><h1>Auth</h1></div></a>
+          <section>
+            <router-view v-bind="settings"/>
+          </section>
+        </main>
+        <div class="loader" v-else>
+          <div class="logo"><h1>Auth</h1></div>
+        </div>
+        <card-footer>
+        </card-footer>
       </div>
-      <card-footer>
-      </card-footer>
     </div>
   </div>
 </template>

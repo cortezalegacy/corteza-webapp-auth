@@ -1,5 +1,13 @@
 <template>
   <b-card :title="$t(`view.login.title`)">
+    <div v-if="externalEnabled && externalProviders" class="text-center mb-5">
+      <external-provider v-for="p in externalProviders"
+                         :key="p.handle" :onExternalAuth="onExternalAuth"
+                         :pKind="p.handle"
+                         :pLabel="p.label"
+                         :pIcon="p.icon || p.handle"></external-provider>
+    </div>
+
     <b-form @submit.prevent="internalLogin" v-if="internalEnabled">
       <div class="text-danger mb-1" v-if="error">{{ $t('general.error-tpl', { error }) }}</div>
       <b-input-group>
@@ -31,7 +39,7 @@
       </b-input-group>
       <small><router-link :to="{ name: 'auth:request-password-reset'}">{{ $t('link.forgotten-password-cta') }}</router-link></small>
 
-      <b-form-group class="text-center">
+      <b-form-group class="text-right">
         <b-button type="submit" variant="primary" :disabled="disabledSubmit">{{ $t('view.login.form.submit') }}</b-button>
       </b-form-group>
 
@@ -40,14 +48,6 @@
         <router-link :to="{ name: 'auth:signup'}">{{ $t('link.signup-cta') }}</router-link>
       </b-form-group>
     </b-form>
-
-    <div class="text-center" v-if="externalEnabled && externalProviders.length && internalEnabled">
-      {{ $t('general.internal-external-separator') }}
-    </div>
-
-    <div class="external-providers" v-if="externalEnabled && externalProviders">
-      <external-provider v-for="p in externalProviders" :key="p.handle" :onExternalAuth="onExternalAuth" :pKind="p.handle" :pLabel="p.label"></external-provider>
-    </div>
     <div v-if="!(externalEnabled && externalProviders.length > 0) && !internalEnabled">
       {{ $t('auth:general.login-disabled') }}
     </div>

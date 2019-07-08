@@ -18,7 +18,7 @@
                       required
                       autocomplete="email"></b-form-input>
       </b-input-group>
-      <b-form-group class="text-center">
+      <b-form-group class="text-right">
         <b-button type="submit"
                   variant="primary"
                   class="mt-2"
