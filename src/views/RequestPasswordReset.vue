@@ -5,7 +5,9 @@
       <div class="text-danger mb-1" v-if="error">{{ $t('general.error-tpl', { error }) }}</div>
       <b-input-group>
         <b-input-group-prepend>
-          <span class="input-group-text bg-primary text-white"><font-awesome-icon :icon="['fas', 'user']"></font-awesome-icon></span>
+          <span class="input-group-text bg-primary text-white">
+            <font-awesome-icon :icon="['fas', 'at']"></font-awesome-icon>
+          </span>
         </b-input-group-prepend>
         <b-form-input v-model="form.email"
                       id="email"
@@ -17,7 +19,10 @@
                       autocomplete="email"></b-form-input>
       </b-input-group>
       <b-form-group class="text-center">
-        <b-button type="submit" variant="primary" class="mt-2" :disabled="disabledSubmit">{{ $t('view.request-password-reset.form.send') }}</b-button>
+        <b-button type="submit"
+                  variant="primary"
+                  class="mt-2"
+                  :disabled="disabledSubmit">{{ $t('view.request-password-reset.form.send') }}</b-button>
       </b-form-group>
     </b-form>
     <div class="text-center">

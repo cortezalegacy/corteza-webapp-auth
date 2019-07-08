@@ -1,34 +1,40 @@
 <template>
-  <div>
-    <h1>{{ $t(`view.reset-password.title`) }}</h1>
+  <b-card :title="$t(`view.reset-password.title`)">
     <div v-if="!user">
-      <div class="error" v-if="error">{{ $t('general.error-tpl', { error }) }}</div>
+      <div class="text-danger mb-1" v-if="error">{{ $t('general.error-tpl', { error }) }}</div>
       <div v-else>{{ $t('view.reset-password.validating-token') }}</div>
     </div>
-    <form v-else @submit.prevent="changePassword">
+    <b-form v-else @submit.prevent="changePassword">
       {{ $t(`view.reset-password.set-new-password`, { user }) }}
 
-      <div class="error" v-if="error">{{ $t('general.error-tpl', { error }) }}</div>
+      <div class="text-danger mb-1" v-if="error">{{ $t('general.error-tpl', { error }) }}</div>
 
-      <label for="password">{{ $t('view.reset-password.form.new-password.label') }}</label>
-      <input id="password"
-             type="password"
-             name="password"
-             required
-             :placeholder="$t('view.reset-password.form.new-password.placeholder')"
-             autocomplete="password"
-             v-model="form.password">
-      <br />
+      <b-input-group>
+        <b-input-group-prepend>
+          <span class="input-group-text bg-primary text-white">
+            <font-awesome-icon :icon="['fas', 'key']"></font-awesome-icon>
+          </span>
+        </b-input-group-prepend>
+        <b-form-input v-model="form.password"
+                      id="password"
+                      type="password"
+                      name="password"
+                      :label="$t('view.reset-password.form.new-password.label')"
+                      :placeholder="$t('view.reset-password.form.new-password.placeholder')"
+                      required
+                      autocomplete="password"></b-form-input>
+      </b-input-group>
+      <b-form-group class="text-center mt-2">
+        <b-button type="submit"
+                  variant="primary"
+                  :disabled="disabledSubmit">{{ $t('view.reset-password.form.reset') }}</b-button>
+      </b-form-group>
 
-      <button type="submit"
-              class="login-btn"
-              :disabled="disabledSubmit">{{ $t('view.reset-password.form.reset') }}</button>
-
-    </form>
-    <div class="footnote">
+    </b-form>
+    <div class="text-center mt-2">
       <router-link :to="{ name: 'auth:login' }">{{ $t('link.login-cta' )}}</router-link>
     </div>
-  </div>
+  </b-card>
 </template>
 
 <script>

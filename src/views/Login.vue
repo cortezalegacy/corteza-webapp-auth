@@ -4,18 +4,23 @@
       <div class="text-danger mb-1" v-if="error">{{ $t('general.error-tpl', { error }) }}</div>
       <b-input-group>
         <b-input-group-prepend>
-          <span class="input-group-text bg-primary text-white"><font-awesome-icon :icon="['fas', 'user']"></font-awesome-icon></span>
+          <span class="input-group-text bg-primary text-white">
+            <font-awesome-icon :icon="['fas', 'at']"></font-awesome-icon>
+          </span>
         </b-input-group-prepend>
         <b-form-input v-model="form.email"
                       :label="$t('view.login.form.email.label')"
                       :placeholder="$t('view.login.form.email.placeholder')"
                       required
-                      autocomplete="email"></b-form-input>
+                      autocomplete="email">
+        </b-form-input>
       </b-input-group>
 
       <b-input-group class="mt-2">
         <b-input-group-prepend>
-          <span class="input-group-text bg-primary text-white"><font-awesome-icon :icon="['fas', 'key']"></font-awesome-icon></span>
+          <span class="input-group-text bg-primary text-white">
+            <font-awesome-icon :icon="['fas', 'key']"></font-awesome-icon>
+          </span>
         </b-input-group-prepend>
         <b-form-input v-model="form.password"
                       type="password"

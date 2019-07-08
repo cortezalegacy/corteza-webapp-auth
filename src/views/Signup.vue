@@ -1,57 +1,88 @@
 <template>
-  <div>
-    <h1>{{ $t('view.signup.title') }}</h1>
+  <b-card :title="$t('view.signup.title')">
     <p v-if="pendingEmailConfirmation">{{ $t('view.signup.pending-email-confirmation') }}</p>
     <div v-else>
-      <form @submit.prevent="internalSignup" v-if="internalSignUpEnabled">
-        <label for="email">{{ $t('view.signup.form.email.label') }}</label>
-        <input id="email"
-               type="email"
-               name="email"
-               required
-               autocomplete="email"
-               :placeholder="$t('view.signup.form.email.placeholder')"
-               v-model="form.email">
-        <br />
+      <b-form @submit.prevent="internalSignup" v-if="internalSignUpEnabled">
+        <b-input-group>
+          <b-input-group-prepend>
+            <span class="input-group-text bg-primary text-white">
+              <font-awesome-icon :icon="['fas', 'at']"></font-awesome-icon>
+            </span>
+          </b-input-group-prepend>
+          <b-form-input v-model="form.email"
+                        id="email"
+                        type="email"
+                        name="email"
+                        :label="$t('view.signup.form.email.label')"
+                        :placeholder="$t('view.signup.form.email.placeholder')"
+                        required
+                        autocomplete="email">
+          </b-form-input>
+        </b-input-group>
 
-        <label for="password">{{ $t('view.signup.form.password.label') }}</label>
-        <input id="password"
-               type="password"
-               name="password"
-               required
-               autocomplete="password"
-               :placeholder="$t('view.signup.form.password.placeholder')"
-               v-model="form.password">
-        <br />
+        <b-input-group class="mt-2">
+          <b-input-group-prepend>
+            <span class="input-group-text bg-primary text-white">
+              <font-awesome-icon :icon="['fas', 'key']"></font-awesome-icon>
+            </span>
+          </b-input-group-prepend>
+          <b-form-input v-model="form.password"
+                        id="password"
+                        type="password"
+                        name="password"
+                        :label="$t('\'view.signup.form.password.label\'')"
+                        :placeholder="$t('view.signup.form.password.placeholder')"
+                        required
+                        autocomplete="password">
+          </b-form-input>
+        </b-input-group>
 
-        <label for="name">{{ $t('view.signup.form.name.label') }}</label>
-        <input id="name"
-               type="text"
-               name="name"
-               autocomplete="name"
-               :placeholder="$t('view.signup.form.name.placeholder')"
-               v-model="form.name">
-        <br />
+        <b-input-group class="mt-2">
+          <b-input-group-prepend>
+            <span class="input-group-text bg-primary text-white">
+              <font-awesome-icon :icon="['fas', 'user']"></font-awesome-icon>
+            </span>
+          </b-input-group-prepend>
+          <b-form-input v-model="form.name"
+                        id="name"
+                        type="text"
+                        name="name"
+                        :label="$t('\'view.signup.form.name.label\'')"
+                        :placeholder="$t('view.signup.form.name.placeholder')"
+                        required
+                        autocomplete="name">
+          </b-form-input>
+        </b-input-group>
 
-        <label for="handle">{{ $t('view.signup.form.handle.label') }}</label>
-        <input id="handle"
-               type="text"
-               name="handle"
-               autocomplete="handle"
-               :placeholder="$t('view.signup.form.handle.placeholder')"
-               v-model="form.handle">
-        <br/>
-        <button type="submit"
-                class="login-btn"
-                :disabled="disabledSubmit">{{ $t('view.signup.form.submit') }}</button>
+        <b-input-group class="mt-2">
+          <b-input-group-prepend>
+            <span class="input-group-text bg-primary text-white">
+              <font-awesome-icon :icon="['fas', 'user']"></font-awesome-icon>
+            </span>
+          </b-input-group-prepend>
+          <b-form-input v-model="form.handle"
+                        id="handle"
+                        type="text"
+                        name="handle"
+                        :label="$t('\'view.signup.form.handle.label\'')"
+                        :placeholder="$t('view.signup.form.handle.placeholder')"
+                        autocomplete="handle">
+          </b-form-input>
+        </b-input-group>
 
-        <div class="error" v-if="error">{{ $t('general.error-tpl', { error }) }}</div>
-      </form>
+        <b-form-group class="text-center mt-2">
+          <b-button type="submit"
+                    variant="primary"
+                    :disabled="disabledSubmit">{{ $t('view.signup.form.submit') }}</b-button>
+        </b-form-group>
+        <div class="text-danger mb-1" v-if="error">{{ $t('general.error-tpl', { error }) }}</div>
+      </b-form>
+
       <div class="or" v-if="externalEnabled && externalProviders && internalSignUpEnabled">{{ $t('general.internal-external-separator') }}</div>
       <fieldset class="external-providers" v-if="externalEnabled && externalProviders">
         <external-provider v-for="p in externalProviders" :key="p.handle" :onExternalAuth="onExternalAuth" :pKind="p.handle" :pLabel="p.label"></external-provider>
       </fieldset>
-      <div class="footnote" v-if="internalSignUpEnabled">
+      <div class="text-center" v-if="internalSignUpEnabled">
         <router-link v-if="internalPasswordResetEnabled"
                      :to="{ name: 'auth:request-password-reset'}"
                      class="forgotten-pw">{{ $t('link.forgotten-password-cta') }}</router-link>
@@ -62,7 +93,7 @@
         <router-link :to="{ name: 'auth:login'}">{{ $t('link.login') }}</router-link>
       </div>
     </div>
-  </div>
+  </b-card>
 </template>
 
 <script>

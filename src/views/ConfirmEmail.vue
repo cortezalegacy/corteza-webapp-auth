@@ -1,8 +1,7 @@
 <template>
-  <div>
-    <h1>{{ $t(`view.confirm-email.title`) }}</h1>
+  <b-card :title="$t(`view.confirm-email.title`)">
     <div v-if="error">
-      <p class="error">{{ $t('general.error-tpl', { error }) }}</p>
+      <p class="text-danger mb-1">{{ $t('general.error-tpl', { error }) }}</p>
       <p>{{ $t(`view.confirm-email.check-or-repeat`) }}</p>
     </div>
     <div v-else-if="processing">
@@ -11,10 +10,10 @@
     <div v-else>
       {{ $t(`view.confirm-email.confirmed`) }}
     </div>
-    <div class="footnote" v-if="internalSignUpEnabled">
+    <div v-if="internalSignUpEnabled">
       <router-link :to="{ name: 'auth:login'}">{{ $t('link.login') }}</router-link>
     </div>
-  </div>
+  </b-card>
 </template>
 
 <script>

@@ -42,8 +42,8 @@ export default {
           placeholder: 'Repeat',
         },
         handle: {
-          label: 'Name, nickname, handle:',
-          placeholder: 'Name',
+          label: 'Handle:',
+          placeholder: 'Name, nickname, handle',
         },
         submit: 'Submit',
       },
@@ -70,8 +70,8 @@ export default {
           placeholder: 'Your full name',
         },
         handle: {
-          label: 'Name, nickname, handle:',
-          placeholder: 'Name',
+          label: 'Handle:',
+          placeholder: 'Name, nickname, handle',
         },
         submit: 'Login',
       },
@@ -124,8 +124,8 @@ export default {
           placeholder: 'Your full name',
         },
         handle: {
-          label: 'Name, nickname, handle:',
-          placeholder: 'Name',
+          label: 'Handle:',
+          placeholder: 'Name, nickname, handle',
         },
         submit: '$t(auth:general.form.submit)',
       },

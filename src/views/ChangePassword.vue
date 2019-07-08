@@ -1,56 +1,78 @@
 <template>
   <b-card v-if="internalEnabled" :title="$t(`view.change-password.title`)">
-    <h1>{{ $t(`view.change-password.title`) }}</h1>
     <p v-if="passwordChanged">{{ $t(`view.change-password.changed`) }}</p>
     <div v-else>
-      <form @submit.prevent="changePassword">
-        <label for="email">{{ $t('view.change-password.form.email.label') }}</label>
-        <input
-                id="email"
-                type="email"
-                disabled
-                v-model="user.email">
-        <br />
+      <b-form @submit.prevent="changePassword">
+        <b-input-group>
+          <b-input-group-prepend>
+          <span class="input-group-text bg-primary text-white">
+            <font-awesome-icon :icon="['fas', 'at']"></font-awesome-icon>
+          </span>
+          </b-input-group-prepend>
+          <b-form-input v-model="user.email"
+                        id="email"
+                        type="email"
+                        name="email"
+                        disabled>
+          </b-form-input>
+        </b-input-group>
 
-        <div class="error" v-if="error">{{ $t('general.error-tpl', { error }) }}</div>
+        <div class="text-danger mb-1" v-if="error">{{ $t('general.error-tpl', { error }) }}</div>
 
-        <label for="oldPassword">{{ $t('view.change-password.form.old-password.label') }}</label>
-        <input
-                id="oldPassword"
-                type="password"
-                required
-                autocomplete="password"
-                :placeholder="$t('view.change-password.form.old-password.placeholder')"
-                v-model="form.oldPassword">
-        <br />
+        <b-input-group class="mt-2">
+          <b-input-group-prepend>
+          <span class="input-group-text bg-primary text-white">
+            <font-awesome-icon :icon="['fas', 'key']"></font-awesome-icon>
+          </span>
+          </b-input-group-prepend>
+          <b-form-input v-model="form.oldPassword"
+                        type="password"
+                        id="oldPassword"
+                        :label="$t('view.change-password.form.old-password.label')"
+                        :placeholder="$t('view.change-password.form.old-password.placeholder')"
+                        required
+                        autocomplete="password"></b-form-input>
+        </b-input-group>
 
-        <label for="newPassword">{{ $t('view.change-password.form.new-password.label') }}</label>
-        <input
-                id="newPassword"
-                type="password"
-                required
-                autocomplete="password"
-                :placeholder="$t('view.change-password.form.new-password.placeholder')"
-                v-model="form.newPassword">
-        <br />
+        <b-input-group class="mt-2">
+          <b-input-group-prepend>
+          <span class="input-group-text bg-primary text-white">
+            <font-awesome-icon :icon="['fas', 'key']"></font-awesome-icon>
+          </span>
+          </b-input-group-prepend>
+          <b-form-input v-model="form.newPassword"
+                        type="password"
+                        id="newPassword"
+                        :label="$t('view.change-password.form.new-password.label')"
+                        :placeholder="$t('view.change-password.form.new-password.placeholder')"
+                        required
+                        autocomplete="password"></b-form-input>
+        </b-input-group>
 
-        <label for="passwordCheck">{{ $t('view.change-password.form.check-password.label') }}</label>
-        <input
-                id="passwordCheck"
-                type="password"
-                required
-                autocomplete="password"
-                :placeholder="$t('view.change-password.form.check-password.placeholder')"
-                :class="{ error: !this.passwordCheckMatch }"
-                v-model="form.newPasswordCheck">
-        <br />
+        <b-input-group class="mt-2">
+          <b-input-group-prepend>
+          <span class="input-group-text bg-primary text-white">
+            <font-awesome-icon :icon="['fas', 'key']"></font-awesome-icon>
+          </span>
+          </b-input-group-prepend>
+          <b-form-input v-model="form.newPasswordCheck"
+                        type="password"
+                        id="passwordCheck"
+                        :label="$t('view.change-password.form.check-password.label')"
+                        :placeholder="$t('view.change-password.form.check-password.placeholder')"
+                        required
+                        :class="{ 'text-danger mb-1': !this.passwordCheckMatch }"
+                        autocomplete="password"></b-form-input>
+        </b-input-group>
 
-        <button type="submit"
-                class="login-btn"
-                :disabled="disabledSubmit">{{ $t('view.change-password.form.submit') }}</button>
-      </form>
+        <b-form-group class="text-center mt-2">
+          <b-button type="submit"
+                    variant="primary"
+                    :disabled="disabledSubmit">{{ $t('view.change-password.form.submit') }}</b-button>
+        </b-form-group>
+      </b-form>
     </div>
-    <div class="footnote">
+    <div>
       <router-link :to="{ name: 'auth:logout'}">{{ $t('link.logout') }}</router-link>
       |
       <router-link :to="{ name: 'auth:profile'}">{{ $t('link.profile-cta') }}</router-link>

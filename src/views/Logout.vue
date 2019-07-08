@@ -1,13 +1,12 @@
 <template>
-  <div>
-    <h1>{{ $t(`view.logout.title`) }}</h1>
+  <b-card :title="$t(`view.logout.title`)">
     <div v-if="error">
-      <p class="error">{{ $t('general.error-tpl', { error }) }}</p>
+      <p class="text-danger mb-1">{{ $t('general.error-tpl', { error }) }}</p>
     </div>
-    <div class="footnote">
+    <div class="text-center">
       <router-link :to="{ name: 'auth:login' }">{{ $t('link.login') }}</router-link>
     </div>
-  </div>
+  </b-card>
 </template>
 <script>
 export default {
