@@ -1,5 +1,5 @@
 <template>
-  <div slot="footer" class="text-right">
+  <div slot="footer" class="text-right card-footer bg-light border-top-0">
     <small class="text-muted"><a href="https://cortezaproject.org/" target="_blank">cortezaproject.org</a></small>
     <span>  |  </span>
     <small class="text-muted"><a href="https://github.com/cortezaproject/" target="_blank">Github</a></small>

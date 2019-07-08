@@ -12,13 +12,21 @@
       <div class="loader" v-else>
         <div class="logo"><h1>Auth</h1></div>
       </div>
+      <card-footer>
+      </card-footer>
     </div>
   </div>
 </template>
 
 <script>
+import CardFooter from '../components/CardFooter'
+
 export default {
   name: 'Auth',
+
+  components: {
+    CardFooter,
+  },
 
   data () {
     return {

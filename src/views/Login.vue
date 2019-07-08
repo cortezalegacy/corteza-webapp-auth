@@ -46,20 +46,11 @@
     <div v-if="!(externalEnabled && externalProviders.length > 0) && !internalEnabled">
       {{ $t('auth:general.login-disabled') }}
     </div>
-    <div slot="footer" class="text-right">
-      <small class="text-muted"><a href="https://cortezaproject.org/" target="_blank">cortezaproject.org</a></small>
-      <span>  |  </span>
-      <small class="text-muted"><a href="https://github.com/cortezaproject/" target="_blank">Github</a></small>
-    </div>
-    <div slot="footer"><small class="text-muted">Footer Text</small></div>
-    <card-footer>
-    </card-footer>
   </b-card>
 </template>
 
 <script>
 import ExternalProvider from '../components/ExternalProvider'
-import CardFooter from '../components/CardFooter'
 
 const tokenRegex = /^[a-zA-Z0-9]{32}\d+$/
 
@@ -68,7 +59,6 @@ export default {
 
   components: {
     ExternalProvider,
-    CardFooter,
   },
   props: {
     afterLogin: { default: null },
