@@ -1,8 +1,7 @@
 <template>
   <div class="container d-flex justify-content-center align-items-center vh-100">
     <div class="col-md-8 col-lg-6">
-      <!--<div class="error">test</div>-->
-      <div class="error" v-if="error">{{ error }}</div>
+      <div class="text-danger mb-1" v-if="error">{{ error }}</div>
       <main v-else-if="!this.processing">
         <a href="/"><div class="logo bg-white pt-5"><h1>Auth</h1></div></a>
         <section>
@@ -103,15 +102,5 @@ export default {
     opacity: 0.7;
     animation: flickerAnimation 3s infinite;
   }
-}
-
-.error {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #E85568;
-  font-size: 24px;
-  background-color: #FFFFFF;
-  text-align: center;
 }
 </style>

@@ -1,7 +1,7 @@
 <template>
   <b-card :title="$t(`view.login.title`)">
     <b-form @submit.prevent="internalLogin" v-if="internalEnabled">
-      <div class="error" v-if="error">{{ $t('general.error-tpl', { error }) }}</div>
+      <div class="text-danger mb-1" v-if="error">{{ $t('general.error-tpl', { error }) }}</div>
       <b-input-group>
         <b-input-group-prepend>
           <span class="input-group-text bg-primary text-white"><font-awesome-icon :icon="['fas', 'user']"></font-awesome-icon></span>

@@ -1,31 +1,29 @@
 <template>
-  <div>
-    <h1>{{ $t(`view.request-password-reset.title`) }}</h1>
+  <b-card :title="$t(`view.request-password-reset.title`)">
     <p v-if="done">{{ $t('view.request-password-reset.password-request-sent') }}</p>
-    <form @submit.prevent="requestPasswordReset" v-else>
-
-      <div class="error" v-if="error">{{ $t('general.error-tpl', { error }) }}</div>
-
-      <label for="email">{{ $t('view.request-password-reset.form.email.label') }}</label>
-      <input
-              id="email"
-              type="email"
-              name="email"
-              required
-              autocomplete="email"
-              :placeholder="$t('view.request-password-reset.form.email.placeholder')"
-              v-model="form.email">
-
-      <br/>
-      <button type="submit"
-              class="login-btn"
-              :disabled="disabledSubmit">{{ $t('view.request-password-reset.form.send') }}</button>
-
-    </form>
-    <div class="footnote">
+    <b-form @submit.prevent="requestPasswordReset" v-else>
+      <div class="text-danger mb-1" v-if="error">{{ $t('general.error-tpl', { error }) }}</div>
+      <b-input-group>
+        <b-input-group-prepend>
+          <span class="input-group-text bg-primary text-white"><font-awesome-icon :icon="['fas', 'user']"></font-awesome-icon></span>
+        </b-input-group-prepend>
+        <b-form-input v-model="form.email"
+                      id="email"
+                      type="email"
+                      name="email"
+                      :label="$t('view.request-password-reset.form.email.label\'')"
+                      :placeholder="$t('view.request-password-reset.form.email.placeholder')"
+                      required
+                      autocomplete="email"></b-form-input>
+      </b-input-group>
+      <b-form-group class="text-center">
+        <b-button type="submit" variant="primary" class="mt-2" :disabled="disabledSubmit">{{ $t('view.request-password-reset.form.send') }}</b-button>
+      </b-form-group>
+    </b-form>
+    <div class="text-center">
       <router-link :to="{ name: 'auth:login' }">{{ $t('link.login-cta' )}}</router-link>
     </div>
-  </div>
+  </b-card>
 </template>
 
 <script>

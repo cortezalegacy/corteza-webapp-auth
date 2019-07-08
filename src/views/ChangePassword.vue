@@ -1,5 +1,5 @@
 <template>
-  <div v-if="internalEnabled">
+  <b-card v-if="internalEnabled" :title="$t(`view.change-password.title`)">
     <h1>{{ $t(`view.change-password.title`) }}</h1>
     <p v-if="passwordChanged">{{ $t(`view.change-password.changed`) }}</p>
     <div v-else>
@@ -55,7 +55,7 @@
       |
       <router-link :to="{ name: 'auth:profile'}">{{ $t('link.profile-cta') }}</router-link>
     </div>
-  </div>
+  </b-card>
 </template>
 
 <script>
