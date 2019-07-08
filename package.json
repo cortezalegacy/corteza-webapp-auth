@@ -12,6 +12,10 @@
   },
   "main": "index.js",
   "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^1.2.19",
+    "@fortawesome/free-regular-svg-icons": "^5.9.0",
+    "@fortawesome/free-solid-svg-icons": "^5.9.0",
+    "@fortawesome/vue-fontawesome": "^0.1.6",
     "@panter/vue-i18next": "^0.15.0",
     "@storybook/addon-knobs": "^5.1.9",
     "@vue/eslint-config-standard": "^4.0.0",

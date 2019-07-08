@@ -1,10 +1,10 @@
 <template>
-  <div class="container">
-    <div class="d-flex justify-content-center h-100">
+  <div class="container d-flex justify-content-center align-items-center vh-100">
+    <div class="col-md-8 col-lg-6">
+      <!--<div class="error">test</div>-->
       <div class="error" v-if="error">{{ error }}</div>
-
-      <main v-else-if="!processing">
-        <a href="/"><div class="logo"><h1>Auth</h1></div></a>
+      <main v-else-if="!this.processing">
+        <a href="/"><div class="logo bg-white pt-5"><h1>Auth</h1></div></a>
         <section>
           <router-view v-bind="settings"/>
         </section>
@@ -104,33 +104,6 @@ export default {
   color: #E85568;
   font-size: 24px;
   background-color: #FFFFFF;
-  height: 20vh;
-  top: 40vh;
   text-align: center;
-}
-
-main {
-  h1 {
-    margin: 0;
-    padding: 0 0 20px 0;
-    font-size: 18px;
-  }
-
-  position: relative;
-  max-width: 320px;
-
-  section {
-    margin-top: 20px;
-    padding: 20px;
-    background-color: #fff;
-    border-radius: 2px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.33);
-  }
-
-  img.logo {
-    max-width: 80%;
-    display: block;
-    margin: 0 auto;
-  }
 }
 </style>

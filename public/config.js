@@ -1,1 +1,1 @@
-window.SystemAPI = `http://system.api.local.crust.tech:3002`
+window.SystemAPI = `https://system.api.playground.crust.tech`

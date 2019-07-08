@@ -10,6 +10,7 @@ import routes from './views/routes'
 import App from './views/Index'
 
 import './themes'
+import './ui'
 
 /* eslint-disable no-undef */
 console.log(

@@ -1,16 +1,5 @@
-// Paths
-$fonts_dir : './assets/fonts/';
-$icomoon-font-path: $fonts_dir + 'icomoon' !default;
-$icomoon-font-family: "icomoon" !default;
-
 // Typography
-$regular: 'nunito_sansregular';
-$bold: 'nunito_sansbold';
-$semibold: 'nunito_sanssemibold';
-$font-size-base: 0.85rem;
-
-$font-family-base:      $regular;
-$headings-font-family:  $semibold;
+$font-size-base: 0.85rem !default;
 
 // Color system
 $white:         #fff !default;
@@ -25,6 +14,23 @@ $dark:          #1e2224 !default;
 
 // Forms
 $input-font-size: $font-size-base;
-$input-btn-focus-width:        0;
-$input-focus-box-shadow:       none;
-$input-focus-border-color:     $primary;
+$input-btn-focus-width:        0 !default;
+$input-focus-box-shadow:       none !default;
+$input-focus-border-color:     $primary !default;
+
+// Options
+$enable-rounded: false !default;
+
+// Components
+$border-radius: 0 !default;
+
+// Buttons
+$btn-focus-width: 0 !default;
+$btn-focus-box-shadow: none !default;
+$btn-active-box-shadow: none !default;
+
+// Forms
+$input-font-size:              $font-size-base !default;
+$input-btn-focus-width:        0 !default;
+$input-focus-box-shadow:       none !default;
+$input-focus-border-color:     $primary !default;

@@ -2,33 +2,36 @@
   <b-card :title="$t(`view.login.title`)">
     <b-form @submit.prevent="internalLogin" v-if="internalEnabled">
       <div class="error" v-if="error">{{ $t('general.error-tpl', { error }) }}</div>
-
-      <b-form-group :label="$t('view.login.form.email.label')">
+      <b-input-group>
+        <b-input-group-prepend>
+          <span class="input-group-text bg-primary text-white"><font-awesome-icon :icon="['fas', 'user']"></font-awesome-icon></span>
+        </b-input-group-prepend>
         <b-form-input v-model="form.email"
                       :label="$t('view.login.form.email.label')"
                       :placeholder="$t('view.login.form.email.placeholder')"
                       required
                       autocomplete="email"></b-form-input>
-      </b-form-group>
+      </b-input-group>
 
-      <b-form-group :label="$t('view.login.form.password.label')">
+      <b-input-group class="mt-2">
+        <b-input-group-prepend>
+          <span class="input-group-text bg-primary text-white"><font-awesome-icon :icon="['fas', 'key']"></font-awesome-icon></span>
+        </b-input-group-prepend>
         <b-form-input v-model="form.password"
                       type="password"
                       :label="$t('view.login.form.password.label')"
                       :placeholder="$t('view.login.form.password.placeholder')"
                       required
                       autocomplete="password"></b-form-input>
-        <slot name="description">
-          <small><router-link :to="{ name: 'auth:request-password-reset'}">{{ $t('link.forgotten-password-cta') }}</router-link></small>
-        </slot>
-      </b-form-group>
+      </b-input-group>
+      <small><router-link :to="{ name: 'auth:request-password-reset'}">{{ $t('link.forgotten-password-cta') }}</router-link></small>
 
-      <b-form-group class="text-right">
+      <b-form-group class="text-center">
         <b-button type="submit" variant="primary" :disabled="disabledSubmit">{{ $t('view.login.form.submit') }}</b-button>
       </b-form-group>
 
       <b-form-group v-if="internalEnabled && internalSignUpEnabled"
-                    class="text-right">
+                    class="text-center">
         <router-link :to="{ name: 'auth:signup'}">{{ $t('link.signup-cta') }}</router-link>
       </b-form-group>
     </b-form>
@@ -43,11 +46,20 @@
     <div v-if="!(externalEnabled && externalProviders.length > 0) && !internalEnabled">
       {{ $t('auth:general.login-disabled') }}
     </div>
+    <div slot="footer" class="text-right">
+      <small class="text-muted"><a href="https://cortezaproject.org/" target="_blank">cortezaproject.org</a></small>
+      <span>  |  </span>
+      <small class="text-muted"><a href="https://github.com/cortezaproject/" target="_blank">Github</a></small>
+    </div>
+    <div slot="footer"><small class="text-muted">Footer Text</small></div>
+    <card-footer>
+    </card-footer>
   </b-card>
 </template>
 
 <script>
 import ExternalProvider from '../components/ExternalProvider'
+import CardFooter from '../components/CardFooter'
 
 const tokenRegex = /^[a-zA-Z0-9]{32}\d+$/
 
@@ -56,6 +68,7 @@ export default {
 
   components: {
     ExternalProvider,
+    CardFooter,
   },
   props: {
     afterLogin: { default: null },
