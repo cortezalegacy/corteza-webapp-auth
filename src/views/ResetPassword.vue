@@ -16,7 +16,6 @@
           </span>
         </b-input-group-prepend>
         <b-form-input v-model="form.password"
-                      id="password"
                       type="password"
                       name="password"
                       :label="$t('view.reset-password.form.new-password.label')"

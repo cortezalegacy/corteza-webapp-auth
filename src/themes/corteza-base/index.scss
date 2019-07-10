@@ -1,27 +1,4 @@
-@import "variables";
-@import 'node_modules/bootstrap/scss/bootstrap';
-@import 'node_modules/bootstrap-vue/src/index.scss';
-
-body {
-  background: url("img/background.png");
-  height: 100vh;
-
-  &::before {
-    content: "";
-    position: fixed;
-    left: 0;
-    right: 0;
-    top: 0;
-    bottom: 0;
-    background: rgba(255, 255, 255, 0.23);
-  }
-}
-
-div.logo {
-  background: url("img/logo.png") no-repeat center;
-  height: 80px;
-
-  * {
-    display: none;
-  }
-}
+@import 'variables';
+@import '~bootstrap/scss/bootstrap';
+@import '~bootstrap-vue/src/index.scss';
+@import 'custom';

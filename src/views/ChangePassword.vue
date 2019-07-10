@@ -10,7 +10,6 @@
           </span>
           </b-input-group-prepend>
           <b-form-input v-model="user.email"
-                        id="email"
                         type="email"
                         name="email"
                         disabled>
@@ -27,7 +26,6 @@
           </b-input-group-prepend>
           <b-form-input v-model="form.oldPassword"
                         type="password"
-                        id="oldPassword"
                         :label="$t('view.change-password.form.old-password.label')"
                         :placeholder="$t('view.change-password.form.old-password.placeholder')"
                         required
@@ -42,7 +40,6 @@
           </b-input-group-prepend>
           <b-form-input v-model="form.newPassword"
                         type="password"
-                        id="newPassword"
                         :label="$t('view.change-password.form.new-password.label')"
                         :placeholder="$t('view.change-password.form.new-password.placeholder')"
                         required
@@ -57,7 +54,6 @@
           </b-input-group-prepend>
           <b-form-input v-model="form.newPasswordCheck"
                         type="password"
-                        id="passwordCheck"
                         :label="$t('view.change-password.form.check-password.label')"
                         :placeholder="$t('view.change-password.form.check-password.placeholder')"
                         required

@@ -1,0 +1,42 @@
+body {
+  background: url("img/background.png");
+  height: 100vh;
+
+  &::before {
+    content: "";
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0.23);
+  }
+}
+
+div.logo {
+  background: url("img/logo.png") no-repeat center;
+  height: 80px;
+
+  * {
+    display: none;
+  }
+}
+
+@keyframes flickerAnimation {
+  0% { opacity: 0.6; }
+  50% { opacity: 0.1; }
+  100% { opacity: 0.6; }
+}
+
+.loader {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+
+  img {
+    align-self: center;
+    opacity: 0.7;
+    animation: flickerAnimation 3s infinite;
+  }
+}

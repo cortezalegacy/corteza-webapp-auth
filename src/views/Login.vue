@@ -17,6 +17,7 @@
           </span>
         </b-input-group-prepend>
         <b-form-input v-model="form.email"
+                      type="email"
                       :label="$t('view.login.form.email.label')"
                       :placeholder="$t('view.login.form.email.placeholder')"
                       required

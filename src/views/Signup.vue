@@ -18,7 +18,6 @@
             </span>
           </b-input-group-prepend>
           <b-form-input v-model="form.email"
-                        id="email"
                         type="email"
                         name="email"
                         :label="$t('view.signup.form.email.label')"
@@ -35,7 +34,6 @@
             </span>
           </b-input-group-prepend>
           <b-form-input v-model="form.password"
-                        id="password"
                         type="password"
                         name="password"
                         :label="$t('\'view.signup.form.password.label\'')"
@@ -52,7 +50,6 @@
             </span>
           </b-input-group-prepend>
           <b-form-input v-model="form.name"
-                        id="name"
                         type="text"
                         name="name"
                         :label="$t('\'view.signup.form.name.label\'')"
@@ -69,7 +66,6 @@
             </span>
           </b-input-group-prepend>
           <b-form-input v-model="form.handle"
-                        id="handle"
                         type="text"
                         name="handle"
                         :label="$t('\'view.signup.form.handle.label\'')"
@@ -86,8 +82,6 @@
         <div class="text-danger mb-1" v-if="error">{{ $t('general.error-tpl', { error }) }}</div>
       </b-form>
       <div class="text-center" v-if="internalSignUpEnabled">
-        <router-link v-if="internalPasswordResetEnabled"
-                     :to="{ name: 'auth:request-password-reset'}">{{ $t('link.forgotten-password-cta') }}</router-link>
         {{ $t('view.signup.existing-account') }}
         <router-link :to="{ name: 'auth:login'}">{{ $t('link.login') }}</router-link>
       </div>

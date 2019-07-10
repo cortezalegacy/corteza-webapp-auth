@@ -10,7 +10,6 @@
           </span>
         </b-input-group-prepend>
         <b-form-input v-model="form.email"
-                      id="email"
                       type="email"
                       name="email"
                       :label="$t('view.request-password-reset.form.email.label\'')"

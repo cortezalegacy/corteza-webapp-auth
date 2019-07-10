@@ -1,1 +1,1 @@
-import './corteza-base/index.scss'
+import(/* webpackChunkName: 'corteza-base' */ './corteza-base')

@@ -6,7 +6,7 @@
         <main v-else-if="!this.processing">
           <a href="/"><div class="logo bg-white pt-5"><h1>Auth</h1></div></a>
           <section>
-            <router-view v-bind="settings"/>
+            <router-view v-bind="settings" />
           </section>
         </main>
         <div class="loader" v-else>
@@ -31,7 +31,7 @@ export default {
 
   data () {
     return {
-      processing: false,
+      processing: true,
 
       error: null,
 
@@ -86,23 +86,3 @@ export default {
   },
 }
 </script>
-<style lang="scss" scoped>
-@keyframes flickerAnimation {
-  0% { opacity: 0.6; }
-  50% { opacity: 0.1; }
-  100% { opacity: 0.6; }
-}
-
-.loader {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 100vh;
-
-  img {
-    align-self: center;
-    opacity: 0.7;
-    animation: flickerAnimation 3s infinite;
-  }
-}
-</style>
