@@ -37,7 +37,13 @@ export default {
 
   computed: {
     iconClass () {
-      return `${this.pIcon || this.pKind}`
+      const ico = this.pIcon || this.pKind
+
+      if (/^openid-connect\./.test(ico)) {
+        return 'openid'
+      }
+
+      return ico
     },
 
     authUrl () {

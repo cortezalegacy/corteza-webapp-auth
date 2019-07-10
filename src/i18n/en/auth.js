@@ -1,6 +1,6 @@
 export default {
   general: {
-    'error-tpl': 'Error: {{ error }}',
+    'error-tpl': 'Error: {{- error}}', // interporated & unescaped
     form: {
       submit: 'Submit',
     },
