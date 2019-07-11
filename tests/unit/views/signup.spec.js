@@ -1,7 +1,7 @@
 import { expect, assert } from 'chai'
 import { createLocalVue } from '@vue/test-utils'
 import sinon from 'sinon'
-import Signup from '@/views/Signup'
+import Signup from 'corteza-webapp-auth/src/views/Signup'
 import { mount, writeableWindowLocation } from '../../lib/helpers'
 
 const localVue = createLocalVue()

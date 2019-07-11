@@ -1,7 +1,7 @@
-import { expect, assert } from 'chai'
+import { expect } from 'chai'
 import { shallowMount, createLocalVue } from '@vue/test-utils'
 import sinon from 'sinon'
-import Index from '@/views/Index'
+import Index from 'corteza-webapp-auth/src/views/App'
 
 const localVue = createLocalVue()
 
@@ -22,14 +22,6 @@ describe('views/Index.vue', () => {
 
   afterEach(() => {
     sinon.restore()
-  })
-
-  describe('created', () => {
-    it('loadsSettings', () => {
-      const loadSettings = sinon.fake()
-      wrapper = mount({ methods: { loadSettings } })
-      assert(loadSettings.calledOnce)
-    })
   })
 
   describe('methods', () => {

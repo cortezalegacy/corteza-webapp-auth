@@ -1,7 +1,7 @@
 import { expect, assert } from 'chai'
 import { shallowMount, createLocalVue } from '@vue/test-utils'
 import sinon from 'sinon'
-import ConfirmEmail from '@/views/ConfirmEmail'
+import ConfirmEmail from 'corteza-webapp-auth/src/views/ConfirmEmail'
 import { writeableWindowLocation } from '../../lib/helpers'
 
 const localVue = createLocalVue()

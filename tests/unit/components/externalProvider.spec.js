@@ -1,7 +1,7 @@
 import { expect, assert } from 'chai'
 import { shallowMount, createLocalVue } from '@vue/test-utils'
 import sinon from 'sinon'
-import ExternalProvider from '@/components/ExternalProvider'
+import ExternalProvider from 'corteza-webapp-auth/src/components/ExternalProvider'
 import { writeableWindowLocation } from '../../lib/helpers'
 
 const localVue = createLocalVue()
@@ -37,11 +37,11 @@ describe('components/ExternalProvider.vue', () => {
     })
 
     it('iconClass', () => {
-      let expected = 'icon-externalProvider'
+      let expected = 'externalProvider'
       expect(wrapper.vm.iconClass).to.eq(expected)
 
-      wrapper.setProps({ pIcon: 'icon' })
-      expected = 'icon-icon'
+      wrapper.setProps({ pKind: 'openid-connect.foo' })
+      expected = 'openid'
       expect(wrapper.vm.iconClass).to.eq(expected)
     })
 

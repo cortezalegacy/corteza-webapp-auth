@@ -1,7 +1,7 @@
 import { expect, assert } from 'chai'
 import { createLocalVue } from '@vue/test-utils'
 import sinon from 'sinon'
-import ResetPassword from '@/views/ResetPassword'
+import ResetPassword from 'corteza-webapp-auth/src/views/ResetPassword'
 import { mount } from '../../lib/helpers'
 
 const localVue = createLocalVue()

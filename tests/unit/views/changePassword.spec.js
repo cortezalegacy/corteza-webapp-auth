@@ -1,7 +1,7 @@
 import { expect } from 'chai'
 import { shallowMount, createLocalVue } from '@vue/test-utils'
 import sinon from 'sinon'
-import ChangePassword from '@/views/ChangePassword'
+import ChangePassword from 'corteza-webapp-auth/src/views/ChangePassword'
 
 const localVue = createLocalVue()
 

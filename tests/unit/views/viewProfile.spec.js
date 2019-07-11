@@ -1,7 +1,7 @@
 import { expect, assert } from 'chai'
 import { createLocalVue } from '@vue/test-utils'
 import sinon from 'sinon'
-import ViewProfile from '@/views/ViewProfile'
+import ViewProfile from 'corteza-webapp-auth/src/views/ViewProfile'
 import { mount } from '../../lib/helpers'
 
 const localVue = createLocalVue()
@@ -32,7 +32,7 @@ describe('views/ViewProfile.vue', () => {
 
       it('default', () => {
         const user = {}
-        wrapper = mount(ViewProfile, { ...common, mocks: { ...mocks, $auth: { is: isTrue } } })
+        wrapper = mount(ViewProfile, { ...common, mocks: { ...mocks, $auth: { is: isTrue, user: {} } } })
         expect(wrapper.vm.user).to.deep.eq(user)
       })
     })
@@ -45,12 +45,12 @@ describe('views/ViewProfile.vue', () => {
     })
 
     it('push.login', () => {
-      wrapper = mount(ViewProfile, { ...common, mocks: { ...mocks, $router: { push } } })
+      wrapper = mount(ViewProfile, { ...common, mocks: { ...mocks, $auth: { is: isFalse, user: {} }, $router: { push } } })
       assert(push.calledOnceWith({ name: 'auth:login' }))
     })
 
     it('showProfile', () => {
-      wrapper = mount(ViewProfile, { ...common, mocks: { ...mocks, $auth: { is: isTrue }, $router: { push } } })
+      wrapper = mount(ViewProfile, { ...common, mocks: { ...mocks, $auth: { is: isTrue, user: {} }, $router: { push } } })
       assert(push.notCalled)
     })
   })

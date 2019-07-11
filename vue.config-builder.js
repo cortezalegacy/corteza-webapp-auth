@@ -53,7 +53,7 @@ module.exports = ({ appName, appLabel, version, theme, packageAlias, root = path
         return options
       })
 
-      // Aliasing 'corteza-webapp-compose' instead of '@' so we do
+      // Aliasing full package name instead of '@' so we do
       // not break imports on apps that import this code
       config.resolve.alias.delete('@')
       if (packageAlias) {
