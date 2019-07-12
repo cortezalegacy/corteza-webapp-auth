@@ -2,9 +2,9 @@
   <div class="container h-100">
     <div class="row justify-content-center align-items-center h-100">
       <div class="col-md-8 col-lg-6">
-        <div class="text-danger mb-1" v-if="error">
+        <b-card class="border-top-0 text-danger" v-if="error">
           {{ error }}
-        </div>
+        </b-card>
 
         <div class="loader" v-else-if="loading">
           <div class="logo"></div>
