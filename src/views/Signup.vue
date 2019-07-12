@@ -1,12 +1,13 @@
 <template>
-  <b-card :title="$t('view.signup.title')">
+  <b-card-body>
+    <b-card-title>{{ $t('view.signup.title') }}</b-card-title>
     <div class="text-center mb-5" v-if="externalEnabled && externalProviders">
-      <external-provider v-for="p in externalProviders"
-                         :key="p.handle"
-                         :onExternalAuth="onExternalAuth"
-                         :pKind="p.handle"
-                         :pIcon="p.icon || p.handle"
-                         :pLabel="p.label"></external-provider>
+      <c-external-provider v-for="p in externalProviders"
+                           :key="p.handle"
+                           :onExternalAuth="onExternalAuth"
+                           :pKind="p.handle"
+                           :pIcon="p.icon || p.handle"
+                           :pLabel="p.label"></c-external-provider>
     </div>
     <p v-if="pendingEmailConfirmation">{{ $t('view.signup.pending-email-confirmation') }}</p>
     <div v-else>
@@ -86,18 +87,12 @@
         <router-link :to="{ name: 'auth:login'}">{{ $t('link.login') }}</router-link>
       </div>
     </div>
-  </b-card>
+  </b-card-body>
 </template>
 
 <script>
-import ExternalProvider from '../components/ExternalProvider'
-
 export default {
   name: 'Signup',
-
-  components: {
-    ExternalProvider,
-  },
 
   props: {
     afterSignup: { default: null },
@@ -140,10 +135,6 @@ export default {
         handle: '',
       },
     }
-  },
-
-  i18nOptions: {
-    namespaces: [ 'auth' ],
   },
 
   computed: {

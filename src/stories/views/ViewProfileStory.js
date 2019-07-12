@@ -20,7 +20,7 @@ const story = storiesOf('Views|ViewProfile', module)
 
 story.add('Full', () => ({
   components: { ViewProfile },
-  i18n: i18nInit(Vue),
+  i18n: i18nInit(),
   template: `<view-profile :internal-enabled="internalEnabled" :user="user" />`,
   props: {
     internalEnabled: { default: boolean('Internal login enabled', false) },
@@ -34,7 +34,7 @@ story.add('Full', () => ({
 
 story.add('Just email', () => ({
   components: { ViewProfile },
-  i18n: i18nInit(Vue),
+  i18n: i18nInit(),
   template: `<view-profile :internal-enabled="internalEnabled" :user="user" />`,
   props: {
     internalEnabled: { default: boolean('Internal login enabled', false) },

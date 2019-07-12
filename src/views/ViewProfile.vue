@@ -1,5 +1,6 @@
 <template>
-  <b-card :title="$t(`view.profile.title`)">
+  <b-card-body>
+    <b-card-title>{{ $t(`view.profile.title`) }}</b-card-title>
     <dt>{{ $t('view.profile.fields.email.label') }}</dt>
     <dd>{{ user.email }}</dd>
     <dt>{{ $t('view.profile.fields.name.label') }}</dt>
@@ -12,7 +13,7 @@
         | <router-link :to="{ name: 'auth:change-password'}">{{ $t('link.change-password') }}</router-link>
       </span>
     </div>
-  </b-card>
+  </b-card-body>
 </template>
 
 <script>
@@ -30,10 +31,6 @@ export default {
         return this.$auth.user
       },
     },
-  },
-
-  i18nOptions: {
-    namespaces: [ 'auth' ],
   },
 
   beforeCreate () {

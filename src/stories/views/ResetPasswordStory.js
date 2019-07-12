@@ -20,7 +20,7 @@ const story = storiesOf('Views|ResetPassword', module)
 
 story.add('Initial', () => ({
   components: { ResetPassword },
-  i18n: i18nInit(Vue),
+  i18n: i18nInit(),
   template: `<reset-password />`,
   mounted () {
     this.$children[0].error = null
@@ -29,13 +29,13 @@ story.add('Initial', () => ({
 
 story.add('Error', () => ({
   components: { ResetPassword },
-  i18n: i18nInit(Vue),
+  i18n: i18nInit(),
   template: `<reset-password />`,
 }))
 
 story.add('Done', () => ({
   components: { ResetPassword },
-  i18n: i18nInit(Vue),
+  i18n: i18nInit(),
   template: `<reset-password />`,
   mounted () {
     this.$children[0].email = null

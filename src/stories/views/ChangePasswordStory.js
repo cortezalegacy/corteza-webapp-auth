@@ -20,13 +20,13 @@ const story = storiesOf('Views|ChangePassword', module)
 
 story.add('Basic', () => ({
   components: { ChangePassword },
-  i18n: i18nInit(Vue),
+  i18n: i18nInit(),
   template: `<change-password :internal-enabled="true" />`,
 }))
 
 story.add('With error', () => ({
   components: { ChangePassword },
-  i18n: i18nInit(Vue),
+  i18n: i18nInit(),
   template: `<change-password :internal-enabled="true" />`,
   mounted () {
     this.$children[0].error = 'Example error text'
@@ -35,7 +35,7 @@ story.add('With error', () => ({
 
 story.add('After password change', () => ({
   components: { ChangePassword },
-  i18n: i18nInit(Vue),
+  i18n: i18nInit(),
   template: `<change-password :internal-enabled="true" />`,
   mounted () {
     this.$children[0].passwordChanged = true

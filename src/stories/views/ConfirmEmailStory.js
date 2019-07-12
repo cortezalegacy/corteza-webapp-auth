@@ -20,7 +20,7 @@ const story = storiesOf('Views|ConfirmEmail', module)
 
 story.add('Basic', () => ({
   components: { ConfirmEmail },
-  i18n: i18nInit(Vue),
+  i18n: i18nInit(),
   template: `<confirm-email :internal-enabled="true"
                     :internalSignUpEnabled="internalSignUpEnabled" />`,
   props: {
@@ -34,7 +34,7 @@ story.add('Basic', () => ({
 
 story.add('Processing', () => ({
   components: { ConfirmEmail },
-  i18n: i18nInit(Vue),
+  i18n: i18nInit(),
   template: `<confirm-email :internal-enabled="true" />`,
   mounted () {
     this.$children[0].processing = true
@@ -44,7 +44,7 @@ story.add('Processing', () => ({
 
 story.add('With error', () => ({
   components: { ConfirmEmail },
-  i18n: i18nInit(Vue),
+  i18n: i18nInit(),
   template: `<confirm-email :internal-enabled="true" />`,
   mounted () {
     this.$children[0].error = 'Example error text'

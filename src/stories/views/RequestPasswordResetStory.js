@@ -20,7 +20,7 @@ const story = storiesOf('Views|RequestPasswordReset', module)
 
 story.add('Basic', () => ({
   components: { RequestPasswordReset },
-  i18n: i18nInit(Vue),
+  i18n: i18nInit(),
   template: `<request-password-reset :internal-enabled="true"
                     :internalPasswordResetEnabled="internalPasswordResetEnabled" />`,
   props: {
@@ -30,7 +30,7 @@ story.add('Basic', () => ({
 
 story.add('With error', () => ({
   components: { RequestPasswordReset },
-  i18n: i18nInit(Vue),
+  i18n: i18nInit(),
   template: `<request-password-reset :internal-enabled="true" />`,
   mounted () {
     this.$children[0].error = 'Example error text'
@@ -39,7 +39,7 @@ story.add('With error', () => ({
 
 story.add('Done', () => ({
   components: { RequestPasswordReset },
-  i18n: i18nInit(Vue),
+  i18n: i18nInit(),
   template: `<request-password-reset :internal-enabled="true" />`,
   mounted () {
     this.$children[0].done = true

@@ -1,11 +1,13 @@
 <template>
-  <b-card :title="$t(`view.login.title`)">
+  <b-card-body>
+    <b-card-title>{{ $t(`view.login.title`) }}</b-card-title>
     <div v-if="externalEnabled && externalProviders" class="text-center mb-5">
-      <external-provider v-for="p in externalProviders"
-                         :key="p.handle" :onExternalAuth="onExternalAuth"
-                         :pKind="p.handle"
-                         :pLabel="p.label"
-                         :pIcon="p.icon || p.handle"></external-provider>
+      <c-external-provider v-for="p in externalProviders"
+                           :key="p.handle"
+                           :onExternalAuth="onExternalAuth"
+                           :pKind="p.handle"
+                           :pLabel="p.label"
+                           :pIcon="p.icon || p.handle"></c-external-provider>
     </div>
 
     <b-form @submit.prevent="internalLogin" v-if="internalEnabled">
@@ -52,20 +54,15 @@
     <div v-if="!(externalEnabled && externalProviders.length > 0) && !internalEnabled">
       {{ $t('auth:general.login-disabled') }}
     </div>
-  </b-card>
+  </b-card-body>
 </template>
 
 <script>
-import ExternalProvider from '../components/ExternalProvider'
-
 const tokenRegex = /^[a-zA-Z0-9]{32}\d+$/
 
 export default {
   name: 'Login',
 
-  components: {
-    ExternalProvider,
-  },
   props: {
     afterLogin: { default: null },
     onExternalAuth: { default: null },
@@ -85,10 +82,6 @@ export default {
     internalSignUpEnabled: {
       type: Boolean,
     },
-  },
-
-  i18nOptions: {
-    namespaces: [ 'auth' ],
   },
 
   data () {

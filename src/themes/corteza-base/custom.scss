@@ -1,5 +1,5 @@
 body {
-  background: url("img/background.png");
+  background: url($background);
   height: 100vh;
 
   &::before {
@@ -14,8 +14,10 @@ body {
 }
 
 div.logo {
-  background: url("img/logo.png") no-repeat center;
+  background: url($logo) no-repeat center;
+  background-size: initial;
   height: 80px;
+  width: 100%;
 
   * {
     display: none;
@@ -34,7 +36,7 @@ div.logo {
   justify-content: center;
   height: 100vh;
 
-  img {
+  div.logo {
     align-self: center;
     opacity: 0.7;
     animation: flickerAnimation 3s infinite;

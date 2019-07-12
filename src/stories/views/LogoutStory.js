@@ -20,13 +20,13 @@ const story = storiesOf('Views|Logout', module)
 
 story.add('Basic', () => ({
   components: { Logout },
-  i18n: i18nInit(Vue),
+  i18n: i18nInit(),
   template: `<logout />`,
 }))
 
 story.add('With error', () => ({
   components: { Logout },
-  i18n: i18nInit(Vue),
+  i18n: i18nInit(),
   template: `<logout />`,
   mounted () {
     this.$children[0].error = 'Example error text'

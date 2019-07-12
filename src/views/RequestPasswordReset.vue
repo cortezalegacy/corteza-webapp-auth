@@ -1,5 +1,6 @@
 <template>
-  <b-card :title="$t(`view.request-password-reset.title`)">
+  <b-card-body>
+    <b-card-title>{{ $t(`view.request-password-reset.title`) }}</b-card-title>
     <p v-if="done">{{ $t('view.request-password-reset.password-request-sent') }}</p>
     <b-form @submit.prevent="requestPasswordReset" v-else>
       <div class="text-danger mb-1" v-if="error">{{ $t('general.error-tpl', { error }) }}</div>
@@ -27,7 +28,7 @@
     <div class="text-center">
       <router-link :to="{ name: 'auth:login' }">{{ $t('link.login-cta' )}}</router-link>
     </div>
-  </b-card>
+  </b-card-body>
 </template>
 
 <script>
@@ -40,10 +41,6 @@ export default {
       type: Boolean,
       required: true,
     },
-  },
-
-  i18nOptions: {
-    namespaces: [ 'auth' ],
   },
 
   data () {

@@ -20,13 +20,13 @@ const story = storiesOf('Views|Signup', module)
 
 story.add('Basic', () => ({
   components: { Signup },
-  i18n: i18nInit(Vue),
+  i18n: i18nInit(),
   template: `<signup :internalSignUpEnabled="true" />`,
 }))
 
 story.add('With external providers', () => ({
   components: { Signup },
-  i18n: i18nInit(Vue),
+  i18n: i18nInit(),
   template: `<signup :internalSignUpEnabled="true"
                     :external-enabled="true"
                     :external-providers="externalProviders" />`,
@@ -37,7 +37,7 @@ story.add('With external providers', () => ({
 
 story.add('With error', () => ({
   components: { Signup },
-  i18n: i18nInit(Vue),
+  i18n: i18nInit(),
   template: `<signup :internalSignUpEnabled="true" />`,
   mounted () {
     this.$children[0].error = 'Example error text'
@@ -46,7 +46,7 @@ story.add('With error', () => ({
 
 story.add('Pending email confirmation', () => ({
   components: { Signup },
-  i18n: i18nInit(Vue),
+  i18n: i18nInit(),
   template: `<signup :internalSignUpEnabled="true" />`,
   mounted () {
     this.$children[0].pendingEmailConfirmation = true

@@ -1,12 +1,13 @@
 <template>
-  <b-card :title="$t(`view.logout.title`)">
+  <b-card-body>
+    <b-card-title>{{ $t('view.logout.title') }}</b-card-title>
     <div v-if="error">
       <p class="text-danger mb-1">{{ $t('general.error-tpl', { error }) }}</p>
     </div>
     <div class="text-center">
       <router-link :to="{ name: 'auth:login' }">{{ $t('link.login') }}</router-link>
     </div>
-  </b-card>
+  </b-card-body>
 </template>
 <script>
 export default {
@@ -14,10 +15,6 @@ export default {
 
   props: {
     afterLogout: { default: null },
-  },
-
-  i18nOptions: {
-    namespaces: [ 'auth' ],
   },
 
   data () {

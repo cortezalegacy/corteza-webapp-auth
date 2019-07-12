@@ -15,13 +15,13 @@ const story = storiesOf('Views|Login', module)
 
 story.add('Disabled', () => ({
   components: { Login },
-  i18n: i18nInit(Vue),
+  i18n: i18nInit(),
   template: `<login />`,
 }))
 
 story.add('Internal only', () => ({
   components: { Login },
-  i18n: i18nInit(Vue),
+  i18n: i18nInit(),
   template: `<login :internal-enabled="true"
                     :internalSignUpEnabled="internalSignUpEnabled" />`,
   props: {
@@ -31,7 +31,7 @@ story.add('Internal only', () => ({
 
 story.add('External', () => ({
   components: { Login },
-  i18n: i18nInit(Vue),
+  i18n: i18nInit(),
   template: `<login :external-enabled="true"
                     :external-providers="externalProviders" />`,
   props: {
@@ -41,7 +41,7 @@ story.add('External', () => ({
 
 story.add('Full', () => ({
   components: { Login },
-  i18n: i18nInit(Vue),
+  i18n: i18nInit(),
   template: `<login :external-enabled="true"
                     :internal-enabled="true"
                     :external-providers="externalProviders" />`,

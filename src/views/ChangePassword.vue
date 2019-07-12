@@ -1,5 +1,6 @@
 <template>
-  <b-card v-if="internalEnabled" :title="$t(`view.change-password.title`)">
+  <div v-if="internalEnabled">
+    <b-card-title>{{ $t(`view.change-password.title`) }}</b-card-title>
     <p v-if="passwordChanged">{{ $t(`view.change-password.changed`) }}</p>
     <div v-else>
       <b-form @submit.prevent="changePassword">
@@ -73,7 +74,7 @@
       |
       <router-link :to="{ name: 'auth:profile'}">{{ $t('link.profile-cta') }}</router-link>
     </div>
-  </b-card>
+  </div>
 </template>
 
 <script>
@@ -113,10 +114,6 @@ export default {
     user () {
       return this.$auth.user
     },
-  },
-
-  i18nOptions: {
-    namespaces: [ 'auth' ],
   },
 
   created () {

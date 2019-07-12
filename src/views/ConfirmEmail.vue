@@ -1,5 +1,5 @@
 <template>
-  <b-card :title="$t(`view.confirm-email.title`)">
+  <b-card-body :title="$t(`view.confirm-email.title`)">
     <div v-if="error">
       <p class="text-danger mb-1">{{ $t('general.error-tpl', { error }) }}</p>
       <p>{{ $t(`view.confirm-email.check-or-repeat`) }}</p>
@@ -13,7 +13,7 @@
     <div v-if="internalSignUpEnabled">
       <router-link :to="{ name: 'auth:login'}">{{ $t('link.login') }}</router-link>
     </div>
-  </b-card>
+  </b-card-body>
 </template>
 
 <script>
@@ -28,10 +28,6 @@ export default {
       type: Boolean,
     },
     afterConfirmEmail: { default: null },
-  },
-
-  i18nOptions: {
-    namespaces: [ 'auth' ],
   },
 
   data () {
