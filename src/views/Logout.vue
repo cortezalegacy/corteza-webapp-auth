@@ -28,10 +28,7 @@ export default {
       return
     }
 
-    this.$SystemAPI.authLogout().then(() => {
-      this.$auth.JWT = null
-      this.$auth.user = null
-
+    this.$auth.logout(this.$SystemAPI).then(() => {
       if (this.afterLogout) {
         this.afterLogout()
       } else {

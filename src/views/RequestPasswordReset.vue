@@ -63,10 +63,8 @@ export default {
   },
 
   created () {
-    if (this.$auth.is()) {
-      this.$router.push({ name: 'auth:profile' })
-      return
-    }
+    this.gotoProfileIfAuthenticated()
+
     if (!this.internalPasswordResetEnabled) {
       this.$router.push({ name: 'auth:login' })
     }

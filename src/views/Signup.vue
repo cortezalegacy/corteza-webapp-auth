@@ -37,7 +37,7 @@
           <b-form-input v-model="form.password"
                         type="password"
                         name="password"
-                        :label="$t('\'view.signup.form.password.label\'')"
+                        :label="$t('view.signup.form.password.label')"
                         :placeholder="$t('view.signup.form.password.placeholder')"
                         required
                         autocomplete="password">
@@ -53,7 +53,7 @@
           <b-form-input v-model="form.name"
                         type="text"
                         name="name"
-                        :label="$t('\'view.signup.form.name.label\'')"
+                        :label="$t('view.signup.form.name.label')"
                         :placeholder="$t('view.signup.form.name.placeholder')"
                         required
                         autocomplete="name">
@@ -69,7 +69,7 @@
           <b-form-input v-model="form.handle"
                         type="text"
                         name="handle"
-                        :label="$t('\'view.signup.form.handle.label\'')"
+                        :label="$t('view.signup.form.handle.label')"
                         :placeholder="$t('view.signup.form.handle.placeholder')"
                         autocomplete="handle">
           </b-form-input>
@@ -144,9 +144,7 @@ export default {
   },
 
   created () {
-    if (this.$auth.is()) {
-      this.$router.push({ name: 'auth:profile' })
-    }
+    this.gotoProfileIfAuthenticated()
   },
 
   methods: {

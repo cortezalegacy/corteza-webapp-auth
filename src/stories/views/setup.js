@@ -6,6 +6,18 @@ import '../../components'
 
 Vue.use(BootstrapVue)
 
+Vue.mixin({
+  methods: {
+    async gotoProfileIfAuthenticated () {
+      return Promise
+    },
+
+    async gotoLoginFormIfAnonymous () {
+      return Promise
+    },
+  },
+})
+
 export const wrapper = () => {
   // Wrap everything
   return {

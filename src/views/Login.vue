@@ -101,6 +101,7 @@ export default {
     disabledSubmit () {
       return this.processing
     },
+
     fPath () {
       return this.$route.fullPath
     },
@@ -108,7 +109,7 @@ export default {
 
   watch: {
     fPath: {
-      handler: function (newVal) {
+      handler: function () {
         this.finishExternal()
       },
     },
@@ -127,8 +128,8 @@ export default {
         } else {
           this.exchangeToken(token)
         }
-      } else if (this.$auth.is()) {
-        this.$router.push({ name: 'auth:profile' })
+      } else {
+        this.gotoProfileIfAuthenticated()
       }
     },
 

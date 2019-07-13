@@ -117,6 +117,8 @@ export default {
   },
 
   created () {
+    this.gotoLoginFormIfAnonymous()
+
     if (!this.internalEnabled) {
       this.$router.push({ name: 'auth:login' })
     }
