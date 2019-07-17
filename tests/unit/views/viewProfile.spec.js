@@ -1,57 +1,44 @@
-import { expect, assert } from 'chai'
-import { createLocalVue } from '@vue/test-utils'
+/* eslint-disable no-unused-expressions */
+import { expect } from 'chai'
 import sinon from 'sinon'
 import ViewProfile from 'corteza-webapp-auth/src/views/ViewProfile'
-import { mount } from '../../lib/helpers'
-
-const localVue = createLocalVue()
+import { shallowMount } from 'corteza-webapp-auth/tests/lib/helpers'
 
 describe('views/ViewProfile.vue', () => {
-  const isFalse = sinon.stub().returns(false)
-  const isTrue = sinon.stub().returns(true)
-
-  const mocks = {
-    $auth: { is: isFalse },
-    $t: (e) => e,
-  }
-
-  let common = { localVue, stubs: ['router-view', 'router-link'], mocks }
-  let wrapper
-
   afterEach(() => {
     sinon.restore()
   })
 
-  describe('computed', () => {
-    describe('user', () => {
-      it('$auth.user', () => {
-        const user = { user: true }
-        wrapper = mount(ViewProfile, { ...common, mocks: { ...mocks, $auth: { is: isTrue, user } } })
-        expect(wrapper.vm.user).to.deep.eq(user)
-      })
-
-      it('default', () => {
-        const user = {}
-        wrapper = mount(ViewProfile, { ...common, mocks: { ...mocks, $auth: { is: isTrue, user: {} } } })
-        expect(wrapper.vm.user).to.deep.eq(user)
-      })
-    })
+  let $auth, propsData
+  beforeEach(() => {
+    $auth = { user: {} }
+    propsData = {}
   })
 
-  describe('beforeCreate', () => {
-    let push = sinon.fake()
-    beforeEach(() => {
-      push.resetHistory()
-    })
+  const mountVP = (opt) => shallowMount(ViewProfile, {
+    mocks: { $auth },
+    propsData,
+    ...opt,
+  })
 
-    it('push.login', () => {
-      wrapper = mount(ViewProfile, { ...common, mocks: { ...mocks, $auth: { is: isFalse, user: {} }, $router: { push } } })
-      assert(push.calledOnceWith({ name: 'auth:login' }))
-    })
+  it('anonymous - redirect', () => {
+    const gotoLoginFormIfAnonymous = sinon.fake()
+    mountVP({ methods: { gotoLoginFormIfAnonymous } })
 
-    it('showProfile', () => {
-      wrapper = mount(ViewProfile, { ...common, mocks: { ...mocks, $auth: { is: isTrue, user: {} }, $router: { push } } })
-      assert(push.notCalled)
-    })
+    sinon.assert.calledOnce(gotoLoginFormIfAnonymous)
+  })
+
+  it('user prop undefined - default to $auth.user', () => {
+    $auth.user.used = true
+    const wrap = mountVP()
+
+    expect(wrap.vm.user.used).to.be.true
+  })
+
+  it('user prop undefined and $auth invalid - default to empty object', () => {
+    $auth.user = undefined
+    const wrap = mountVP()
+
+    expect(wrap.vm.user).to.deep.eq({})
   })
 })

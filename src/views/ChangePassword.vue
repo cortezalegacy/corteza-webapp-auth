@@ -1,8 +1,8 @@
 <template>
   <div v-if="internalEnabled">
     <b-card-title>{{ $t(`view.change-password.title`) }}</b-card-title>
-    <p v-if="passwordChanged">{{ $t(`view.change-password.changed`) }}</p>
-    <div v-else>
+    <p v-if="passwordChanged" class="change-success">{{ $t(`view.change-password.changed`) }}</p>
+    <div v-else class="change-form">
       <b-form @submit.prevent="changePassword">
         <b-input-group>
           <b-input-group-prepend>
@@ -17,7 +17,7 @@
           </b-form-input>
         </b-input-group>
 
-        <div class="text-danger mb-1" v-if="error">{{ $t('general.error-tpl', { error }) }}</div>
+        <div class="text-danger mb-1 error" v-if="error">{{ $t('general.error-tpl', { error }) }}</div>
 
         <b-input-group class="mt-2">
           <b-input-group-prepend>
@@ -117,19 +117,25 @@ export default {
   },
 
   created () {
-    this.gotoLoginFormIfAnonymous()
-
     if (!this.internalEnabled) {
       this.$router.push({ name: 'auth:login' })
+      return
     }
 
     if (!this.$auth.is()) {
       this.$router.push({ name: 'auth:login' })
+      return
     }
+
+    this.gotoLoginFormIfAnonymous()
   },
 
   methods: {
     changePassword () {
+      if (!this.passwordCheckMatch || !this.internalEnabled || !this.$auth.is()) {
+        return
+      }
+
       this.error = null
       this.processing = true
       this.passwordChanged = false

@@ -1,197 +1,169 @@
-import { expect, assert } from 'chai'
-import { createLocalVue } from '@vue/test-utils'
+/* eslint-disable no-unused-expressions */
+import { expect } from 'chai'
 import sinon from 'sinon'
 import Login from 'corteza-webapp-auth/src/views/Login'
-import { mount, writeableWindowLocation } from '../../lib/helpers'
-
-const localVue = createLocalVue()
+import { writeableWindowLocation, stdReject, shallowMount } from 'corteza-webapp-auth/tests/lib/helpers'
+import fp from 'flush-promises'
 
 describe('views/Login.vue', () => {
-  const isFalse = sinon.stub().returns(false)
-  const isTrue = sinon.stub().returns(true)
-
-  const mocks = {
-    $route: { query: {} },
-    $auth: { is: isFalse },
-    $t: (e) => e,
-  }
-  const common = { localVue, propsData: { internalEnabled: true }, stubs: ['router-view', 'router-link'], mocks }
-  let wrapper
-
   afterEach(() => {
     sinon.restore()
   })
 
-  describe('computed', () => {
-    it('disabledSubmit', () => {
-      wrapper = mount(Login, common)
-      expect(wrapper.vm.disabledSubmit).to.eq(false)
+  let $auth, $router, $route, $SystemAPI
+  let propsData
+  const makeToken = () => '0'.repeat(33)
 
-      wrapper.setData({ processing: true })
-      expect(wrapper.vm.disabledSubmit).to.eq(true)
+  beforeEach(() => {
+    $auth = { login: sinon.stub().resolves() }
+    $router = { push: sinon.fake() }
+    $route = { query: {} }
+    $SystemAPI = {
+      authInternalLogin: sinon.stub().resolves(),
+      authExchangeAuthToken: sinon.stub().resolves(),
+    }
+    propsData = { internalEnabled: true, externalEnabled: true }
+  })
+
+  const mountLogin = (opt) => shallowMount(Login, {
+    mocks: { $auth, $router, $route, $SystemAPI },
+    propsData,
+    ...opt,
+  })
+
+  it('authenticated - redirect', () => {
+    const gotoProfileIfAuthenticated = sinon.fake()
+    mountLogin({ methods: { gotoProfileIfAuthenticated } })
+
+    sinon.assert.calledOnce(gotoProfileIfAuthenticated)
+  })
+
+  describe('internal login', () => {
+    it('disabled - don\'t render form', () => {
+      propsData.internalEnabled = false
+      const wrap = mountLogin()
+
+      expect(wrap.find('.login-form').exists()).to.be.false
+    })
+
+    it('enabled - render form', () => {
+      const wrap = mountLogin()
+
+      expect(wrap.find('.login-form').exists()).to.be.true
+    })
+
+    it('disabled - don\'t process input', () => {
+      propsData.internalEnabled = false
+      const wrap = mountLogin()
+      wrap.vm.internalLogin()
+
+      sinon.assert.notCalled($SystemAPI.authInternalLogin)
+    })
+
+    it('on success - redirect', async () => {
+      writeableWindowLocation({ path: '/dirty' })
+      const wrap = mountLogin()
+      wrap.vm.internalLogin()
+
+      await fp()
+      sinon.assert.calledOnce($SystemAPI.authInternalLogin)
+      expect(window.location).to.not.eq('/dirty')
+    })
+
+    it('on success - callback', async () => {
+      propsData.afterLogin = sinon.fake()
+      const wrap = mountLogin()
+      wrap.vm.internalLogin()
+
+      await fp()
+      sinon.assert.calledOnce($SystemAPI.authInternalLogin)
+      sinon.assert.calledOnce(propsData.afterLogin)
+    })
+
+    it('on error - notify user', async () => {
+      $SystemAPI.authInternalLogin = stdReject()
+      const wrap = mountLogin()
+      wrap.vm.internalLogin()
+
+      await fp()
+      sinon.assert.calledOnce($SystemAPI.authInternalLogin)
+      expect(wrap.find('.error').exists()).to.be.true
     })
   })
 
-  describe('created', () => {
-    it('finishesExternal', () => {
-      const finishExternal = sinon.fake()
-      wrapper = mount(Login, { ...common, mocks, methods: { finishExternal } })
+  describe('external login - invocation', () => {
+    it('disabled - don\'t render provider list', () => {
+      propsData.externalEnabled = false
+      const wrap = mountLogin()
 
-      assert(finishExternal.calledOnce)
+      expect(wrap.find('.external-providers').exists()).to.be.false
+    })
+
+    it('enabled with no providers - don\'t render provider list', () => {
+      propsData.externalEnabled = true
+      const wrap = mountLogin()
+
+      expect(wrap.find('.external-providers').exists()).to.be.false
+    })
+
+    it('enabled with providers - render provider list', () => {
+      propsData.externalEnabled = true
+      propsData.externalProviders = [{}, {}]
+      const wrap = mountLogin()
+
+      expect(wrap.find('.external-providers').exists()).to.be.true
     })
   })
 
-  describe('methods', () => {
-    describe('finishExternal', () => {
-      const exchangeToken = sinon.fake()
-      const push = sinon.fake()
-      beforeEach(() => {
-        exchangeToken.resetHistory()
-        push.resetHistory()
-      })
+  describe('external login - completion', () => {
+    it('disabled - don\'t process input', () => {
+      propsData.externalEnabled = false
+      mountLogin()
 
-      it('token.valid', () => {
-        let token = `${(new Array(33)).join('a')}123`
-
-        wrapper = mount(Login, { ...common, methods: { exchangeToken }, mocks: { ...mocks, $route: { query: { token } }, $router: { push } } })
-        assert(exchangeToken.calledOnceWith(token))
-        assert(push.notCalled)
-      })
-
-      it('token.invalid', () => {
-        let token = `invalid`
-
-        wrapper = mount(Login, { ...common, methods: { exchangeToken }, mocks: { ...mocks, $route: { query: { token } }, $router: { push } } })
-        assert(exchangeToken.notCalled)
-        assert(push.calledOnceWith({ name: 'auth:login' }))
-      })
-
-      it('token.missing.authenticated', () => {
-        wrapper = mount(Login, { ...common, methods: { exchangeToken }, mocks: { ...mocks, $auth: { is: isTrue }, $router: { push } } })
-        assert(exchangeToken.notCalled)
-        assert(push.calledOnceWith({ name: 'auth:profile' }))
-      })
-
-      it('token.missing.anonymous', () => {
-        wrapper = mount(Login, { ...common, methods: { exchangeToken }, mocks: { ...mocks, $router: { push } } })
-        assert(exchangeToken.notCalled)
-        assert(push.notCalled)
-      })
+      sinon.assert.notCalled($SystemAPI.authExchangeAuthToken)
     })
 
-    describe('exchangeToken', () => {
-      let token = 'token'
-      const params = { jwt: 'jwt', user: 'user' }
-      const systemResolve = sinon.stub().resolves(params)
-      const systemReject = sinon.stub().rejects(new Error('reject'))
-      const finalize = sinon.fake()
+    it('no token provided - cancel process', () => {
+      mountLogin()
 
-      afterEach(() => {
-        finalize.resetHistory()
-      })
-
-      it('resolve', (done) => {
-        wrapper = mount(Login, { ...common, methods: { finalize }, mocks: { ...mocks, $SystemAPI: { authExchangeAuthToken: systemResolve } } })
-        wrapper.vm.exchangeToken(token)
-        expect(wrapper.vm.error).to.eq(null)
-        expect(wrapper.vm.processing).to.eq(true)
-
-        setTimeout(() => {
-          expect(wrapper.vm.processing).to.eq(false)
-          assert(finalize.calledOnceWith(params))
-          done()
-        })
-      })
-
-      it('reject', (done) => {
-        wrapper = mount(Login, { ...common, methods: { finalize }, mocks: { ...mocks, $SystemAPI: { authExchangeAuthToken: systemReject } } })
-        wrapper.vm.exchangeToken(token)
-        expect(wrapper.vm.error).to.eq(null)
-        expect(wrapper.vm.processing).to.eq(true)
-
-        setTimeout(() => {
-          expect(wrapper.vm.processing).to.eq(false)
-          expect(wrapper.vm.error).to.eq('reject')
-          assert(finalize.notCalled)
-          done()
-        })
-      })
+      sinon.assert.notCalled($SystemAPI.authExchangeAuthToken)
     })
 
-    describe('internalLogin', () => {
-      const jwt = 'jwt'
-      const user = 'user'
-      let systemResolve
-      let systemReject
-      const finalize = sinon.fake()
-      beforeEach(() => {
-        finalize.resetHistory()
-        systemResolve = sinon.stub().resolves({ jwt, user })
-        systemReject = sinon.stub().rejects(new Error('reject'))
-      })
+    it('invalid token - cancel process and redirect', () => {
+      $route.query.token = 'invalid'
+      mountLogin()
 
-      it('disabled', () => {
-        wrapper = mount(Login, { ...common, propsData: { internalEnabled: false }, methods: { finalize }, mocks: { ...mocks, $SystemAPI: { authInternalLogin: systemResolve } } })
-        wrapper.vm.internalLogin()
-        assert(systemResolve.notCalled)
-      })
-
-      it('resolve', (done) => {
-        wrapper = mount(Login, { ...common, methods: { finalize }, mocks: { ...mocks, $SystemAPI: { authInternalLogin: systemResolve } } })
-        wrapper.vm.internalLogin()
-        expect(wrapper.vm.error).to.eq(null)
-        expect(wrapper.vm.processing).to.eq(true)
-
-        setTimeout(() => {
-          expect(wrapper.vm.processing).to.eq(false)
-          assert(finalize.calledOnceWith({ jwt, user }))
-          done()
-        })
-      })
-
-      it('reject', (done) => {
-        wrapper = mount(Login, { ...common, methods: { finalize }, mocks: { ...mocks, $SystemAPI: { authInternalLogin: systemReject } } })
-        wrapper.vm.internalLogin()
-        expect(wrapper.vm.error).to.eq(null)
-        expect(wrapper.vm.processing).to.eq(true)
-
-        setTimeout(() => {
-          expect(wrapper.vm.processing).to.eq(false)
-          expect(wrapper.vm.error).to.eq('reject')
-          assert(finalize.notCalled)
-          done()
-        })
-      })
+      sinon.assert.calledOnce($router.push)
     })
 
-    describe('finalize', () => {
-      let afterLogin
-      let params = { jwt: 'jwt', user: 'user', redirectTo: 'redirectTo' }
+    it('on success - redirect', async () => {
+      $route.query.token = makeToken()
+      writeableWindowLocation({ path: '/dirty' })
+      mountLogin()
 
-      beforeEach(() => {
-        writeableWindowLocation({ path: '/' })
-        afterLogin = sinon.fake()
-      })
+      await fp()
+      sinon.assert.calledOnce($SystemAPI.authExchangeAuthToken)
+      expect(window.location).to.not.eq('/dirty')
+    })
 
-      it('afterLogin', () => {
-        wrapper = mount(Login, { ...common, propsData: { afterLogin } })
+    it('on success - callback', async () => {
+      propsData.afterLogin = sinon.fake()
+      $route.query.token = makeToken()
+      mountLogin()
 
-        wrapper.vm.finalize(params)
-        assert(afterLogin.calledOnce)
-        expect(wrapper.vm.$auth.JWT).to.eq(params.jwt)
-        expect(wrapper.vm.$auth.user).to.eq(params.user)
-        expect(window.location).to.eq('/')
-      })
+      await fp()
+      sinon.assert.calledOnce($SystemAPI.authExchangeAuthToken)
+      sinon.assert.calledOnce(propsData.afterLogin)
+    })
 
-      it('redirect', () => {
-        wrapper = mount(Login, common)
+    it('on error - notify user', async () => {
+      $SystemAPI.authExchangeAuthToken = stdReject()
+      $route.query.token = makeToken()
+      const wrap = mountLogin()
 
-        wrapper.vm.finalize(params)
-        assert(afterLogin.notCalled)
-        expect(wrapper.vm.$auth.JWT).to.eq(params.jwt)
-        expect(wrapper.vm.$auth.user).to.eq(params.user)
-        expect(window.location).to.eq(params.redirectTo)
-      })
+      await fp()
+      sinon.assert.calledOnce($SystemAPI.authExchangeAuthToken)
+      expect(wrap.find('.error').exists()).to.be.true
     })
   })
 })

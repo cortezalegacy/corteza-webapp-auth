@@ -1,151 +1,121 @@
-import { expect, assert } from 'chai'
-import { createLocalVue } from '@vue/test-utils'
+/* eslint-disable no-unused-expressions */
+import { expect } from 'chai'
 import sinon from 'sinon'
 import Signup from 'corteza-webapp-auth/src/views/Signup'
-import { mount, writeableWindowLocation } from '../../lib/helpers'
-
-const localVue = createLocalVue()
+import { writeableWindowLocation, shallowMount, stdReject, makeJWT } from 'corteza-webapp-auth/tests/lib/helpers'
+import fp from 'flush-promises'
 
 describe('views/Signup.vue', () => {
-  const isFalse = sinon.stub().returns(false)
-  const isTrue = sinon.stub().returns(true)
-
-  const mocks = {
-    $auth: { is: isFalse },
-    $t: (e) => e,
-  }
-
-  let common = { localVue, stubs: ['router-view', 'router-link'], mocks }
-  let wrapper
-
   afterEach(() => {
     sinon.restore()
   })
 
-  describe('computed', () => {
-    it('disabledSubmit', () => {
-      wrapper = mount(Signup, common)
+  let $SystemAPI, $auth, propsData
+  beforeEach(() => {
+    $SystemAPI = { authInternalSignup: sinon.stub().resolves({ jwt: makeJWT() }) }
+    $auth = {}
+    propsData = { externalEnabled: true, internalSignUpEnabled: true, externalProviders: [] }
+  })
 
-      wrapper.setData({ processing: true })
-      expect(wrapper.vm.disabledSubmit).to.eq(true)
+  const mountSignup = (opt) => shallowMount(Signup, {
+    mocks: { $SystemAPI, $auth },
+    propsData,
+    ...opt,
+  })
 
-      wrapper.setData({ processing: false })
-      expect(wrapper.vm.disabledSubmit).to.eq(false)
+  it('authenticated - redirect', () => {
+    const gotoProfileIfAuthenticated = sinon.fake()
+    mountSignup({ methods: { gotoProfileIfAuthenticated } })
+
+    sinon.assert.calledOnce(gotoProfileIfAuthenticated)
+  })
+
+  describe('internal signup', () => {
+    it('disabled - don\'t render form', () => {
+      propsData.internalSignUpEnabled = false
+      const wrap = mountSignup()
+
+      expect(wrap.find('.signup-form').exists()).to.be.false
+    })
+
+    it('enabled - render form', () => {
+      propsData.internalSignUpEnabled = true
+      const wrap = mountSignup()
+
+      expect(wrap.find('.signup-form').exists()).to.be.true
+    })
+
+    it('disabled - don\'t process input', () => {
+      propsData.internalSignUpEnabled = false
+      const wrap = mountSignup()
+      wrap.vm.internalSignup()
+
+      sinon.assert.notCalled($SystemAPI.authInternalSignup)
+    })
+
+    it('on success - email confirmation pending', async () => {
+      $SystemAPI.authInternalSignup = sinon.stub().resolves()
+      const wrap = mountSignup()
+      wrap.vm.internalSignup()
+
+      await fp()
+      sinon.assert.calledOnce($SystemAPI.authInternalSignup)
+      expect(wrap.find('.email-pending').exists()).to.be.true
+    })
+
+    it('on success - redirect', async () => {
+      writeableWindowLocation({ path: '/dirty' })
+      const wrap = mountSignup()
+      wrap.vm.internalSignup()
+
+      await fp()
+      sinon.assert.calledOnce($SystemAPI.authInternalSignup)
+      expect(window.location).to.not.eq('/dirty')
+    })
+
+    it('on success - callback', async () => {
+      propsData.afterSignup = sinon.fake()
+      const wrap = mountSignup()
+      wrap.vm.internalSignup()
+
+      await fp()
+      sinon.assert.calledOnce($SystemAPI.authInternalSignup)
+      sinon.assert.calledOnce(propsData.afterSignup)
+    })
+
+    it('on error - notify user', async () => {
+      $SystemAPI.authInternalSignup = stdReject()
+      const wrap = mountSignup()
+      wrap.vm.internalSignup()
+
+      await fp()
+      sinon.assert.calledOnce($SystemAPI.authInternalSignup)
+      expect(wrap.find('.error').exists()).to.be.true
     })
   })
 
-  describe('created', () => {
-    let push = sinon.fake()
-    beforeEach(() => {
-      push.resetHistory()
+  describe('external signup', () => {
+    it('disabled - don\'t render provider list', () => {
+      propsData.externalEnabled = false
+      const wrap = mountSignup()
+
+      expect(wrap.find('.external-providers').exists()).to.be.false
     })
 
-    it('push.profile', () => {
-      wrapper = mount(Signup, { ...common, mocks: { ...mocks, $auth: { is: isTrue }, $router: { push } } })
-      assert(push.calledOnceWith({ name: 'auth:profile' }))
+    it('enabled with no providers - don\'t render provider list', () => {
+      propsData.externalEnabled = true
+      propsData.externalProviders = undefined
+      const wrap = mountSignup()
+
+      expect(wrap.find('.external-providers').exists()).to.be.false
     })
 
-    it('allowSignup', () => {
-      wrapper = mount(Signup, { ...common, mocks: { ...mocks, $auth: { is: isFalse } } })
-      assert(push.notCalled)
-    })
-  })
+    it('enabled with providers - render provider list', () => {
+      propsData.externalEnabled = true
+      propsData.externalProviders = [{}, {}]
+      const wrap = mountSignup()
 
-  describe('methods', () => {
-    describe('internalSignup', () => {
-      let systemResolve, systemReject
-      let form = { email: 'email', password: 'password' }
-      const params = { jwt: 'jwt', user: 'user' }
-      const finalize = sinon.fake()
-      beforeEach(() => {
-        systemResolve = sinon.stub().resolves(params)
-        systemReject = sinon.stub().rejects(new Error('reject'))
-        finalize.resetHistory()
-      })
-
-      it('resolve', (done) => {
-        wrapper = mount(Signup, { ...common, mocks: { ...mocks, $SystemAPI: { authInternalSignup: systemResolve } }, methods: { finalize }, data: () => ({ form }) })
-
-        wrapper.vm.internalSignup()
-        expect(wrapper.vm.error).to.eq(null)
-        expect(wrapper.vm.processing).to.eq(true)
-        expect(wrapper.vm.pendingEmailConfirmation).to.eq(false)
-
-        setTimeout(() => {
-          assert(finalize.calledOnceWith(params))
-          expect(wrapper.vm.error).to.eq(null)
-          expect(wrapper.vm.processing).to.eq(false)
-          expect(wrapper.vm.pendingEmailConfirmation).to.eq(false)
-
-          done()
-        })
-      })
-
-      it('reject', (done) => {
-        wrapper = mount(Signup, { ...common, mocks: { ...mocks, $SystemAPI: { authInternalSignup: systemReject } }, methods: { finalize }, data: () => ({ form }) })
-
-        wrapper.vm.internalSignup()
-        expect(wrapper.vm.error).to.eq(null)
-        expect(wrapper.vm.processing).to.eq(true)
-        expect(wrapper.vm.pendingEmailConfirmation).to.eq(false)
-
-        setTimeout(() => {
-          assert(finalize.notCalled)
-          expect(wrapper.vm.error).to.eq('reject')
-          expect(wrapper.vm.processing).to.eq(false)
-          expect(wrapper.vm.pendingEmailConfirmation).to.eq(false)
-
-          done()
-        })
-      })
-    })
-
-    describe('finalize', () => {
-      let $auth
-      let afterSignup = sinon.stub()
-      beforeEach(() => {
-        $auth = { is: isFalse }
-        afterSignup.resetHistory()
-        writeableWindowLocation()
-      })
-
-      it('jwt.valid.afterSignup', () => {
-        let params = { jwt: 'jwt', user: 'user', redirectTo: 'redirectTo' }
-        wrapper = mount(Signup, { ...common, propsData: { afterSignup }, mocks: { ...mocks, $auth } })
-
-        wrapper.vm.finalize(params)
-        expect($auth.JWT).to.eq(params.jwt)
-        expect($auth.user).to.eq(params.user)
-        assert(afterSignup.calledOnce)
-        expect(window.location).to.eq('/')
-        expect(wrapper.vm.pendingEmailConfirmation).to.eq(false)
-      })
-
-      it('jwt.valid.redirect', () => {
-        let params = { jwt: 'jwt', user: 'user', redirectTo: 'redirectTo' }
-        wrapper = mount(Signup, { ...common, mocks: { ...mocks, $auth } })
-
-        wrapper.vm.finalize(params)
-        expect($auth.JWT).to.eq(params.jwt)
-        expect($auth.user).to.eq(params.user)
-        assert(afterSignup.notCalled)
-        expect(window.location).to.eq(params.redirectTo)
-        expect(wrapper.vm.pendingEmailConfirmation).to.eq(false)
-      })
-
-      it('jwt.invalid')
-
-      it('jwt.missing', () => {
-        let params = { user: 'user', redirectTo: 'redirectTo' }
-        wrapper = mount(Signup, { ...common, mocks: { ...mocks, $auth } })
-
-        wrapper.vm.finalize(params)
-        expect($auth.JWT).to.eq(undefined)
-        expect($auth.user).to.eq(undefined)
-        assert(afterSignup.notCalled)
-        expect(window.location).to.eq('/')
-        expect(wrapper.vm.pendingEmailConfirmation).to.eq(true)
-      })
+      expect(wrap.find('.external-providers').exists()).to.be.true
     })
   })
 })

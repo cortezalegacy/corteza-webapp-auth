@@ -33,7 +33,7 @@ export default {
     this.error = null
     this.processing = true
 
-    this.$SystemAPI.authSettings().then(ss => {
+    this.$SystemAPI.authSettings().then((ss = {}) => {
       for (var k in this.settings) {
         if (ss[k] !== undefined) {
           this.settings[k] = ss[k]

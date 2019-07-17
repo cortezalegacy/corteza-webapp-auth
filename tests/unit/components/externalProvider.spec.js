@@ -1,79 +1,75 @@
-import { expect, assert } from 'chai'
-import { shallowMount, createLocalVue } from '@vue/test-utils'
+import { expect } from 'chai'
 import sinon from 'sinon'
 import ExternalProvider from 'corteza-webapp-auth/src/components/ExternalProvider'
-import { writeableWindowLocation } from '../../lib/helpers'
+import { writeableWindowLocation, shallowMount } from 'corteza-webapp-auth/tests/lib/helpers'
 
-const localVue = createLocalVue()
 describe('components/ExternalProvider.vue', () => {
-  let wrapper
+  afterEach(() => {
+    sinon.restore()
+  })
 
-  const mocks = {
-    $t: (e) => e,
-  }
-
-  const common = {
-    localVue,
-    propsData: { pKind: 'externalProvider', pUrl: 'pUrl' },
-    mocks,
-  }
-
+  let $SystemAPI, propsData
   beforeEach(() => {
-    writeableWindowLocation({ path: '/' })
+    $SystemAPI = { authSettingsEndpoint: () => undefined }
+    propsData = { pKind: 'pKind' }
   })
 
-  describe('computed', () => {
-    beforeEach(() => {
-      wrapper = shallowMount(ExternalProvider, {
-        ...common,
-        mocks: {
-          ...mocks,
-          $SystemAPI: {
-            baseURL: 'baseURL/',
-            authSettingsEndpoint: () => 'authSettingsEndpoint/',
-          },
+  const mountEP = (opt) => shallowMount(ExternalProvider, {
+    mocks: { $SystemAPI },
+    propsData,
+    ...opt,
+  })
+
+  describe('determine icon class', () => {
+    it('from icon name', () => {
+      let local = { pIcon: 'icon' }
+      expect(ExternalProvider.computed.iconClass.call(local)).to.eq('icon')
+    })
+
+    it('from provider kind', () => {
+      let local = { pKind: 'icon' }
+      expect(ExternalProvider.computed.iconClass.call(local)).to.eq('icon')
+    })
+
+    it('determine if openid connect', () => {
+      let local = { pIcon: 'openid-connect.some-provider' }
+      expect(ExternalProvider.computed.iconClass.call(local)).to.eq('openid')
+    })
+  })
+
+  describe('determine auth url', () => {
+    it('from provided url', () => {
+      let local = { pUrl: 'some.url.com' }
+      expect(ExternalProvider.computed.authUrl.call(local)).to.eq('some.url.com')
+    })
+
+    it('based on $SystemAPI and provider kind', () => {
+      let local = {
+        $SystemAPI: {
+          baseURL: 'some.url.com',
+          authSettingsEndpoint: () => '/settings/',
         },
-      })
-    })
-
-    it('iconClass', () => {
-      let expected = 'externalProvider'
-      expect(wrapper.vm.iconClass).to.eq(expected)
-
-      wrapper.setProps({ pKind: 'openid-connect.foo' })
-      expected = 'openid'
-      expect(wrapper.vm.iconClass).to.eq(expected)
-    })
-
-    it('authUrl', () => {
-      let expected = 'pUrl'
-      expect(wrapper.vm.authUrl).to.eq(expected)
-
-      wrapper.setProps({ pUrl: undefined })
-      expected = 'baseURL/authSettingsEndpoint/external/externalProvider'
-      expect(wrapper.vm.authUrl).to.eq(expected)
+        pKind: 'provider',
+      }
+      expect(ExternalProvider.computed.authUrl.call(local)).to.eq('some.url.com/settings/external/provider')
     })
   })
 
-  describe('methods', () => {
-    const onExternalAuth = sinon.fake()
-    beforeEach(() => {
-      wrapper = shallowMount(ExternalProvider, {
-        ...common,
-      })
+  describe('invocation', () => {
+    it('redirect', () => {
+      writeableWindowLocation({ path: '/dirty' })
+      const wrap = mountEP()
+      wrap.vm.redirect()
+
+      expect(window.location).to.not.eq('/dirty')
     })
 
-    describe('redirect', () => {
-      it('onExternalAuth', () => {
-        wrapper.setProps({ onExternalAuth })
-        wrapper.vm.redirect()
-        assert(onExternalAuth.calledOnceWith('pUrl'))
-      })
+    it('callback', () => {
+      propsData.onExternalAuth = sinon.fake()
+      const wrap = mountEP()
+      wrap.vm.redirect()
 
-      it('onRedirect', () => {
-        wrapper.vm.redirect()
-        expect(window.location).to.eq('pUrl')
-      })
+      sinon.assert.calledOnce(propsData.onExternalAuth)
     })
   })
 })

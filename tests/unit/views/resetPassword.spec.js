@@ -1,158 +1,103 @@
-import { expect, assert } from 'chai'
-import { createLocalVue } from '@vue/test-utils'
+/* eslint-disable no-unused-expressions */
+import { expect } from 'chai'
 import sinon from 'sinon'
 import ResetPassword from 'corteza-webapp-auth/src/views/ResetPassword'
-import { mount } from '../../lib/helpers'
-
-const localVue = createLocalVue()
+import { shallowMount, makeToken, stdReject } from 'corteza-webapp-auth/tests/lib/helpers'
+import fp from 'flush-promises'
 
 describe('views/ResetPassword.vue', () => {
-  const mocks = {
-    $route: { query: {} },
-    $t: (e) => e,
-  }
-  let common = {
-    localVue,
-    stubs: ['router-view', 'router-link'],
-    propsData: { internalPasswordResetEnabled: true },
-    mocks,
-  }
-  let wrapper
-
   afterEach(() => {
     sinon.restore()
   })
 
-  describe('computed', () => {
-    it('disabledSubmit', () => {
-      wrapper = mount(ResetPassword, common)
+  let $SystemAPI, $router, $route, $auth
+  beforeEach(() => {
+    $SystemAPI = {
+      authInternalExchangePasswordResetToken: sinon.stub().resolves({ user: {} }),
+      authInternalResetPassword: sinon.stub().resolves(),
+    }
+    $router = { push: sinon.fake() }
+    $route = { query: { token: makeToken() } }
+    $auth = {}
+  })
 
-      wrapper.setData({ processing: true })
-      expect(wrapper.vm.disabledSubmit).to.eq(true)
+  const mountRP = (opt) => shallowMount(ResetPassword, {
+    mocks: { $SystemAPI, $router, $route, $auth },
+    ...opt,
+  })
 
-      wrapper.setData({ processing: false })
-      expect(wrapper.vm.disabledSubmit).to.eq(false)
+  describe('exchange for token', () => {
+    it('no token provided - cancel process and notify user', () => {
+      $route.query.token = undefined
+      const wrap = mountRP()
+
+      sinon.assert.notCalled($SystemAPI.authInternalExchangePasswordResetToken)
+      expect(wrap.find('.error').exists()).to.be.true
+      expect(wrap.find('.reset-form').exists()).to.be.false
+    })
+
+    it('invalid token - cancel process and notify user', () => {
+      $route.query.token = 'invalid'
+      const wrap = mountRP()
+
+      sinon.assert.notCalled($SystemAPI.authInternalExchangePasswordResetToken)
+      expect(wrap.find('.error').exists()).to.be.true
+      expect(wrap.find('.reset-form').exists()).to.be.false
+    })
+
+    it('on success - allow password reset', async () => {
+      const wrap = mountRP()
+
+      await fp()
+      sinon.assert.calledOnce($SystemAPI.authInternalExchangePasswordResetToken)
+      expect(wrap.find('.error').exists()).to.be.false
+      expect(wrap.find('.reset-form').exists()).to.be.true
+    })
+
+    it('on error - don\'t allow password reset', async () => {
+      $SystemAPI.authInternalExchangePasswordResetToken = stdReject()
+      const wrap = mountRP()
+
+      await fp()
+      sinon.assert.calledOnce($SystemAPI.authInternalExchangePasswordResetToken)
+      expect(wrap.find('.error').exists()).to.be.true
+      expect(wrap.find('.reset-form').exists()).to.be.false
     })
   })
 
-  describe('created', () => {
-    let exchangeToken = sinon.fake()
+  describe('password reset', () => {
+    let created
     beforeEach(() => {
-      exchangeToken.resetHistory()
+      created = sinon.fake()
     })
 
-    it('validate.token.valid', () => {
-      let token = `${(new Array(33)).join('a')}123`
-      wrapper = mount(ResetPassword, { ...common, methods: { exchangeToken }, mocks: { ...mocks, $route: { query: { token } } } })
-      expect(wrapper.vm.error).to.eq(null)
-      assert(exchangeToken.calledOnceWith(token))
+    it('no token - don\'t process input', () => {
+      const wrap = mountRP({ created })
+      wrap.vm.changePassword()
+
+      sinon.assert.notCalled($SystemAPI.authInternalResetPassword)
     })
 
-    it('validate.token.invalid', () => {
-      let token = `invalid`
-      wrapper = mount(ResetPassword, { ...common, mocks: { ...mocks, $route: { query: { token } } } })
-      expect(wrapper.vm.error).to.eq('view.reset-password.error.invalid-token')
-      assert(exchangeToken.notCalled)
+    it('on success - redirect', async () => {
+      const wrap = mountRP({ created })
+      wrap.setData({ token: makeToken() })
+      wrap.vm.changePassword()
+
+      await fp()
+      sinon.assert.calledOnce($SystemAPI.authInternalResetPassword)
+      sinon.assert.calledOnce($router.push)
     })
 
-    it('validate.token.missing', () => {
-      wrapper = mount(ResetPassword, common)
-      expect(wrapper.vm.error).to.eq('view.reset-password.error.missing-token')
-      assert(exchangeToken.notCalled)
-    })
-  })
+    it('on error - notify user', async () => {
+      $SystemAPI.authInternalResetPassword = stdReject()
+      const wrap = mountRP({ created })
+      wrap.setData({ token: makeToken() })
+      wrap.vm.changePassword()
 
-  describe('methods', () => {
-    let systemResolve, systemReject
-    let token = 'token'
-
-    describe('exchangeToken', () => {
-      const params = { token: 'token', user: 'user' }
-      beforeEach(() => {
-        systemResolve = sinon.stub().resolves(params)
-        systemReject = sinon.stub().rejects(new Error('reject'))
-      })
-
-      it('resolve', (done) => {
-        wrapper = mount(ResetPassword, { ...common, mocks: { ...mocks, $SystemAPI: { authInternalExchangePasswordResetToken: systemResolve } } })
-
-        wrapper.vm.exchangeToken(token)
-        expect(wrapper.vm.error).to.eq(null)
-        expect(wrapper.vm.processing).to.eq(true)
-
-        setTimeout(() => {
-          expect(wrapper.vm.token).to.eq(params.token)
-          expect(wrapper.vm.user).to.eq(params.user)
-          expect(wrapper.vm.processing).to.eq(false)
-          assert(systemResolve.calledOnceWith({ token }))
-          done()
-        })
-      })
-
-      it('reject', (done) => {
-        wrapper = mount(ResetPassword, { ...common, mocks: { ...mocks, $SystemAPI: { authInternalExchangePasswordResetToken: systemReject } } })
-
-        wrapper.vm.exchangeToken(token)
-        expect(wrapper.vm.error).to.eq(null)
-        expect(wrapper.vm.processing).to.eq(true)
-
-        setTimeout(() => {
-          expect(wrapper.vm.token).to.eq(null)
-          expect(wrapper.vm.user).to.eq(null)
-          expect(wrapper.vm.processing).to.eq(false)
-          assert(systemReject.calledOnceWith({ token }))
-          done()
-        })
-      })
-    })
-
-    describe('changePassword', () => {
-      const params = { jwt: 'jwt', user: 'user' }
-      const form = { password: 'password' }
-      const push = sinon.fake()
-      let $auth
-      beforeEach(() => {
-        systemResolve = sinon.stub().resolves(params)
-        systemReject = sinon.stub().rejects(new Error('reject'))
-        push.resetHistory()
-        $auth = {}
-      })
-
-      it('resolve', (done) => {
-        wrapper = mount(ResetPassword, { ...common, mocks: { ...mocks, $SystemAPI: { authInternalResetPassword: systemResolve }, $auth, $router: { push } }, data: () => ({ token, form }) })
-
-        wrapper.vm.changePassword()
-        expect(wrapper.vm.error).to.eq(null)
-        expect(wrapper.vm.processing).to.eq(true)
-
-        setTimeout(() => {
-          expect($auth.JWT).to.eq(params.jwt)
-          expect($auth.user).to.eq(params.user)
-          expect(wrapper.vm.error).to.eq(null)
-          expect(wrapper.vm.processing).to.eq(false)
-          assert(systemResolve.calledOnceWith({ token, ...form }))
-          assert(push.calledOnceWith({ name: 'auth:profile' }))
-          done()
-        })
-      })
-
-      it('reject', (done) => {
-        wrapper = mount(ResetPassword, { ...common, mocks: { ...mocks, $SystemAPI: { authInternalResetPassword: systemReject }, $auth, $router: { push } }, data: () => ({ token, form }) })
-
-        wrapper.vm.changePassword()
-        expect(wrapper.vm.error).to.eq(null)
-        expect(wrapper.vm.processing).to.eq(true)
-
-        setTimeout(() => {
-          expect($auth.JWT).to.eq(undefined)
-          expect($auth.user).to.eq(undefined)
-          expect(wrapper.vm.error).to.eq('reject')
-          expect(wrapper.vm.processing).to.eq(false)
-          assert(systemReject.calledOnceWith({ token, ...form }))
-          assert(push.notCalled)
-          done()
-        })
-      })
+      await fp()
+      sinon.assert.calledOnce($SystemAPI.authInternalResetPassword)
+      sinon.assert.notCalled($router.push)
+      expect(wrap.find('.error').exists()).to.be.true
     })
   })
 })

@@ -1,9 +1,9 @@
 <template>
   <b-card-body>
     <b-card-title>{{ $t(`view.request-password-reset.title`) }}</b-card-title>
-    <p v-if="done">{{ $t('view.request-password-reset.password-request-sent') }}</p>
-    <b-form @submit.prevent="requestPasswordReset" v-else>
-      <div class="text-danger mb-1" v-if="error">{{ $t('general.error-tpl', { error }) }}</div>
+    <p v-if="done" class="request-success">{{ $t('view.request-password-reset.password-request-sent') }}</p>
+    <b-form @submit.prevent="requestPasswordReset" v-else class="request-form">
+      <div class="text-danger mb-1 error" v-if="error">{{ $t('general.error-tpl', { error }) }}</div>
       <b-input-group>
         <b-input-group-prepend>
           <span class="input-group-text bg-primary text-white">
@@ -63,15 +63,20 @@ export default {
   },
 
   created () {
-    this.gotoProfileIfAuthenticated()
-
     if (!this.internalPasswordResetEnabled) {
       this.$router.push({ name: 'auth:login' })
+      return
     }
+
+    this.gotoProfileIfAuthenticated()
   },
 
   methods: {
     requestPasswordReset () {
+      if (!this.internalPasswordResetEnabled) {
+        return false
+      }
+
       this.error = null
       this.processing = true
       this.done = false

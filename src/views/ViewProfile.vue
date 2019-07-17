@@ -32,7 +32,7 @@ export default {
     user: {
       type: Object,
       default () {
-        return this.$auth.user
+        return this.$auth.user || {}
       },
     },
   },

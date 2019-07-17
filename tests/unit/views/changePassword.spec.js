@@ -1,126 +1,106 @@
+/* eslint-disable no-unused-expressions */
 import { expect } from 'chai'
-import { shallowMount, createLocalVue } from '@vue/test-utils'
 import sinon from 'sinon'
 import ChangePassword from 'corteza-webapp-auth/src/views/ChangePassword'
-
-const localVue = createLocalVue()
+import { stdReject, shallowMount } from 'corteza-webapp-auth/tests/lib/helpers'
+import fp from 'flush-promises'
 
 describe('views/ChangePassword.vue', () => {
-  let wrapper
-
-  const mocks = {
-    $auth: { user: {}, is: () => true },
-    $t: (e) => e,
-  }
-
-  const common = {
-    localVue,
-    stubs: ['router-view', 'router-link'],
-    propsData: { internalEnabled: true },
-    mocks,
-  }
-  const mount = (props = {}) => shallowMount(ChangePassword, { ...common, ...props })
-
-  beforeEach(() => {
+  afterEach(() => {
     sinon.restore()
   })
 
-  describe('computed', () => {
-    it('passwordCheckMatch', () => {
-      wrapper = mount()
-      expect(wrapper.vm.passwordCheckMatch).to.eq(true)
-
-      wrapper.vm.form.newPassword = 'new'
-      expect(wrapper.vm.passwordCheckMatch).to.eq(false)
-
-      wrapper.vm.form.newPasswordCheck = 'new'
-      expect(wrapper.vm.passwordCheckMatch).to.eq(true)
-    })
-
-    it('disabledSubmit', () => {
-      wrapper = mount()
-      expect(wrapper.vm.disabledSubmit).to.eq(false)
-
-      wrapper.vm.processing = true
-      expect(wrapper.vm.disabledSubmit).to.eq(true)
-
-      wrapper.vm.processing = false
-      wrapper.vm.form.newPassword = 'new'
-      expect(wrapper.vm.disabledSubmit).to.eq(true)
-
-      wrapper.vm.form.newPasswordCheck = 'new'
-      expect(wrapper.vm.disabledSubmit).to.eq(false)
-
-      wrapper.vm.processing = true
-      expect(wrapper.vm.disabledSubmit).to.eq(true)
-    })
-
-    it('user', () => {
-      const user = { user: true }
-      wrapper = mount({ mocks: { ...mocks, $auth: { user, is: () => true } } })
-      expect(wrapper.vm.user).to.deep.eq(user)
-    })
+  let $auth, $SystemAPI, $router, propsData
+  beforeEach(() => {
+    $auth = { is: sinon.stub().returns(true), user: {} }
+    $SystemAPI = { authInternalChangePassword: sinon.stub().resolves() }
+    $router = { push: sinon.fake() }
+    propsData = { internalEnabled: true }
   })
 
-  describe('created', () => {
-    it('pushLogin', () => {
-      // internal disabled
-      let push = sinon.fake()
-      wrapper = mount({
-        mocks: { ...mocks, $auth: { user: {}, is: () => true }, $router: { push } },
-        propsData: { internalEnabled: false },
-      })
-
-      expect(push.calledOnceWith({ name: 'auth:login' }))
-
-      // user not authenticated
-      push = sinon.fake()
-      wrapper = mount({
-        mocks: { ...mocks, $auth: { user: {}, is: () => false }, $router: { push } },
-        propsData: { internalEnabled: true },
-      })
-
-      expect(push.calledOnceWith({ name: 'auth:login' }))
-    })
+  const mountCP = (opt) => shallowMount(ChangePassword, {
+    mocks: { $auth, $SystemAPI, $router },
+    propsData,
+    ...opt,
   })
 
-  describe('methods', () => {
-    describe('changePassword', () => {
-      const systemResolve = sinon.stub().resolves({ message: 'resolve' })
-      const systemReject = sinon.stub().rejects(new Error('reject'))
-      const form = { oldPassword: 'old', newPassword: 'new', newPasswordCheck: 'new' }
+  it('internal disabled - redirect', () => {
+    propsData.internalEnabled = false
+    mountCP()
 
-      it('resolve', (done) => {
-        wrapper = mount({ mocks: { ...mocks, $auth: { user: {}, is: () => true }, $SystemAPI: { authInternalChangePassword: systemResolve } }, data: () => ({ form }) })
+    sinon.assert.calledOnce($router.push)
+  })
 
-        wrapper.vm.changePassword(wrapper.vm.form)
-        expect(wrapper.vm.error).to.eq(null)
-        expect(wrapper.vm.processing).to.eq(true)
-        expect(wrapper.vm.passwordChanged).to.eq(false)
+  it('not authenticated - redirect', () => {
+    $auth.is = sinon.stub().returns(false)
+    mountCP()
 
-        setTimeout(() => {
-          expect(wrapper.vm.error).to.eq(null)
-          expect(wrapper.vm.processing).to.eq(false)
-          expect(wrapper.vm.passwordChanged).to.eq(true)
-          done()
-        })
-      })
+    sinon.assert.calledOnce($router.push)
+  })
 
-      it('reject', (done) => {
-        wrapper = mount({ mocks: { ...mocks, $auth: { user: {}, is: () => true }, $SystemAPI: { authInternalChangePassword: systemReject } }, data: () => ({ form }) })
+  it('if anonymous - redirect', () => {
+    const gotoLoginFormIfAnonymous = sinon.fake()
+    mountCP({ methods: { gotoLoginFormIfAnonymous } })
 
-        wrapper.vm.changePassword(wrapper.vm.form)
-        expect(wrapper.vm.error).to.eq(null)
-        expect(wrapper.vm.processing).to.eq(true)
-        expect(wrapper.vm.passwordChanged).to.eq(false)
+    sinon.assert.calledOnce(gotoLoginFormIfAnonymous)
+  })
 
-        setTimeout(() => {
-          expect(wrapper.vm.error).to.eq('reject')
-          expect(wrapper.vm.processing).to.eq(false)
-          expect(wrapper.vm.passwordChanged).to.eq(false)
-          done()
-        })
-      })
+  describe('change password', () => {
+    it('verify password matching', () => {
+      let local = { form: { newPassword: 'new', newPasswordCheck: '' } }
+      expect(ChangePassword.computed.passwordCheckMatch.call(local)).to.be.false
+
+      local.form.newPasswordCheck = 'new'
+      expect(ChangePassword.computed.passwordCheckMatch.call(local)).to.be.true
+    })
+
+    it('password mismatch - don\'t process input', () => {
+      const computed = {
+        passwordCheckMatch: sinon.stub().returns(false),
+      }
+      const wrap = mountCP({ computed })
+      wrap.vm.changePassword()
+
+      fp()
+      sinon.assert.notCalled($SystemAPI.authInternalChangePassword)
+    })
+
+    it('internal disabled - don\'t process input', () => {
+      propsData.internalEnabled = false
+      const wrap = mountCP()
+      wrap.vm.changePassword()
+
+      fp()
+      sinon.assert.notCalled($SystemAPI.authInternalChangePassword)
+    })
+
+    it('not authenticated - don\'t process input', () => {
+      $auth.is = sinon.stub().returns(false)
+      const wrap = mountCP()
+      wrap.vm.changePassword()
+
+      fp()
+      sinon.assert.notCalled($SystemAPI.authInternalChangePassword)
+    })
+
+    it('on success - notify user', async () => {
+      const wrap = mountCP()
+      wrap.vm.changePassword()
+
+      await fp()
+      sinon.assert.calledOnce($SystemAPI.authInternalChangePassword)
+      expect(wrap.find('.change-success').exists()).to.be.true
+    })
+
+    it('on error - notify user', async () => {
+      $SystemAPI.authInternalChangePassword = stdReject()
+      const wrap = mountCP()
+      wrap.vm.changePassword()
+
+      await fp()
+      sinon.assert.calledOnce($SystemAPI.authInternalChangePassword)
+      expect(wrap.find('.error').exists()).to.be.true
+      expect(wrap.find('.change-success').exists()).to.be.false
     })
   })
 })

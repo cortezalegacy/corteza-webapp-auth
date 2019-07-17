@@ -1,7 +1,7 @@
 <template>
   <b-card-body>
     <b-card-title>{{ $t('view.signup.title') }}</b-card-title>
-    <div class="text-center mb-5" v-if="externalEnabled && externalProviders">
+    <div class="text-center mb-5 external-providers" v-if="externalEnabled && externalProviders">
       <c-external-provider v-for="p in externalProviders"
                            :key="p.handle"
                            :onExternalAuth="onExternalAuth"
@@ -9,9 +9,9 @@
                            :pIcon="p.icon || p.handle"
                            :pLabel="p.label"></c-external-provider>
     </div>
-    <p v-if="pendingEmailConfirmation">{{ $t('view.signup.pending-email-confirmation') }}</p>
+    <p v-if="pendingEmailConfirmation" class="email-pending">{{ $t('view.signup.pending-email-confirmation') }}</p>
     <div v-else>
-      <b-form @submit.prevent="internalSignup" v-if="internalSignUpEnabled">
+      <b-form @submit.prevent="internalSignup" v-if="internalSignUpEnabled" class="signup-form">
         <b-input-group>
           <b-input-group-prepend>
             <span class="input-group-text bg-primary text-white">
@@ -80,7 +80,7 @@
                     variant="primary"
                     :disabled="disabledSubmit">{{ $t('view.signup.form.submit') }}</b-button>
         </b-form-group>
-        <div class="text-danger mb-1" v-if="error">{{ $t('general.error-tpl', { error }) }}</div>
+        <div class="text-danger mb-1 error" v-if="error">{{ $t('general.error-tpl', { error }) }}</div>
       </b-form>
       <div class="text-center" v-if="internalSignUpEnabled">
         {{ $t('view.signup.existing-account') }}
@@ -104,10 +104,6 @@ export default {
 
     externalProviders: {
       type: Array,
-    },
-
-    internalEnabled: {
-      type: Boolean,
     },
 
     internalPasswordResetEnabled: {
@@ -149,11 +145,15 @@ export default {
 
   methods: {
     internalSignup () {
+      if (!this.internalSignUpEnabled) {
+        return
+      }
+
       this.error = null
       this.processing = true
       this.pendingEmailConfirmation = false
 
-      this.$SystemAPI.authInternalSignup(this.form).then(({ jwt, user }) => {
+      this.$SystemAPI.authInternalSignup(this.form).then(({ jwt, user } = {}) => {
         this.finalize({ jwt, user })
       }).catch(({ message } = {}) => {
         this.error = message

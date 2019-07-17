@@ -3,7 +3,6 @@ export default {
     async gotoProfileIfAuthenticated () {
       return this.$auth.check(this.$SystemAPI).then((user) => {
         if (user) {
-          console.log('pushing profile')
           this.$router.push({ name: 'auth:profile' })
         }
       }).catch((error) => {

@@ -1,105 +1,68 @@
-import { expect, assert } from 'chai'
-import { createLocalVue } from '@vue/test-utils'
+/* eslint-disable no-unused-expressions */
+import { expect } from 'chai'
 import sinon from 'sinon'
 import RequestPasswordReset from 'corteza-webapp-auth/src/views/RequestPasswordReset'
-import { mount } from '../../lib/helpers'
-
-const localVue = createLocalVue()
+import { shallowMount, stdReject } from 'corteza-webapp-auth/tests/lib/helpers'
+import fp from 'flush-promises'
 
 describe('views/RequestPasswordReset.vue', () => {
-  let isFalse = sinon.stub().returns(false)
-  let isTrue = sinon.stub().returns(true)
-  const mocks = {
-    $auth: { is: isFalse },
-    $t: (e) => e,
-  }
-  let common = {
-    localVue,
-    stubs: ['router-view', 'router-link'],
-    propsData: { internalPasswordResetEnabled: true },
-    mocks,
-  }
-  let wrapper
-
   afterEach(() => {
     sinon.restore()
   })
 
-  describe('computed', () => {
-    it('disabledSubmit', () => {
-      wrapper = mount(RequestPasswordReset, common)
-
-      wrapper.setData({ processing: true })
-      expect(wrapper.vm.disabledSubmit).to.eq(true)
-
-      wrapper.setData({ processing: false })
-      expect(wrapper.vm.disabledSubmit).to.eq(false)
-    })
+  let $router, $SystemAPI, propsData
+  beforeEach(() => {
+    $router = { push: sinon.fake() }
+    $SystemAPI = { authInternalRequestPasswordReset: sinon.stub().resolves() }
+    propsData = { internalPasswordResetEnabled: true }
   })
 
-  describe('created', () => {
-    let push = sinon.fake()
-    beforeEach(() => {
-      push.resetHistory()
-    })
-
-    it('push.profile', () => {
-      wrapper = mount(RequestPasswordReset, { ...common, mocks: { ...mocks, $auth: { is: isTrue }, $router: { push } } })
-      assert(push.calledOnceWith({ name: 'auth:profile' }))
-    })
-
-    it('push.profile.internalDisabled', () => {
-      wrapper = mount(RequestPasswordReset, { ...common, propsData: { internalPasswordResetEnabled: false }, mocks: { ...mocks, $auth: { is: isTrue }, $router: { push } } })
-      assert(push.calledOnceWith({ name: 'auth:profile' }))
-    })
-
-    it('push.login', () => {
-      wrapper = mount(RequestPasswordReset, { ...common, propsData: { internalPasswordResetEnabled: false }, mocks: { ...mocks, $auth: { is: isFalse }, $router: { push } } })
-      assert(push.calledOnceWith({ name: 'auth:login' }))
-    })
-
-    it('allowReset', () => {
-      wrapper = mount(RequestPasswordReset, { ...common, mocks: { ...mocks, $auth: { is: isFalse }, $router: { push } } })
-      assert(push.notCalled)
-    })
+  const mountRPR = (opt) => shallowMount(RequestPasswordReset, {
+    mocks: { $router, $SystemAPI },
+    propsData,
+    ...opt,
   })
 
-  describe('methods', () => {
-    const systemResolve = sinon.stub().resolves({ message: 'resolve' })
-    const systemReject = sinon.stub().rejects(new Error('reject'))
+  it('password reset disabled - redirect', () => {
+    propsData.internalPasswordResetEnabled = false
+    mountRPR()
 
-    describe('requestPasswordReset', () => {
-      it('resolve', (done) => {
-        wrapper = mount(RequestPasswordReset, { ...common, mocks: { ...mocks, $SystemAPI: { authInternalRequestPasswordReset: systemResolve } } })
-        wrapper.vm.requestPasswordReset()
+    sinon.assert.calledOnce($router.push)
+  })
 
-        expect(wrapper.vm.error).to.eq(null)
-        expect(wrapper.vm.processing).to.eq(true)
-        expect(wrapper.vm.done).to.eq(false)
+  it('authenticated - redirect', () => {
+    const methods = { gotoProfileIfAuthenticated: sinon.fake() }
+    mountRPR({ methods })
 
-        setTimeout(() => {
-          expect(wrapper.vm.error).to.eq(null)
-          expect(wrapper.vm.processing).to.eq(false)
-          expect(wrapper.vm.done).to.eq(true)
-          done()
-        })
-      })
+    sinon.assert.calledOnce(methods.gotoProfileIfAuthenticated)
+  })
 
-      it('reject', (done) => {
-        wrapper = mount(RequestPasswordReset, { ...common, mocks: { ...mocks, $SystemAPI: { authInternalRequestPasswordReset: systemReject } } })
-        wrapper.vm.requestPasswordReset()
+  describe('request password reset', () => {
+    it('password reset disabled - don\'t process input', () => {
+      propsData.internalPasswordResetEnabled = false
+      const wrap = mountRPR()
+      wrap.vm.requestPasswordReset()
 
-        expect(wrapper.vm.error).to.eq(null)
-        expect(wrapper.vm.processing).to.eq(true)
-        expect(wrapper.vm.done).to.eq(false)
+      sinon.assert.notCalled($SystemAPI.authInternalRequestPasswordReset)
+    })
 
-        setTimeout(() => {
-          expect(wrapper.vm.error).to.eq('reject')
-          expect(wrapper.vm.processing).to.eq(false)
-          expect(wrapper.vm.done).to.eq(false)
-          done()
-        })
-      })
+    it('on success - notify user', async () => {
+      const wrap = mountRPR()
+      wrap.vm.requestPasswordReset()
+
+      await fp()
+      sinon.assert.calledOnce($SystemAPI.authInternalRequestPasswordReset)
+      expect(wrap.find('.request-success').exists()).to.be.true
+    })
+
+    it('on error - notify user', async () => {
+      $SystemAPI.authInternalRequestPasswordReset = stdReject()
+      const wrap = mountRPR()
+      wrap.vm.requestPasswordReset()
+
+      await fp()
+      sinon.assert.calledOnce($SystemAPI.authInternalRequestPasswordReset)
+      expect(wrap.find('.error').exists()).to.be.true
     })
   })
 })

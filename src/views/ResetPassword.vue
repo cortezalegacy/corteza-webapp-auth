@@ -2,13 +2,13 @@
   <b-card-body>
     <b-card-title>{{ $t(`view.reset-password.title`) }}</b-card-title>
     <div v-if="!user">
-      <div class="text-danger mb-1" v-if="error">{{ $t('general.error-tpl', { error }) }}</div>
+      <div class="text-danger mb-1 error" v-if="error">{{ $t('general.error-tpl', { error }) }}</div>
       <div v-else>{{ $t('view.reset-password.validating-token') }}</div>
     </div>
-    <b-form v-else @submit.prevent="changePassword">
+    <b-form v-else @submit.prevent="changePassword" class="reset-form">
       {{ $t(`view.reset-password.set-new-password`, { user }) }}
 
-      <div class="text-danger mb-1" v-if="error">{{ $t('general.error-tpl', { error }) }}</div>
+      <div class="text-danger mb-1 error" v-if="error">{{ $t('general.error-tpl', { error }) }}</div>
 
       <b-input-group>
         <b-input-group-prepend>
@@ -84,7 +84,7 @@ export default {
       this.error = null
       this.processing = true
 
-      this.$SystemAPI.authInternalExchangePasswordResetToken({ token }).then(({ token, user }) => {
+      this.$SystemAPI.authInternalExchangePasswordResetToken({ token }).then(({ token, user } = {}) => {
         this.token = token
         this.user = user
       }).catch(({ message } = {}) => {
@@ -95,10 +95,14 @@ export default {
     },
 
     changePassword () {
+      if (!this.token) {
+        return false
+      }
+
       this.error = null
       this.processing = true
 
-      this.$SystemAPI.authInternalResetPassword({ token: this.token, ...this.form }).then(({ jwt, user }) => {
+      this.$SystemAPI.authInternalResetPassword({ token: this.token, ...this.form }).then(({ jwt, user } = {}) => {
         this.$auth.JWT = jwt
         this.$auth.user = user
         this.$router.push({ name: 'auth:profile' })

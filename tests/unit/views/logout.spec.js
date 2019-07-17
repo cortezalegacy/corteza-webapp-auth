@@ -1,80 +1,56 @@
-import { expect, assert } from 'chai'
-import { createLocalVue } from '@vue/test-utils'
+/* eslint-disable no-unused-expressions */
+import { expect } from 'chai'
 import sinon from 'sinon'
 import Logout from 'corteza-webapp-auth/src/views/Logout'
-import { mount } from '../../lib/helpers'
-
-const localVue = createLocalVue()
+import { shallowMount, stdReject } from 'corteza-webapp-auth/tests/lib/helpers'
+import fp from 'flush-promises'
 
 describe('views/Logout.vue', () => {
-  let wrapper
-
-  const mocks = {
-    $t: (e) => e,
-  }
-
-  let common = {
-    localVue,
-    stubs: ['router-view', 'router-link'],
-    mocks,
-  }
-
   afterEach(() => {
     sinon.restore()
   })
 
-  describe('created', () => {
-    describe('logout', () => {
-      let systemResolve, systemReject, $auth
-      beforeEach(() => {
-        systemResolve = sinon.stub().resolves({ message: 'resolve' })
-        systemReject = sinon.stub().rejects(new Error('reject'))
-        $auth = { JWT: 'JWT', user: 'user' }
-      })
+  let $auth, $router, propsData
+  beforeEach(() => {
+    $auth = { logout: sinon.stub().resolves() }
+    $router = { push: sinon.fake() }
+    propsData = { afterLogout: sinon.fake() }
+  })
 
-      it('resolve.afterLogout', (done) => {
-        const afterLogout = sinon.fake()
-        wrapper = mount(Logout, { ...common, propsData: { afterLogout }, mocks: { ...mocks, $auth, $SystemAPI: { authLogout: systemResolve } } })
+  const mountLogout = (opt) => shallowMount(Logout, {
+    mocks: { $auth, $router },
+    ...opt,
+  })
 
-        expect($auth.JWT).to.eq('JWT')
-        expect($auth.user).to.eq('user')
+  it('$SystemAPI not provided - prevent logout', () => {
+    mountLogout({ mocks: { $SystemAPI: undefined } })
 
-        setTimeout(() => {
-          expect($auth.JWT).to.eq(null)
-          expect($auth.user).to.eq(null)
-          assert(afterLogout.calledOnce)
-          done()
-        })
-      })
+    sinon.assert.notCalled($auth.logout)
+  })
 
-      it('resolve.redirect', (done) => {
-        const push = sinon.fake()
-        wrapper = mount(Logout, { ...common, mocks: { ...mocks, $auth, $SystemAPI: { authLogout: systemResolve }, $router: { push } } })
+  it('on success - redirect', async () => {
+    mountLogout()
 
-        expect($auth.JWT).to.eq('JWT')
-        expect($auth.user).to.eq('user')
+    await fp()
+    sinon.assert.calledOnce($auth.logout)
+    sinon.assert.calledOnce($router.push)
+    sinon.assert.calledWith($router.push, { name: 'auth:login' })
+  })
 
-        setTimeout(() => {
-          expect($auth.JWT).to.eq(null)
-          expect($auth.user).to.eq(null)
-          assert(push.calledOnceWith({ name: 'auth:login' }))
-          done()
-        })
-      })
+  it('on success - callback', async () => {
+    mountLogout({ propsData })
 
-      it('reject', (done) => {
-        wrapper = mount(Logout, { ...common, mocks: { ...mocks, $auth, $SystemAPI: { authLogout: systemReject } } })
+    await fp()
+    sinon.assert.calledOnce($auth.logout)
+    sinon.assert.calledOnce(propsData.afterLogout)
+  })
 
-        expect($auth.JWT).to.eq('JWT')
-        expect($auth.user).to.eq('user')
+  it('on error - notify user', async () => {
+    const $auth = { logout: stdReject() }
+    const wrap = mountLogout({ mocks: { $auth } })
 
-        setTimeout(() => {
-          expect($auth.JWT).to.eq('JWT')
-          expect($auth.user).to.eq('user')
-          expect(wrapper.vm.error).to.eq('reject')
-          done()
-        })
-      })
-    })
+    await fp()
+    sinon.assert.calledOnce($auth.logout)
+    expect(wrap.vm.error).to.not.be.undefined
   })
 })

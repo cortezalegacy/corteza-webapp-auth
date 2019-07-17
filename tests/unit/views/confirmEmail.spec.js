@@ -1,129 +1,74 @@
-import { expect, assert } from 'chai'
-import { shallowMount, createLocalVue } from '@vue/test-utils'
+/* eslint-disable no-unused-expressions */
+import { expect } from 'chai'
 import sinon from 'sinon'
 import ConfirmEmail from 'corteza-webapp-auth/src/views/ConfirmEmail'
-import { writeableWindowLocation } from '../../lib/helpers'
-
-const localVue = createLocalVue()
+import { shallowMount, stdReject } from 'corteza-webapp-auth/tests/lib/helpers'
+import fp from 'flush-promises'
 
 describe('views/ConfirmEmail.vue', () => {
-  let wrapper
-
-  const t = { $t: (e) => e }
-  const mocks = {
-    ...t,
-    $route: { query: {} },
-    $auth: { user: {}, is: () => true },
-  }
-
-  const common = {
-    localVue,
-    stubs: ['router-view', 'router-link'],
-    propsData: { internalEnabled: true },
-    mocks,
-  }
-  const mount = (props = {}) => shallowMount(ConfirmEmail, { ...common, ...props })
-
   afterEach(() => {
     sinon.restore()
   })
 
-  describe('created', () => {
-    let token
-    it('token.valid', () => {
-      token = `${new Array(33).join('a')}123`
-      const confirmToken = sinon.fake()
-      wrapper = mount({ mocks: { ...mocks, $route: { query: { token } } }, methods: { confirmToken } })
-
-      assert(confirmToken.calledOnceWith(token))
-      expect(wrapper.vm.error).to.eq(null)
-    })
-
-    it('token.invalid', () => {
-      // missing
-      token = undefined
-      const confirmToken = sinon.fake()
-      wrapper = mount({ mocks: { ...t, $route: { query: { token } } }, methods: { confirmToken } })
-
-      expect(confirmToken.calledOnce).to.eq(false)
-      expect(wrapper.vm.error).to.not.eq(null)
-
-      // invalid
-      token = 'token'
-      confirmToken.resetHistory()
-      wrapper = mount({ mocks: { ...t, $route: { query: { token } } }, methods: { confirmToken } })
-
-      expect(confirmToken.calledOnce).to.eq(false)
-      expect(wrapper.vm.error).to.not.eq(null)
-    })
+  let $SystemAPI, $auth, propsData, $route, afterConfirm
+  const makeToken = () => '0'.repeat(33)
+  beforeEach(() => {
+    $auth = {}
+    $SystemAPI = { authInternalConfirmEmail: sinon.stub().resolves() }
+    propsData = {}
+    $route = { query: { token: makeToken() } }
+    afterConfirm = sinon.fake()
   })
 
-  describe('methods', () => {
-    describe('confirmToken', () => {
-      const token = 'token'
-      const systemResolve = sinon.stub().resolves({ jwt: 'jwt', user: 'user' })
-      const systemReject = sinon.stub().rejects(new Error('reject'))
-      let afterConfirmEmail
-      beforeEach(() => {
-        writeableWindowLocation({ path: '/' })
-        afterConfirmEmail = sinon.fake()
-        systemResolve.resetHistory()
-        systemReject.resetHistory()
-      })
+  const mountCE = (opt) => shallowMount(ConfirmEmail, {
+    mocks: { $SystemAPI, $auth, $route },
+    methods: { afterConfirm },
+    propsData,
+    ...opt,
+  })
 
-      it('resolve.afterConfirmEmail', (done) => {
-        const $auth = { user: {}, is: () => true }
-        wrapper = mount({ props: { afterConfirmEmail }, mocks: { ...mocks, $route: { query: {} }, $auth, $SystemAPI: { authInternalConfirmEmail: systemResolve } } })
+  describe('confirmation', () => {
+    it('no token provided - cancel process and notify user', () => {
+      $route.query.token = undefined
+      const wrap = mountCE()
 
-        wrapper.vm.confirmToken(token)
-        expect(wrapper.vm.error).to.eq(null)
-        expect(wrapper.vm.processing).to.eq(true)
+      sinon.assert.notCalled($SystemAPI.authInternalConfirmEmail)
+      expect(wrap.find('.error').exists()).to.be.true
+    })
 
-        setTimeout(() => {
-          expect($auth.JWT).to.eq('jwt')
-          expect($auth.user).to.eq('user')
-          expect(wrapper.vm.error).to.eq(null)
-          expect(window.location).to.eq('/')
-          assert(systemResolve.calledOnce)
-          done()
-        })
-      })
-      it('resolve.redirect', (done) => {
-        const $auth = { user: {}, is: () => true }
-        const afterConfirm = sinon.fake()
-        wrapper = mount({ mocks: { ...mocks, $route: { query: {} }, $auth, $SystemAPI: { authInternalConfirmEmail: systemResolve } }, methods: { afterConfirm } })
+    it('invalid token - cancel process and notify user', () => {
+      $route.query.token = 'invalid'
+      const wrap = mountCE()
 
-        wrapper.vm.confirmToken(token)
-        expect(wrapper.vm.error).to.eq(null)
-        expect(wrapper.vm.processing).to.eq(true)
+      sinon.assert.notCalled($SystemAPI.authInternalConfirmEmail)
+      expect(wrap.find('.error').exists()).to.be.true
+    })
 
-        setTimeout(() => {
-          expect($auth.JWT).to.eq('jwt')
-          expect($auth.user).to.eq('user')
-          expect(wrapper.vm.error).to.eq(null)
-          assert(systemResolve.calledOnce)
-          assert(afterConfirm.calledOnce)
-          done()
-        })
-      })
+    it('on success - redirect', async () => {
+      mountCE()
 
-      it('reject', (done) => {
-        const $auth = { user: undefined, is: () => true }
-        wrapper = mount({ mocks: { ...mocks, $route: { query: {} }, $auth, $SystemAPI: { authInternalConfirmEmail: systemReject } } })
+      await fp()
+      sinon.assert.calledOnce($SystemAPI.authInternalConfirmEmail)
+      // redirect + timeout is wrapped inside this function
+      sinon.assert.calledOnce(afterConfirm)
+    })
 
-        wrapper.vm.confirmToken(token)
-        expect(wrapper.vm.error).to.eq(null)
-        expect(wrapper.vm.processing).to.eq(true)
+    it('on success - callback', async () => {
+      propsData.afterConfirmEmail = sinon.fake()
+      mountCE()
 
-        setTimeout(() => {
-          expect($auth.JWT).to.eq(undefined)
-          expect($auth.user).to.eq(undefined)
-          expect(window.location).to.eq('/')
-          expect(wrapper.vm.error).to.eq('reject')
-          assert(systemReject.calledOnce)
-          done()
-        })
-      })
+      await fp()
+      sinon.assert.calledOnce($SystemAPI.authInternalConfirmEmail)
+      sinon.assert.calledOnce(propsData.afterConfirmEmail)
+    })
+
+    it('on error - notify user', async () => {
+      $SystemAPI.authInternalConfirmEmail = stdReject()
+      const wrap = mountCE()
+
+      await fp()
+      sinon.assert.calledOnce($SystemAPI.authInternalConfirmEmail)
+      expect(wrap.find('.error').exists()).to.be.true
     })
   })
 })

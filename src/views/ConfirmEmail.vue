@@ -1,13 +1,13 @@
 <template>
   <b-card-body :title="$t(`view.confirm-email.title`)">
-    <div v-if="error">
+    <div v-if="error" class="error">
       <p class="text-danger mb-1">{{ $t('general.error-tpl', { error }) }}</p>
       <p>{{ $t(`view.confirm-email.check-or-repeat`) }}</p>
     </div>
-    <div v-else-if="processing">
+    <div v-else-if="processing" class="processing">
       {{ $t(`view.confirm-email.sending`) }}
     </div>
-    <div v-else>
+    <div v-else class="confirmed">
       {{ $t(`view.confirm-email.confirmed`) }}
     </div>
     <div v-if="internalSignUpEnabled">
@@ -57,7 +57,7 @@ export default {
       this.error = null
       this.processing = true
 
-      this.$SystemAPI.authInternalConfirmEmail({ token }).then(({ jwt, user }) => {
+      this.$SystemAPI.authInternalConfirmEmail({ token }).then(({ jwt, user } = {}) => {
         this.$auth.JWT = jwt
         this.$auth.user = user
         if (this.afterConfirmEmail) {

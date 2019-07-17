@@ -23,6 +23,7 @@
     "bootstrap-vue": "^2.0.0-rc.24",
     "core-js": "^2.6.5",
     "corteza-webapp-common": "cortezaproject/corteza-webapp-common.git#master",
+    "flush-promises": "^1.0.2",
     "i18next": "^15.0.7",
     "i18next-browser-languagedetector": "^3.0.1",
     "jquery": "^3.0.0",
