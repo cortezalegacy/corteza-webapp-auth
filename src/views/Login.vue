@@ -58,7 +58,7 @@
 </template>
 
 <script>
-const tokenRegex = /^[a-zA-Z0-9]{32}\d+$/
+import { tokenRegex } from 'corteza-webapp-auth/src/lib/common'
 
 export default {
   name: 'Login',
