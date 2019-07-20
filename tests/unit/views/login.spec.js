@@ -2,7 +2,7 @@
 import { expect } from 'chai'
 import sinon from 'sinon'
 import Login from 'corteza-webapp-auth/src/views/Login'
-import { writeableWindowLocation, stdReject, shallowMount } from 'corteza-webapp-auth/tests/lib/helpers'
+import { writeableWindowLocation, stdReject, shallowMount, makeToken } from 'corteza-webapp-auth/tests/lib/helpers'
 import fp from 'flush-promises'
 
 describe('views/Login.vue', () => {
@@ -12,7 +12,6 @@ describe('views/Login.vue', () => {
 
   let $auth, $router, $route, $SystemAPI
   let propsData
-  const makeToken = () => '0'.repeat(33)
 
   beforeEach(() => {
     $auth = { login: sinon.stub().resolves() }

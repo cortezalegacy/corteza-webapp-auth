@@ -2,7 +2,7 @@
 import { expect } from 'chai'
 import sinon from 'sinon'
 import ConfirmEmail from 'corteza-webapp-auth/src/views/ConfirmEmail'
-import { shallowMount, stdReject } from 'corteza-webapp-auth/tests/lib/helpers'
+import { shallowMount, stdReject, makeToken } from 'corteza-webapp-auth/tests/lib/helpers'
 import fp from 'flush-promises'
 
 describe('views/ConfirmEmail.vue', () => {
@@ -11,7 +11,6 @@ describe('views/ConfirmEmail.vue', () => {
   })
 
   let $SystemAPI, $auth, propsData, $route, afterConfirm
-  const makeToken = () => '0'.repeat(33)
   beforeEach(() => {
     $auth = {}
     $SystemAPI = { authInternalConfirmEmail: sinon.stub().resolves() }
