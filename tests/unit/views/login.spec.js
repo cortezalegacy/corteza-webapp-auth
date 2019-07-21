@@ -107,7 +107,7 @@ describe('views/Login.vue', () => {
 
     it('enabled with providers - render provider list', () => {
       propsData.externalEnabled = true
-      propsData.externalProviders = [{}, {}]
+      propsData.externalProviders = [{ handle: 'ep1' }, { handle: 'ep2' }]
       const wrap = mountLogin()
 
       expect(wrap.find('.external-providers').exists()).to.be.true

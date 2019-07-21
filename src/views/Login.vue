@@ -58,10 +58,15 @@
 </template>
 
 <script>
+import ExternalProvider from 'corteza-webapp-auth/src/components/ExternalProvider'
 import { tokenRegex } from 'corteza-webapp-auth/src/lib/common'
 
 export default {
   name: 'Login',
+
+  components: {
+    'c-external-provider': ExternalProvider,
+  },
 
   props: {
     afterLogin: { default: null },

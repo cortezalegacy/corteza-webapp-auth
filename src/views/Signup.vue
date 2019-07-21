@@ -91,8 +91,14 @@
 </template>
 
 <script>
+import ExternalProvider from 'corteza-webapp-auth/src/components/ExternalProvider'
+
 export default {
   name: 'Signup',
+
+  components: {
+    'c-external-provider': ExternalProvider,
+  },
 
   props: {
     afterSignup: { default: null },

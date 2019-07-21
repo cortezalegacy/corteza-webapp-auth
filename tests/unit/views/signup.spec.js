@@ -112,7 +112,7 @@ describe('views/Signup.vue', () => {
 
     it('enabled with providers - render provider list', () => {
       propsData.externalEnabled = true
-      propsData.externalProviders = [{}, {}]
+      propsData.externalProviders = [{ handle: 'ep3' }, { handle: 'ep4' }]
       const wrap = mountSignup()
 
       expect(wrap.find('.external-providers').exists()).to.be.true
