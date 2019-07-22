@@ -9,7 +9,7 @@
     "lint": "vue-cli-service lint",
     "test:unit": "vue-cli-service test:unit",
     "storybook": "start-storybook",
-    "cdeps": "yarn upgrade corteza-webapp-auth"
+    "cdeps": "yarn upgrade corteza-webapp-common"
   },
   "main": "index.js",
   "dependencies": {
