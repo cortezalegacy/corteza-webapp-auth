@@ -179,7 +179,7 @@ export default {
       if (this.afterSignup) {
         this.afterSignup()
       } else {
-        window.location = redirectTo
+        this.$auth.goto(redirectTo)
       }
     },
   },

@@ -8,14 +8,18 @@ describe('components/ExternalProvider.vue', () => {
     sinon.restore()
   })
 
-  let $SystemAPI, propsData
+  let $SystemAPI, $auth, propsData
   beforeEach(() => {
     $SystemAPI = { authSettingsEndpoint: () => undefined }
+    $auth = {
+      goto: (u) => { window.location = u },
+      open: (u) => { window.location = u },
+    }
     propsData = { pKind: 'pKind' }
   })
 
   const mountEP = (opt) => shallowMount(ExternalProvider, {
-    mocks: { $SystemAPI },
+    mocks: { $SystemAPI, $auth },
     propsData,
     ...opt,
   })

@@ -13,7 +13,10 @@ describe('views/Signup.vue', () => {
   let $SystemAPI, $auth, propsData
   beforeEach(() => {
     $SystemAPI = { authInternalSignup: sinon.stub().resolves({ jwt: makeJWT() }) }
-    $auth = {}
+    $auth = {
+      goto: (u) => { window.location = u },
+      open: (u) => { window.location = u },
+    }
     propsData = { externalEnabled: true, internalSignUpEnabled: true, externalProviders: [] }
   })
 

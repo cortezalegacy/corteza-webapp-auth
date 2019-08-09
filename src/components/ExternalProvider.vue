@@ -56,7 +56,7 @@ export default {
       if (this.onExternalAuth) {
         this.onExternalAuth(this.authUrl)
       } else {
-        window.location = this.authUrl
+        this.$auth.goto(this.authUrl)
       }
     },
   },

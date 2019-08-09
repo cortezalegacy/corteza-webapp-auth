@@ -48,7 +48,7 @@ export default {
   methods: {
     afterConfirm () {
       window.setTimeout(() => {
-        window.location = '/'
+        this.$auth.goto('/')
       }, 3000)
     },
 

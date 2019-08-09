@@ -14,7 +14,11 @@ describe('views/Login.vue', () => {
   let propsData
 
   beforeEach(() => {
-    $auth = { login: sinon.stub().resolves() }
+    $auth = {
+      login: sinon.stub().resolves(),
+      goto: (u) => { window.location = u },
+      open: (u) => { window.location = u },
+    }
     $router = { push: sinon.fake() }
     $route = { query: {} }
     $SystemAPI = {
