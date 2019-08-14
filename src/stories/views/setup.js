@@ -26,7 +26,7 @@ export const wrapper = () => {
 }
 
 export const providers = [
-  { handle: 'google', label: 'Google' },
+  { handle: 'google', label: 'Google', icon: 'google' },
   { handle: 'facebook', label: 'Facebook' },
   { handle: 'github', label: 'GitHub' },
   { handle: 'oidc', label: 'OIDC', icon: 'openid' },

@@ -42,6 +42,10 @@ export default {
       if (/^openid-connect\./.test(ico)) {
         return 'openid'
       }
+      // @todo remove when backend adopts google auth instead of g+
+      if (this.pIcon === 'gplus') {
+        return 'google'
+      }
 
       return ico
     },
