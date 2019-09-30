@@ -40,7 +40,12 @@
                       required
                       autocomplete="password"></b-form-input>
       </b-input-group>
-      <small><router-link :to="{ name: 'auth:request-password-reset'}">{{ $t('link.forgotten-password-cta') }}</router-link></small>
+
+      <template v-if="internalPasswordResetEnabled">
+        <small>
+          <router-link :to="{ name: 'auth:request-password-reset'}">{{ $t('link.forgotten-password-cta') }}</router-link>
+        </small>
+      </template>
 
       <b-form-group class="text-right">
         <b-button type="submit" variant="primary" :disabled="processing">{{ $t('view.login.form.submit') }}</b-button>
@@ -71,6 +76,10 @@ export default {
   props: {
     afterLogin: { default: null },
     onExternalAuth: { default: null },
+
+    internalPasswordResetEnabled: {
+      type: Boolean,
+    },
 
     externalEnabled: {
       type: Boolean,
