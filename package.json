@@ -20,6 +20,7 @@
     "@fortawesome/vue-fontawesome": "^0.1.6",
     "@panter/vue-i18next": "^0.15.0",
     "@vue/eslint-config-standard": "^4.0.0",
+    "axios": "^0.18.0",
     "bootstrap-vue": "^2.0.0-rc.24",
     "core-js": "^2.6.5",
     "corteza-webapp-common": "cortezaproject/corteza-webapp-common.git#master",
