@@ -1,5 +1,8 @@
 <template>
-  <c-the-wrap :loading="this.processing" :error="error">
+  <c-the-wrap
+    :loading="processing"
+    :error="error"
+  >
     <router-view v-bind="settings" />
   </c-the-wrap>
 </template>

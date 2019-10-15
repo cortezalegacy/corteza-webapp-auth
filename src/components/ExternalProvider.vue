@@ -1,9 +1,11 @@
 <template>
-  <b-button variant="outline-primary"
-            class="mr-1"
-            size="lg"
-            @click="redirect">
-    <font-awesome-icon :icon="['fab', iconClass]"></font-awesome-icon><br>
+  <b-button
+    variant="outline-primary"
+    class="mr-1"
+    size="lg"
+    @click="redirect"
+  >
+    <font-awesome-icon :icon="['fab', iconClass]" /><br>
     <small>{{ pLabel || pKind }}</small>
   </b-button>
 </template>
@@ -14,20 +16,28 @@ export default {
     pKind: {
       type: String,
       required: true,
+      default: '',
     },
     pIcon: {
       type: String,
       required: false,
+      default: '',
     },
     pLabel: {
       type: String,
       required: false,
+      default: '',
     },
     pUrl: {
       type: String,
       required: false,
+      default: '',
     },
-    onExternalAuth: { default: null },
+    onExternalAuth: {
+      type: Function,
+      required: false,
+      default: null,
+    },
   },
 
   i18nOptions: {

@@ -1,44 +1,61 @@
 <template>
   <b-card-body>
     <b-card-title>{{ $t(`view.login.title`) }}</b-card-title>
-    <div v-if="externalEnabled && externalProviders" class="text-center mb-5 external-providers">
-      <c-external-provider v-for="p in externalProviders"
-                           :key="p.handle"
-                           :onExternalAuth="onExternalAuth"
-                           :pKind="p.handle"
-                           :pLabel="p.label"
-                           :pIcon="p.icon || p.handle"></c-external-provider>
+    <div
+      v-if="externalEnabled && externalProviders"
+      class="text-center mb-5 external-providers"
+    >
+      <c-external-provider
+        v-for="p in externalProviders"
+        :key="p.handle"
+        :on-external-auth="onExternalAuth"
+        :p-kind="p.handle"
+        :p-label="p.label"
+        :p-icon="p.icon || p.handle"
+      />
     </div>
 
-    <b-form @submit.prevent="internalLogin" v-if="internalEnabled" class="login-form">
-      <div class="text-danger mb-1 error" v-if="error">{{ $t('general.error-tpl', { error }) }}</div>
+    <b-form
+      v-if="internalEnabled"
+      class="login-form"
+      @submit.prevent="internalLogin"
+    >
+      <div
+        v-if="error"
+        class="text-danger mb-1 error"
+      >
+        {{ $t('general.error-tpl', { error }) }}
+      </div>
       <b-input-group>
         <b-input-group-prepend>
           <span class="input-group-text bg-primary text-white">
-            <font-awesome-icon :icon="['fas', 'at']"></font-awesome-icon>
+            <font-awesome-icon :icon="['fas', 'at']" />
           </span>
         </b-input-group-prepend>
-        <b-form-input v-model="form.email"
-                      type="email"
-                      :label="$t('view.login.form.email.label')"
-                      :placeholder="$t('view.login.form.email.placeholder')"
-                      required
-                      autocomplete="email">
-        </b-form-input>
+        <b-form-input
+          v-model="form.email"
+          type="email"
+          :label="$t('view.login.form.email.label')"
+          :placeholder="$t('view.login.form.email.placeholder')"
+          required
+          autocomplete="email"
+        />
       </b-input-group>
 
       <b-input-group class="mt-2">
         <b-input-group-prepend>
           <span class="input-group-text bg-primary text-white">
-            <font-awesome-icon :icon="['fas', 'key']"></font-awesome-icon>
+            <font-awesome-icon :icon="['fas', 'key']" />
           </span>
         </b-input-group-prepend>
-        <b-form-input v-model="form.password"
-                      type="password"
-                      :label="$t('view.login.form.password.label')"
-                      :placeholder="$t('view.login.form.password.placeholder')"
-                      required
-                      autocomplete="password"></b-form-input>
+        <b-form-input
+          v-model="form.password"
+          type="password"
+          :label="$t('view.login.form.password.label')"
+          :placeholder="$t('view.login.form.password.placeholder')"
+          required
+          autocomplete="password"
+        />
       </b-input-group>
 
       <template v-if="internalPasswordResetEnabled">
@@ -48,12 +65,22 @@
       </template>
 
       <b-form-group class="text-right">
-        <b-button type="submit" variant="primary" :disabled="processing">{{ $t('view.login.form.submit') }}</b-button>
+        <b-button
+          type="submit"
+          variant="primary"
+          :disabled="processing"
+        >
+          {{ $t('view.login.form.submit') }}
+        </b-button>
       </b-form-group>
 
-      <b-form-group v-if="internalEnabled && internalSignUpEnabled"
-                    class="text-center">
-        <router-link :to="{ name: 'auth:signup'}">{{ $t('link.signup-cta') }}</router-link>
+      <b-form-group
+        v-if="internalEnabled && internalSignUpEnabled"
+        class="text-center"
+      >
+        <router-link :to="{ name: 'auth:signup'}">
+          {{ $t('link.signup-cta') }}
+        </router-link>
       </b-form-group>
     </b-form>
     <div v-if="!(externalEnabled && externalProviders && externalProviders.length > 0) && !internalEnabled">
@@ -74,8 +101,14 @@ export default {
   },
 
   props: {
-    afterLogin: { default: null },
-    onExternalAuth: { default: null },
+    afterLogin: {
+      type: Function,
+      default: null,
+    },
+    onExternalAuth: {
+      type: Function,
+      default: null,
+    },
 
     internalPasswordResetEnabled: {
       type: Boolean,
@@ -83,18 +116,22 @@ export default {
 
     externalEnabled: {
       type: Boolean,
+      default: false,
     },
 
     externalProviders: {
       type: Array,
+      default: () => [],
     },
 
     internalEnabled: {
       type: Boolean,
+      default: false,
     },
 
     internalSignUpEnabled: {
       type: Boolean,
+      default: false,
     },
   },
 
