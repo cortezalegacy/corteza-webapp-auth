@@ -2,7 +2,7 @@
   <b-card-body>
     <b-card-title>{{ $t('view.signup.title') }}</b-card-title>
     <div
-      v-if="externalEnabled && externalProviders"
+      v-if="externalEnabled && externalProviders && externalProviders.length"
       class="text-center mb-5 external-providers"
     >
       <c-external-provider
