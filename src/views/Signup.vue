@@ -2,7 +2,7 @@
   <b-card-body>
     <b-card-title>{{ $t('view.signup.title') }}</b-card-title>
     <div
-      v-if="externalEnabled && externalProviders && externalProviders.length"
+      v-if="externalEnabled && externalProviders && externalProviders.length && !signUpDisabled"
       class="text-center mb-5 external-providers"
     >
       <c-external-provider
@@ -22,7 +22,7 @@
     </p>
     <div v-else>
       <b-form
-        v-if="internalSignUpEnabled"
+        v-if="internalSignUpEnabled && !signUpDisabled"
         class="signup-form"
         @submit.prevent="internalSignup"
       >
@@ -110,6 +110,12 @@
         </div>
       </b-form>
       <div
+        v-if="signUpDisabled"
+        class="bg-danger alert mb-0 p-3 mb-5 mt-5 text-white"
+      >
+        {{ signUpDisabled }}
+      </div>
+      <div
         v-if="internalSignUpEnabled"
         class="text-center"
       >
@@ -160,6 +166,11 @@ export default {
     internalSignUpEnabled: {
       type: Boolean,
       default: false,
+    },
+
+    signUpDisabled: {
+      type: String,
+      default: null,
     },
   },
 

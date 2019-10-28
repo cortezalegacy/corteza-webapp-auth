@@ -21,6 +21,7 @@ export default {
         internalPasswordResetEnabled: null,
         internalSignUpEmailConfirmationRequired: null,
         internalSignUpEnabled: null,
+        signUpDisabled: null,
 
         externalEnabled: null,
         externalProviders: [],
