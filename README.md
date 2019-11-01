@@ -27,3 +27,8 @@ yarn run lint
 
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
+
+### Run your unit tests with coverage report
+```bash
+yarn test:unit:cc
+```
