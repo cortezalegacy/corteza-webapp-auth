@@ -106,7 +106,7 @@
           v-if="error"
           class="text-danger mb-1 error"
         >
-          {{ $t('general.error-tpl', { error }) }}
+          {{ $t('general.error-tpl', { error: parseError(error) }) }}
         </div>
       </b-form>
       <div

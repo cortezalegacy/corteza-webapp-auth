@@ -6,7 +6,7 @@
       class="error"
     >
       <p class="text-danger mb-1">
-        {{ $t('general.error-tpl', { error }) }}
+        {{ $t('general.error-tpl', { error: parseError(error) }) }}
       </p>
     </div>
     <div class="text-center">

@@ -1,4 +1,9 @@
 export default {
+  system: {
+    repository: {
+      UserNotFound: 'User doesn\'t exist',
+    },
+  },
   general: {
     'error-tpl': 'Error: {{- error}}', // interporated & unescaped
     form: {
