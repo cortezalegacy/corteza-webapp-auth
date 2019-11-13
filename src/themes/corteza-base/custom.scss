@@ -42,3 +42,10 @@ div.logo {
     animation: flickerAnimation 3s infinite;
   }
 }
+
+// This allows external providers to be the same width.
+// Makes element start at the same point when growing.
+.flex-reset {
+  flex: 1 1 0px;
+}
+

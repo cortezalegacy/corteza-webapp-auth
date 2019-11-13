@@ -1,18 +1,21 @@
 <template>
   <b-card-body>
     <b-card-title>{{ $t(`view.login.title`) }}</b-card-title>
-    <div
-      v-if="externalEnabled && externalProviders && externalProviders.length"
-      class="text-center mb-5 external-providers"
-    >
-      <c-external-provider
-        v-for="p in externalProviders"
-        :key="p.handle"
-        :on-external-auth="onExternalAuth"
-        :p-kind="p.handle"
-        :p-label="p.label"
-        :p-icon="p.icon || p.handle"
-      />
+    <div class="d-flex w-100 justify-content-center">
+      <div
+        v-if="externalEnabled && externalProviders && externalProviders.length"
+        class="d-flex mb-5 external-providers"
+      >
+        <c-external-provider
+          v-for="p in externalProviders"
+          :key="p.handle"
+          class="flex-reset"
+          :on-external-auth="onExternalAuth"
+          :p-kind="p.handle"
+          :p-label="p.label"
+          :p-icon="p.icon || p.handle"
+        />
+      </div>
     </div>
 
     <b-form

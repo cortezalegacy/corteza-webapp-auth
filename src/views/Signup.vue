@@ -1,18 +1,21 @@
 <template>
   <b-card-body>
     <b-card-title>{{ $t('view.signup.title') }}</b-card-title>
-    <div
-      v-if="externalEnabled && externalProviders && externalProviders.length && !signUpDisabled"
-      class="text-center mb-5 external-providers"
-    >
-      <c-external-provider
-        v-for="p in externalProviders"
-        :key="p.handle"
-        :on-external-auth="onExternalAuth"
-        :p-kind="p.handle"
-        :p-icon="p.icon || p.handle"
-        :p-label="p.label"
-      />
+    <div class="d-flex w-100 justify-content-center">
+      <div
+        v-if="externalEnabled && externalProviders && externalProviders.length && !signUpDisabled"
+        class="d-flex text-center mb-5 external-providers"
+      >
+        <c-external-provider
+          v-for="p in externalProviders"
+          :key="p.handle"
+          class="flex-reset"
+          :on-external-auth="onExternalAuth"
+          :p-kind="p.handle"
+          :p-icon="p.icon || p.handle"
+          :p-label="p.label"
+        />
+      </div>
     </div>
     <p
       v-if="pendingEmailConfirmation"
