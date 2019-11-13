@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import { createLocalVue, shallowMount as sm } from '@vue/test-utils'
+import errors from 'corteza-webapp-auth/src/mixins/errors'
 import sinon from 'sinon'
 
 Vue.config.ignoredElements = [
@@ -30,6 +31,7 @@ export const shallowMount = (component, { mocks = {}, stubs = [], ...options } =
   localVue.mixin(helperMixin)
 
   return sm(component, {
+    mixins: [ errors ],
     localVue,
     stubs: ['router-view', 'router-link', 'c-external-provider', 'c-the-wrap', ...stubs],
     mocks: {

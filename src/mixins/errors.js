@@ -7,6 +7,10 @@ export default {
      * @returns {String} Parsed error message
      */
     parseError (error) {
+      if (!error) {
+        return error
+      }
+
       const errCode = error.split(':').pop().trim()
       if (!errCode || !errCode.match(/^(\w+\.)+\w+$/g)) {
         return error
