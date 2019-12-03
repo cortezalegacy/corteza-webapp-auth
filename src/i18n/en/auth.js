@@ -3,6 +3,11 @@ export default {
     repository: {
       UserNotFound: 'User doesn\'t exist',
     },
+    service: {
+      UserSuspended: 'User is suspended',
+      UserDeleted: 'User is deleted ',
+      ErrUserInvalid: 'User is invalid',
+    },
   },
   general: {
     'error-tpl': 'Error: {{- error}}', // interporated & unescaped
