@@ -33,10 +33,6 @@ module.exports = ({ appFlavour, appName, appLabel, version, theme, packageAlias,
     lintOnSave: true,
     runtimeCompiler: true,
 
-    transpileDependencies: [
-      /^[\\/]node_modules[\\/]corteza-webapp-/,
-    ],
-
     configureWebpack: {
       // other webpack options to merge in ...
       plugins: [
