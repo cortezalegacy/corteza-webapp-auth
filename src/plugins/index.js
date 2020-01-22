@@ -2,11 +2,12 @@ import Vue from 'vue'
 import BootstrapVue from 'bootstrap-vue'
 import Router from 'vue-router'
 
-import system from 'corteza-webapp-common/src/plugins/system'
-import auth from 'corteza-webapp-common/src/plugins/auth'
+import { plugins } from '@cortezaproject/corteza-vue'
 
 Vue.use(BootstrapVue)
 Vue.use(Router)
 
-Vue.use(system)
-Vue.use(auth)
+Vue.use(plugins.CortezaAPI('system'))
+Vue.use(plugins.Auth(Vue.prototype.$SystemAPI))
+Vue.use(plugins.EventBus())
+Vue.use(plugins.UIHooks('auth'))
