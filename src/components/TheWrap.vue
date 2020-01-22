@@ -35,6 +35,12 @@
         </main>
       </div>
     </div>
+
+    <small
+      class="p-1 text-secondary position-absolute version"
+    >
+      {{ frontendVersion }}
+    </small>
   </div>
 </template>
 <script>
@@ -53,5 +59,18 @@ export default {
       default: '',
     },
   },
+
+  computed: {
+    frontendVersion () {
+      /* eslint-disable no-undef */
+      return VERSION
+    },
+  },
 }
 </script>
+<style lang="scss" scoped>
+.version {
+  bottom: 0;
+  right: 0;
+}
+</style>
