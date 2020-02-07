@@ -1,7 +1,7 @@
 export default {
   methods: {
     async gotoProfileIfAuthenticated () {
-      return this.$auth.check(this.$SystemAPI).then((user) => {
+      return this.$auth.check().then((user) => {
         if (user) {
           this.$router.push({ name: 'auth:profile' })
         }
@@ -11,7 +11,7 @@ export default {
     },
 
     async gotoLoginFormIfAnonymous () {
-      return this.$auth.check(this.$SystemAPI).then((user) => {
+      return this.$auth.check().then((user) => {
         if (!user) {
           this.$router.push({ name: 'auth:login' })
         }
