@@ -1,7 +1,14 @@
 <template>
-  <div class="container h-100">
-    <div class="row justify-content-center align-items-center h-100">
-      <div class="col-md-8 col-lg-6">
+  <b-container
+    fluid
+    class="h-100 overflow-auto"
+  >
+    <b-row class="justify-content-center align-items-center h-100">
+      <b-col
+        sm="10"
+        md="8"
+        lg="4"
+      >
         <b-card
           v-if="error"
           class="border-0 text-danger"
@@ -33,15 +40,15 @@
             >Github</a></small>
           </b-card-footer>
         </main>
-      </div>
-    </div>
+      </b-col>
+    </b-row>
 
     <small
       class="p-1 text-secondary position-absolute version"
     >
       {{ frontendVersion }}
     </small>
-  </div>
+  </b-container>
 </template>
 <script>
 export default {
