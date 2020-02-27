@@ -51,10 +51,6 @@ export default {
           label: 'Repeat your new password:',
           placeholder: 'Repeat',
         },
-        handle: {
-          label: 'Handle:',
-          placeholder: 'Name, nickname, handle',
-        },
         submit: 'Submit',
       },
     },
@@ -74,14 +70,6 @@ export default {
         password: {
           label: 'Password:',
           placeholder: 'Your password',
-        },
-        name: {
-          label: 'Full name:',
-          placeholder: 'Your full name',
-        },
-        handle: {
-          label: 'Handle:',
-          placeholder: 'Name, nickname, handle',
         },
         submit: 'Login',
       },
@@ -135,7 +123,7 @@ export default {
         },
         handle: {
           label: 'Handle:',
-          placeholder: 'Name, nickname, handle',
+          placeholder: 'Short name, nickname or handle',
         },
         submit: '$t(auth:general.form.submit)',
       },
@@ -150,7 +138,7 @@ export default {
           label: 'Full name:',
         },
         handle: {
-          label: 'Name, nickname, handle:',
+          label: 'Handle:',
         },
         submit: '$t(auth:general.form.submit)',
       },

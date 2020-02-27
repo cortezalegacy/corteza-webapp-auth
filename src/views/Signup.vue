@@ -83,16 +83,18 @@
         <b-input-group class="mt-2">
           <b-input-group-prepend>
             <span class="input-group-text bg-primary text-white">
-              <font-awesome-icon :icon="['fas', 'user']" />
+              <font-awesome-icon :icon="['far', 'smile']" />
             </span>
           </b-input-group-prepend>
           <b-form-input
             v-model="form.handle"
             type="text"
             name="handle"
+            :state="handleState"
             :label="$t('view.signup.form.handle.label')"
             :placeholder="$t('view.signup.form.handle.placeholder')"
             autocomplete="handle"
+            required
           />
         </b-input-group>
 
@@ -198,6 +200,15 @@ export default {
   computed: {
     disabledSubmit () {
       return this.processing
+    },
+
+    handleState () {
+      if (this.form.handle.length === 0) {
+        return null
+      }
+
+      const re = /^[A-Za-z][0-9A-Za-z_\-.]*[A-Za-z0-9]$/
+      return re.test(this.form.handle)
     },
   },
 
