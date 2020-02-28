@@ -2,6 +2,7 @@
   <c-the-wrap
     :loading="processing"
     :error="error"
+    :error-details="errorDetails"
   >
     <router-view v-bind="settings" />
   </c-the-wrap>
@@ -15,6 +16,7 @@ export default {
       processing: true,
 
       error: null,
+      errorDetails: null,
 
       settings: {
         internalEnabled: null,
@@ -38,6 +40,10 @@ export default {
     this.processing = true
 
     this.$SystemAPI.authSettings().then((ss = {}) => {
+      if (!ss || typeof ss !== 'object') {
+        throw new Error('Unexpected data returned from the API')
+      }
+
       for (var k in this.settings) {
         if (ss[k] !== undefined) {
           this.settings[k] = ss[k]
@@ -53,11 +59,16 @@ export default {
       }
     }).catch(({ message } = {}) => {
       if (message !== 'Network Error') {
-        this.$auth.JWT = null
-        this.$auth.user = null
+        // Do not clear JWT & user values
+        // in case of a network error
+        this.$auth.JWT = undefined
+        this.$auth.user = undefined
       }
 
       this.error = message
+      this.errorDetails = 'Could not read authentication system settings ' +
+              '(' + window.SystemAPI + this.$SystemAPI.authSettingsEndpoint() + '). ' +
+              'Inspect your settings or contact your IT team.'
     }).finally(() => {
       this.processing = false
     })

@@ -11,9 +11,41 @@
       >
         <b-card
           v-if="error"
-          class="border-0 text-danger"
+          class="border-0"
+          header-bg-variant="danger"
+          header-text-variant="light"
+          :header="error"
+
         >
-          {{ error }}
+          <p>{{ errorDetails }}</p>
+
+          Settings:
+          <b-container class="p-0">
+            <b-row no-gutters>
+              <b-col cols="6">
+                System API URL
+              </b-col>
+              <b-col cols="6">
+                <b-link>{{ systemApiBaseURL }}</b-link>
+              </b-col>
+            </b-row>
+            <b-row no-gutters>
+              <b-col cols="6">
+                Compose API URL
+              </b-col>
+              <b-col cols="6">
+                <b-link>{{ composeApiBaseURL }}</b-link>
+              </b-col>
+            </b-row>
+            <b-row no-gutters>
+              <b-col cols="6">
+                Messaging API URL
+              </b-col>
+              <b-col cols="6">
+                <b-link>{{ messagingApiBaseURL }}</b-link>
+              </b-col>
+            </b-row>
+          </b-container>
         </b-card>
 
         <div
@@ -65,12 +97,30 @@ export default {
       required: false,
       default: '',
     },
+
+    errorDetails: {
+      type: String,
+      required: false,
+      default: '',
+    },
   },
 
   computed: {
     frontendVersion () {
       /* eslint-disable no-undef */
       return VERSION
+    },
+
+    systemApiBaseURL () {
+      return window.SystemAPI
+    },
+
+    composeApiBaseURL () {
+      return window.ComposeAPI
+    },
+
+    messagingApiBaseURL () {
+      return window.MessagingAPI
     },
   },
 }
