@@ -24,7 +24,7 @@ story.add('Full', () => ({
   template: `<view-profile :internal-enabled="internalEnabled" :user="user" />`,
   props: {
     internalEnabled: { default: boolean('Internal login enabled', false) },
-    user: { default: {
+    defaultUser: { default: {
       email: 'email@example.tld',
       name: 'Joe Example',
       handle: 'joEe',
@@ -38,6 +38,6 @@ story.add('Just email', () => ({
   template: `<view-profile :internal-enabled="internalEnabled" :user="user" />`,
   props: {
     internalEnabled: { default: boolean('Internal login enabled', false) },
-    user: { default: { email: 'email@example.tld' } },
+    defaultUser: { default: { email: 'email@example.tld' } },
   },
 }))

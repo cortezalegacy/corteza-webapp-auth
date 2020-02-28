@@ -15,7 +15,6 @@
           header-bg-variant="danger"
           header-text-variant="light"
           :header="error"
-
         >
           <p>{{ errorDetails }}</p>
 
