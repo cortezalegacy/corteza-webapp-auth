@@ -1,6 +1,6 @@
 {
   "name": "corteza-webapp-auth",
-  "version": "2020.9.1",
+  "version": "2020.9.4",
   "private": true,
   "description": "Corteza Authentication WebApp",
   "scripts": {
