@@ -5,6 +5,7 @@
     :error-details="errorDetails"
   >
     <router-view v-bind="settings" />
+    <vue-progress-bar />
   </c-the-wrap>
 </template>
 <script>

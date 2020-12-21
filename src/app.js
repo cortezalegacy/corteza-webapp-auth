@@ -23,6 +23,24 @@ export default (options = {}) => {
     store,
     i18n: i18n(),
 
+    mounted () {
+      this.$Progress.finish()
+    },
+
+    created () {
+      if (this.$auth.is()) {
+        // Setup the progress bar
+        this.$Progress.start()
+        this.$router.beforeEach((to, from, next) => {
+          this.$Progress.start()
+          next()
+        })
+        this.$router.afterEach((to, from) => {
+          this.$Progress.finish()
+        })
+      }
+    },
+
     // Any additional options we want to merge
     ...options,
   }
