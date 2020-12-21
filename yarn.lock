@@ -919,10 +919,10 @@
     lodash "^4.17.19"
     to-fast-properties "^2.0.0"
 
-"@cortezaproject/corteza-js@^2020.12.0-rc.2":
-  version "2020.12.0-rc.2"
-  resolved "https://registry.yarnpkg.com/@cortezaproject/corteza-js/-/corteza-js-2020.12.0-rc.2.tgz#5edef803f0fa5a1b7e173eb5d363e597d0519db1"
-  integrity sha512-BlLhcvjIDBVzWrUb8EdXcUeFohUF7a9cztfMiCdDsSAm1Lia9G/tKJ4YbjfzqkP+05Qt6UtS//+ajIVhhfgywA==
+"@cortezaproject/corteza-js@^2020.12.0-rc.5":
+  version "2020.12.0-rc.5"
+  resolved "https://registry.yarnpkg.com/@cortezaproject/corteza-js/-/corteza-js-2020.12.0-rc.5.tgz#0a706f1ee29febfdc732119c38bd5716cd215f22"
+  integrity sha512-mJBsWg6jTywgpEVxBxdmGVoGA/7q9Yw9FtvrKD++FflV0asavzm1CD/H71CMrO0HY69nG3C1txOYF1UMhrX8pA==
   dependencies:
     axios "^0.19.1"
     chart.js "2.9.3"
@@ -935,12 +935,12 @@
     pino "^5.16.0"
     ts-sinon "^1.0.25"
 
-"@cortezaproject/corteza-vue@^2020.12.0-rc.2":
-  version "2020.12.0-rc.2"
-  resolved "https://registry.yarnpkg.com/@cortezaproject/corteza-vue/-/corteza-vue-2020.12.0-rc.2.tgz#722a3eaf23364ebe29f0a82d4c71e41625699dff"
-  integrity sha512-IMcRhoz5k7BY/7EAGPQelM14iuqisi4Zm72OUjsQlIRS/1RtuTB008eBlu9Jfjj2YsCgwTWVCs4+JdR3Ccu3NA==
+"@cortezaproject/corteza-vue@^2020.12.0-rc.5":
+  version "2020.12.0-rc.5"
+  resolved "https://registry.yarnpkg.com/@cortezaproject/corteza-vue/-/corteza-vue-2020.12.0-rc.5.tgz#77c3a170fa7f0a45a1bff6c12dd15eca49119006"
+  integrity sha512-cLPuENwQlFyK7cql9zmlluDCd/VAwSVHs2T7QM9MXe+WaXt6tFZ1jBbzm9C76ARfbQU9CQrXPbvQKDYqVPVi1A==
   dependencies:
-    "@cortezaproject/corteza-js" "^2020.12.0-rc.2"
+    "@cortezaproject/corteza-js" "^2020.12.0-rc.5"
     "@fortawesome/fontawesome-svg-core" "^1.2.26"
     "@fortawesome/free-solid-svg-icons" "^5.12.0"
     "@fortawesome/vue-fontawesome" "^0.1.9"
@@ -1219,7 +1219,7 @@
     array-from "^2.1.1"
     lodash "^4.17.15"
 
-"@sinonjs/samsam@^5.0.2", "@sinonjs/samsam@^5.2.0":
+"@sinonjs/samsam@^5.0.2", "@sinonjs/samsam@^5.3.0":
   version "5.3.0"
   resolved "https://registry.yarnpkg.com/@sinonjs/samsam/-/samsam-5.3.0.tgz#1d2f0743dc54bf13fe9d508baefacdffa25d4329"
   integrity sha512-hXpcfx3aq+ETVBwPlRFICld5EnrkexXuXDwqUNhDdr5L8VjvMeSRwyOa0qL7XFmR+jVWR4rUZtnxlG7RX72sBg==
@@ -1646,9 +1646,9 @@
   integrity sha512-J32dgx2hw8vXrSbu4ZlVhn1Nm3GbeCFNw2FWL8S5QKucHGY0cyNwjdQdO+KMBZ4wpmC7KhLCiNsdk1RFRIYUQQ==
 
 "@types/node@^11.15.20":
-  version "11.15.39"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-11.15.39.tgz#00043d22cb2814c0ca32ef17e789911aa2325d9a"
-  integrity sha512-vVNBFg0n7vd2GuIEDa/s854RpcqAMRer/8IPmhKCYEoC2cLDGeTPNwlnAmSoI0sddOPhTb82DDWeHMrqEi5p3w==
+  version "11.15.40"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-11.15.40.tgz#66b17b7a9b06fe2689a77afeaa6f432779018b28"
+  integrity sha512-pGIHnyS9XYo7uSV6YHWSsXlqZ1NanfsxMCreJX94T963sA9733Ctsjo2VIq74MvKx3+i4t50HQPfuLfNuZSo4g==
 
 "@types/normalize-package-data@^2.4.0":
   version "2.4.0"
@@ -11992,14 +11992,14 @@ sinon@^7.3.2:
     supports-color "^5.5.0"
 
 sinon@^9.0.3:
-  version "9.2.1"
-  resolved "https://registry.yarnpkg.com/sinon/-/sinon-9.2.1.tgz#64cc88beac718557055bd8caa526b34a2231be6d"
-  integrity sha512-naPfsamB5KEE1aiioaoqJ6MEhdUs/2vtI5w1hPAXX/UwvoPjXcwh1m5HiKx0HGgKR8lQSoFIgY5jM6KK8VrS9w==
+  version "9.2.2"
+  resolved "https://registry.yarnpkg.com/sinon/-/sinon-9.2.2.tgz#b83cf5d43838f99cfa3644453f4c7db23e7bd535"
+  integrity sha512-9Owi+RisvCZpB0bdOVFfL314I6I4YoRlz6Isi4+fr8q8YQsDPoCe5UnmNtKHRThX3negz2bXHWIuiPa42vM8EQ==
   dependencies:
     "@sinonjs/commons" "^1.8.1"
     "@sinonjs/fake-timers" "^6.0.1"
     "@sinonjs/formatio" "^5.0.1"
-    "@sinonjs/samsam" "^5.2.0"
+    "@sinonjs/samsam" "^5.3.0"
     diff "^4.0.2"
     nise "^4.0.4"
     supports-color "^7.1.0"
