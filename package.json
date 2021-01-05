@@ -23,7 +23,7 @@
     "@fortawesome/vue-fontawesome": "^0.1.9",
     "@panter/vue-i18next": "^0.15.0",
     "@vue/eslint-config-standard": "^4.0.0",
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "bootstrap": "^4.4.1",
     "bootstrap-vue": "2.3.0",
     "core-js": "^2.6.5",
